@@ -1,0 +1,43 @@
+{
+  "name": "@gergely-bardos/gnist",
+  "version": "0.0.0",
+  "description": "A lightweight, zero-dependency particle simulation engine built with vanilla JavaScript",
+  "keywords": [
+    "collision-detection",
+    "engine",
+    "esm",
+    "lightweight",
+    "particle",
+    "particle-engine",
+    "particle-physics",
+    "particle-system",
+    "physics",
+    "simulation",
+    "vanilla-js"
+  ],
+  "author": "Gergely Bárdos (https://github.com/gergelybardos)",
+  "license": "MIT",
+  "homepage": "https://github.com/gergelybardos/gnist#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gergelybardos/gnist.git"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "sideEffects": false,
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.6.4"
+  },
+  "scripts": {
+    "start": "npx http-server . -p 8080 -o /sandbox/index.html"
+  }
+}
