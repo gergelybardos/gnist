@@ -1,0 +1,25 @@
+# OS-specific system files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.idea/
+.vscode/
+
+# Vendor packages
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Testing and coverage report
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environmental variables
+.env
+.env.*
