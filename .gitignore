@@ -13,8 +13,12 @@ node_modules/
 dist/
 build/
 
+# Testing and coverage report
+coverage/
+
 # Logs
 *.log
+npm-debug.log*
 
 # Environmental variables
 .env
