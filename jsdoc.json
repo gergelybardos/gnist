@@ -1,0 +1,22 @@
+{
+  "source": {
+    "include": ["src"],
+    "includePattern": "\\.js$",
+    "excludePattern": "(node_modules|dist|build|tests)"
+  },
+  "opts": {
+    "destination": "docs/api",
+    "recurse": true,
+    "access": "all",
+    "template": "node_modules/docdash"
+  },
+  "docdash": {
+    "meta": {
+      "title": "Gnist API Reference"
+    },
+    "search": true,
+    "collapse": true,
+    "wrap": true,
+    "typedefs": true
+  }
+}

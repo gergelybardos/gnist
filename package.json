@@ -1,7 +1,7 @@
 {
   "name": "@gergely-bardos/gnist",
   "version": "0.0.0",
-  "description": "A lightweight, zero-dependency particle simulation engine built with vanilla JavaScript",
+  "description": "A lightweight particle simulation engine built with vanilla JavaScript",
   "keywords": [
     "collision-detection",
     "engine",
@@ -44,13 +44,18 @@
     "dev": "vite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "types": "tsc"
+    "types": "tsc",
+    "doc:api:build": "jsdoc -c jsdoc.json",
+    "doc:deploy": "npm run doc:api:build && gh-pages -d docs/"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "docdash": "^2.0.2",
     "eslint": "^10.5.0",
+    "gh-pages": "^6.3.0",
     "globals": "^17.6.0",
     "http-server": "^14.1.1",
+    "jsdoc": "^4.0.5",
     "typescript": "^6.0.3",
     "vite": "^8.0.16"
   }

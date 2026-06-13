@@ -1,3 +1,6 @@
+/**
+ * @class
+ */
 export class Gnist {
     #canvas;
     #ctx;

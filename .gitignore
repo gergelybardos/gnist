@@ -13,7 +13,8 @@ node_modules/
 dist/
 build/
 
-# Testing and coverage report
+# Generated documentation
+docs/api
 coverage/
 
 # Logs
