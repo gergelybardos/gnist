@@ -38,6 +38,13 @@
     "npm": ">=9.6.4"
   },
   "scripts": {
-    "start": "npx http-server . -p 8080 -o /sandbox/index.html"
+    "start": "npx http-server . -p 8080 -o /sandbox/index.html",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.5.0",
+    "globals": "^17.6.0"
   }
 }
