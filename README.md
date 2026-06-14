@@ -3,6 +3,8 @@
 ![node](https://img.shields.io/badge/node-%3E=20.0.0-green)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
+> ⚠️ This project is currently in early development. APIs are not stable yet and breaking changes should be expected.
+
 ## 📚 Table of Contents
 
 - [Overview](#overview)
@@ -15,10 +17,14 @@
 
 ## 🧠 Overview <a name="overview"></a>
 
-Gnist is a lightweight particle simulation engine built with vanilla JavaScript.
+Gnist is a lightweight particle simulation engine.
 
-> ⚠️ This project is currently in early development. APIs are not stable yet.
- 
+It is designed for real-time visual effects rather than physically accurate simulations. Particles do not have mass or momentum. Forces are functions that calculate acceleration contributions applied to velocity, without modeling true Newtonian force dynamics.
+
+The engine is decoupled from timing and rendering, which makes it reusable across different runtimes and rendering systems.
+
+Gnist is written in vanilla JavaScript, with TypeScript support provided through declaration files.
+
 ## ⚙️ Requirements <a name="requirements"></a>
 
 To install and integrate the NPM package into your own project, your environment should support:
@@ -41,7 +47,6 @@ Coming soon.
 - Force system (gravity, wind, custom fields)
 - Collision handling (colliders, boundaries)
 - Configurable emitters
-- Efficient rendering
 
 ## 🤝 Contributing <a name="contributing"></a>
 

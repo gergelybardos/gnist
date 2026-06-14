@@ -1,7 +1,7 @@
 {
   "name": "@gergely-bardos/gnist",
   "version": "0.0.0",
-  "description": "A lightweight particle simulation engine built with vanilla JavaScript",
+  "description": "Lightweight particle simulation engine built with vanilla JavaScript for real-time visual effects",
   "keywords": [
     "collision-detection",
     "engine",
