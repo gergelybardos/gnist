@@ -46,10 +46,13 @@
     "lint:fix": "eslint . --fix",
     "types": "tsc",
     "doc:api:build": "jsdoc -c jsdoc.json",
-    "doc:deploy": "npm run doc:api:build && gh-pages -d docs/"
+    "doc:deploy": "npm run doc:api:build && gh-pages -d docs/",
+    "doc:changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "conventional-changelog-cli": "^5.0.0",
+    "conventional-changelog-conventionalcommits": "^9.3.1",
     "docdash": "^2.0.2",
     "eslint": "^10.5.0",
     "gh-pages": "^6.3.0",
