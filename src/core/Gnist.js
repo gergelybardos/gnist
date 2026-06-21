@@ -2,33 +2,42 @@
  * @class
  */
 export class Gnist {
-    #canvas;
-    #ctx;
+    /** @type {Array<Object>} */
+    #emitters;
 
-    constructor(canvas, context) {
-        this.#canvas = canvas;
-        this.#ctx = context;
+    /** @type {Array<Object>} */
+    #particles;
+
+    /** @type {Array<Object>} */
+    #forces;
+
+    /** @type {Array<Object>} */
+    #modifiers;
+
+    /**
+     * @constructor
+     */
+    constructor() {
+        this.#emitters = [];
+        this.#particles = [];
+        this.#forces = [];
+        this.#modifiers = [];
     }
 
-    start() {
-        this.renderPlaceholder();
+    /**
+     * @returns {Array<Object>}
+     */
+    get particles() {
+        return this.#particles;
     }
 
-    resize() {
-        this.renderPlaceholder();
-    }
-
-    renderPlaceholder() {
-        const width = this.#canvas.width;
-        const height = this.#canvas.height;
-
-        this.#ctx.fillStyle = '#000';
-        this.#ctx.fillRect(0, 0, width, height);
-        this.#ctx.fillStyle = '#FFF';
-        this.#ctx.font = '16px monospace';
-        this.#ctx.textAlign = 'center';
-        this.#ctx.textBaseline = 'middle';
-
-        this.#ctx.fillText('Gnist Engine Ready', width / 2, height / 2);
+    /**
+     * @param {number} dt
+     * @returns {void}
+     */
+    update(dt) {
+        if (dt <= 0) {
+            return;
+        }
     }
 }
