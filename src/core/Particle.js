@@ -1,3 +1,6 @@
+import { Force } from '../forces/Force.js';
+import { Modifier } from '../modifiers/Modifier.js';
+
 /**
  * Represents a single particle within the simulation.
  * @class

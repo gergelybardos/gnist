@@ -15,7 +15,7 @@ export class LinearDrag extends Force {
     /**
      * Initializes a linear drag with a specified friction coefficient.
      * @constructor
-     * @param {Object} [config={}] Configuration parameters.
+     * @param {object} [config={}] Configuration parameters.
      * @param {string} [config.id] Unique identifier. Defaults to an auto-generated UUID if none is provided.
      * @param {number} [config.drag=0.99] Friction coefficient.
      */
@@ -28,7 +28,7 @@ export class LinearDrag extends Force {
     /**
      * Reduces a particle's velocity over time using linear damping.
      * @override
-     * @param {Object} particle Particle instance to affect.
+     * @param {object} particle Particle instance to affect.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */

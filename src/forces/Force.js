@@ -1,3 +1,5 @@
+import { Particle } from '../core/Particle.js';
+
 /**
  * Abstract base class for environmental forces. Forces affect the motion of particles.
  * @abstract
@@ -13,7 +15,7 @@ export class Force {
     /**
      * Initializes an environmental force.
      * @constructor
-     * @param {Object} [config={}] Configuration parameters.
+     * @param {object} [config={}] Configuration parameters.
      * @throws {TypeError}
      */
     constructor(config = {}) {
@@ -27,12 +29,12 @@ export class Force {
     /**
      * Applies acceleration to a particle's velocity.
      * @abstract
-     * @param {Particle} particle Particle instance to affect.
-     * @param {number} dt Time elapsed since the last frame (in seconds).
+     * @param {Particle} _particle Particle instance to affect.
+     * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      * @throws {Error}
      */
-    apply(particle, dt) {
+    apply(_particle, _dt) {
         throw new Error('Method apply() must be implemented by subclass.');
     }
 }

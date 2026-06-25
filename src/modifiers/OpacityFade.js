@@ -1,3 +1,5 @@
+import { Particle } from '../core/Particle.js';
+
 import { Modifier } from './Modifier.js';
 
 /**
@@ -36,10 +38,9 @@ export class OpacityFade extends Modifier {
      * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
-     * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle, normalizedAge, dt) {
+    update(particle, normalizedAge) {
         particle.opacity = this.startOpacity + (this.endOpacity - this.startOpacity) * normalizedAge;
     }
 }

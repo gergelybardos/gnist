@@ -1,3 +1,5 @@
+import { Particle } from '../core/Particle.js';
+
 import { Modifier } from './Modifier.js';
 
 /**
@@ -39,10 +41,9 @@ export class ColorRamp extends Modifier {
      * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
-     * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle, normalizedAge, dt) {
+    update(particle, normalizedAge) {
         const t = Math.max(0, Math.min(1, normalizedAge));
 
         let lower = this.#colorStops[0];

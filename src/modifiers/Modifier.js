@@ -1,3 +1,5 @@
+import { Particle } from '../core/Particle.js';
+
 /**
  * Abstract base class for particle modifiers.
  * Modifiers apply visual or lifecycle changes to particles based on their normalized age.
@@ -14,7 +16,7 @@ export class Modifier {
     /**
      * Initializes a modifier.
      * @constructor
-     * @param {Object} [config={}] Configuration parameters.
+     * @param {object} [config={}] Configuration parameters.
      * @throws {TypeError}
      */
     constructor(config = {}) {
@@ -28,13 +30,12 @@ export class Modifier {
     /**
      * Applies visual or lifecycle changes to a particle based on its normalized age.
      * @abstract
-     * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
-     * @param {number} dt Time elapsed since the last frame (in seconds).
+     * @param {Particle} _particle Particle instance to affect.
+     * @param {number} _normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
      * @returns {void}
      * @throws {Error}
      */
-    update(particle, normalizedAge, dt) {
+    update(_particle, _normalizedAge) {
         throw new Error('Method update() must be implemented by subclass.');
     }
 }

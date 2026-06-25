@@ -1,3 +1,5 @@
+import {Particle} from '../core/Particle.js';
+
 import {Force} from './Force.js';
 
 /**
@@ -21,7 +23,7 @@ export class DirectionalForce extends Force {
     /**
      * Initializes a directional force with horizontal and vertical acceleration components.
      * @constructor
-     * @param {Object} [config={}] Configuration parameters.
+     * @param {object} [config={}] Configuration parameters.
      * @param {string} [config.id] Unique identifier. Defaults to an auto-generated UUID if none is provided.
      * @param {number} [config.ax=0] Horizontal acceleration component (pixels per second).
      * @param {number} [config.ay=0] Vertical acceleration component (pixels per second).

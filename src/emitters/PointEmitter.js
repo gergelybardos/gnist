@@ -1,3 +1,5 @@
+import { Particle } from '../core/Particle.js';
+
 import { Emitter } from './Emitter.js';
 
 /**

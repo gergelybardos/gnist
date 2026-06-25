@@ -1,3 +1,5 @@
+import { Force } from '../forces/Force.js';
+import { Modifier } from '../modifiers/Modifier.js';
 import { Particle } from '../core/Particle.js';
 
 /**
@@ -55,7 +57,7 @@ export class Emitter {
 
     /**
      * Configuration settings used to initialize emitted particles.
-     * @type {Object}
+     * @type {object}
      */
     #spawnConfig;
 
@@ -86,7 +88,7 @@ export class Emitter {
     /**
      * Initializes a particle emitter.
      * @constructor
-     * @param {Object} [config={}] Configuration parameters.
+     * @param {object} [config={}] Configuration parameters.
      * @throws {TypeError}
      */
     constructor(config = {}) {
