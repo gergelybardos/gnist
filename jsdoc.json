@@ -7,7 +7,6 @@
   "opts": {
     "destination": "docs/api",
     "recurse": true,
-    "access": "all",
     "template": "node_modules/docdash"
   },
   "docdash": {
