@@ -1,7 +1,7 @@
 /**
  * Represents the color state of a particle. RGB color channels are stored independently for efficient interpolation.
  */
-type Color = {
+export type Color = {
     /**
      * Red color channel value (0 to 255).
      */

@@ -5,3 +5,5 @@
  * @property {number} [g=255] Green color channel value (0 to 255).
  * @property {number} [b=255] Blue color channel value (0 to 255).
  */
+
+export {};

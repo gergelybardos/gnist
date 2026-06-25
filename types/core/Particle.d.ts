@@ -1,4 +1,7 @@
 /**
+ * @import {Color} from '../shared/Types.js'
+ */
+/**
  * Represents a single particle within the simulation.
  * @class
  */
@@ -87,5 +90,6 @@ export class Particle {
     setScopedForces(scopedForces: Array<Force>): void;
     #private;
 }
+import type { Color } from '../shared/Types.js';
 import { Modifier } from '../modifiers/Modifier.js';
 import { Force } from '../forces/Force.js';
