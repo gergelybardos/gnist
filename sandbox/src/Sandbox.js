@@ -1,4 +1,4 @@
-import { Gnist } from '../../src/index.js';
+import { Gnist, PointEmitter, DirectionalForce, LinearDrag, ColorRamp, OpacityFade } from 'gnist';
 
 /**
  * @class
@@ -11,10 +11,22 @@ export class Sandbox {
     #ctx;
 
     /** @type {Gnist|null} */
-    #particleEngine;
+    #gnistEngine;
+
+    /** @type {PointEmitter|null} */
+    #pointEmitter;
 
     /** @type {DOMHighResTimeStamp} */
-    #lastTime;
+    #previousTime;
+
+    /** @type {number} */
+    #frameCounter;
+
+    /** @type {number} */
+    #totalExecutionTime;
+
+    /** @type {number} */
+    #avgFrameUpdateDurationMs;
 
     /**
      * @constructor
@@ -22,19 +34,23 @@ export class Sandbox {
     constructor() {
         this.#canvas = null;
         this.#ctx = null;
-        this.#particleEngine = null;
-        this.#lastTime = 0;
+        this.#gnistEngine = null;
+        this.#pointEmitter = null;
+        this.#previousTime = 0;
+        this.#frameCounter = 0;
+        this.#totalExecutionTime = 0;
+        this.#avgFrameUpdateDurationMs = 0;
     }
 
     /**
      * @returns {void}
      */
     start() {
-        if (!this.#particleEngine) {
+        if (!this.#gnistEngine) {
             this.#init();
         }
 
-        this.#lastTime = performance.now();
+        this.#previousTime = performance.now();
 
         requestAnimationFrame((time) => this.#loop(time));
     }
@@ -45,47 +61,40 @@ export class Sandbox {
     #init() {
         this.#setupCanvas();
 
-        this.#particleEngine = new Gnist();
+        this.#gnistEngine = new Gnist();
 
+        const gravity = new DirectionalForce({ax:0, ay: 100});
+        const friction = new LinearDrag({drag: 0.1});
+
+        const fade = new OpacityFade(1.0, 0.0);
+        const rainbowRamp = new ColorRamp([
+            [0, 242, 254],
+            [143, 0, 255],
+            [255, 0, 127],
+            [255, 102, 0],
+        ]);
+
+        this.#pointEmitter = new PointEmitter({
+            x: this.#canvas.width / 2,
+            y: this.#canvas.height / 2,
+            particlesPerSecond: 500,
+            spawnConfig: {
+                size: [1, 8],
+                lifespan: [1, 3],
+                speed: [15, 150],
+                rotation: [0, Math.PI * 2],
+            }
+        });
+
+        this.#pointEmitter.addModifier(fade);
+        this.#pointEmitter.addModifier(rainbowRamp);
+
+        this.#gnistEngine.addGlobalForce(gravity);
+        this.#gnistEngine.addGlobalForce(friction);
+        this.#gnistEngine.addEmitter(this.#pointEmitter);
+
+        this.#canvas.addEventListener('mousemove', (event) => this.#handleMouseMove(event));
         window.addEventListener('resize', () => this.#handleResize());
-    }
-
-    /**
-     * @param {DOMHighResTimeStamp} currentTime
-     * @returns {void}
-     */
-    #loop(currentTime) {
-        const dt = (currentTime - this.#lastTime) / 1000;
-        this.#lastTime = currentTime;
-
-        this.#particleEngine.update(dt);
-
-        this.#render();
-
-        requestAnimationFrame((time) => this.#loop(time));
-    }
-
-    /**
-     * @returns {void}
-     */
-    #render() {
-        const width = this.#canvas.width;
-        const height = this.#canvas.height;
-
-        this.#ctx.fillStyle = '#000';
-        this.#ctx.fillRect(0, 0, width, height);
-
-        const particles = this.#particleEngine.particles;
-
-        if (particles.length === 0) {
-            this.#ctx.fillStyle = '#FFF';
-            this.#ctx.font = '16px monospace';
-            this.#ctx.textAlign = 'center';
-            this.#ctx.textBaseline = 'middle';
-            this.#ctx.fillText('Gnist Engine: 0 Particles Active', width / 2, height / 2);
-        } else {
-            // TODO: future 0.1.0 rendering loop goes here
-        }
     }
 
     /**
@@ -106,11 +115,82 @@ export class Sandbox {
     }
 
     /**
+     * @param {DOMHighResTimeStamp} currentTime
      * @returns {void}
      */
-    #resizeCanvasToViewport() {
-        this.#canvas.width = window.innerWidth;
-        this.#canvas.height = window.innerHeight;
+    #loop(currentTime) {
+        const dt = (currentTime - this.#previousTime) / 1000;
+        this.#previousTime = currentTime;
+        const safeDt = Math.min(dt, 0.1);
+
+        const start = performance.now();
+        this.#gnistEngine.update(safeDt);
+        const end = performance.now();
+
+        this.#totalExecutionTime += (end - start);
+        this.#frameCounter++;
+        if (this.#frameCounter >= 100) {
+            this.#avgFrameUpdateDurationMs = this.#totalExecutionTime / 1000;
+            this.#frameCounter = 0;
+            this.#totalExecutionTime = 0;
+        }
+
+        this.#render();
+
+        requestAnimationFrame((time) => this.#loop(time));
+    }
+
+    /**
+     * @returns {void}
+     */
+    #render() {
+        const width = this.#canvas.width;
+        const height = this.#canvas.height;
+
+        this.#ctx.fillStyle = '#111';
+        this.#ctx.fillRect(0, 0, width, height);
+
+        const particles = this.#gnistEngine.getParticles();
+
+        if (particles.length === 0) {
+            return;
+        }
+
+        const count = particles.length;
+
+        for (let i = 0; i < count; i++) {
+            const particle = particles[i];
+
+            const { r, g, b } = particle.color;
+            const a = particle.opacity;
+
+            this.#ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+
+            const size = particle.size ?? 2;
+            this.#ctx.fillRect(Math.floor(particle.x - size / 2), Math.floor(particle.y - size / 2), size, size);
+        }
+
+        this.#ctx.fillStyle = '#e1e1e1';
+        this.#ctx.font = '14px monospace';
+        this.#ctx.textAlign = 'left';
+        this.#ctx.textBaseline = 'top';
+        this.#ctx.fillText(`Particle count: ${count}`, 25, 25);
+        this.#ctx.fillText(`Avg. update time: ${this.#avgFrameUpdateDurationMs} ms`, 25, 50);
+    }
+
+    /**
+     * @param {MouseEvent} event
+     * @returns {void}
+     */
+    #handleMouseMove(event) {
+        if (!this.#pointEmitter || !this.#canvas) {
+            return;
+        }
+
+        const bounds = this.#canvas.getBoundingClientRect();
+
+        this.#pointEmitter.x = event.clientX - bounds.left;
+        this.#pointEmitter.y = event.clientY - bounds.top;
     }
 
     /**
@@ -118,9 +198,13 @@ export class Sandbox {
      */
     #handleResize() {
         this.#resizeCanvasToViewport();
+    }
 
-        if (this.#particleEngine && typeof this.#particleEngine.resize === 'function') {
-            this.#particleEngine.resize();
-        }
+    /**
+     * @returns {void}
+     */
+    #resizeCanvasToViewport() {
+        this.#canvas.width = window.innerWidth;
+        this.#canvas.height = window.innerHeight;
     }
 }
