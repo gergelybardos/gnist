@@ -1,14 +1,20 @@
 import js from '@eslint/js';
 import globals from 'globals';
+import jsdoc from 'eslint-plugin-jsdoc';
 
 export default [
     js.configs.recommended,
+    jsdoc.configs['flat/recommended'],
     {
+        plugins: {
+            jsdoc,
+        },
         languageOptions: {
             ecmaVersion: 'latest',
             sourceType: 'module',
             globals: {
                 ...globals.browser,
+                DOMHighResTimeStamp: 'readonly',
             },
         },
         rules: {
@@ -22,7 +28,8 @@ export default [
             'no-unused-vars': ['error', {
                 'vars': 'all',
                 'args': 'after-used',
-                'ignoreRestSiblings': true
+                'ignoreRestSiblings': true,
+                'argsIgnorePattern': '^_',
             }],
             'no-var': 'error',
             'prefer-const': 'error',
@@ -45,7 +52,22 @@ export default [
 
             // Whitespaces
             'no-trailing-spaces': 'error',
-        }
+
+            // JSDoc
+            'jsdoc/no-defaults': 'off',
+            'jsdoc/require-returns-description': 'off',
+            'jsdoc/require-param-description': 'off',
+            'jsdoc/multiline-blocks': 'off',
+        },
+        settings: {
+            jsdoc: {
+                mode: 'typescript',
+                tagNamePreference: {
+                    augments: 'extends',
+                    constructor: 'constructor',
+                },
+            },
+        },
     },
     {
         ignores: [
@@ -53,6 +75,7 @@ export default [
             'dist/',
             'build/',
             'coverage/',
+            'docs/',
         ],
     },
 ];
