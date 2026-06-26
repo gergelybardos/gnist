@@ -13,6 +13,9 @@ export class Sandbox {
     /** @type {CanvasRenderingContext2D|null} */
     #ctx;
 
+    /** @type {boolean} */
+    #snapToPixelGrid;
+
     /** @type {Gnist|null} */
     #gnistEngine;
 
@@ -43,6 +46,7 @@ export class Sandbox {
     constructor() {
         this.#canvas = null;
         this.#ctx = null;
+        this.#snapToPixelGrid = false;
         this.#gnistEngine = null;
         this.#pointEmitter = null;
         this.#previousTime = 0;
@@ -74,7 +78,7 @@ export class Sandbox {
 
         this.#gnistEngine = new Gnist();
 
-        const gravity = new DirectionalForce({ax:0, ay: 100});
+        const gravity = new DirectionalForce({ax:0, ay: 10});
         const friction = new LinearDrag({drag: 0.1});
 
         const fade = new OpacityFade(1.0, 0.0);
@@ -90,9 +94,9 @@ export class Sandbox {
             y: this.#canvas.height / 2,
             particlesPerSecond: 500,
             spawnConfig: {
-                size: [1, 8],
+                size: [20, 20],
                 lifespan: [1, 3],
-                speed: [15, 150],
+                speed: [0.01, 0.01],
                 rotation: [0, Math.PI * 2],
             }
         });
@@ -167,23 +171,32 @@ export class Sandbox {
         this.#ctx.fillRect(0, 0, width, height);
 
         const particles = this.#gnistEngine.getParticles();
+        const particleCount = particles.length;
+        const snap = this.#snapToPixelGrid;
 
-        if (particles.length === 0) {
+        if (particleCount === 0) {
             return;
         }
 
-        const count = particles.length;
-
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < particleCount; i++) {
             const particle = particles[i];
-
             const { r, g, b } = particle.color;
             const a = particle.opacity;
 
             this.#ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
-
             const size = particle.size ?? 2;
-            this.#ctx.fillRect(Math.floor(particle.x - size / 2), Math.floor(particle.y - size / 2), size, size);
+
+            const halfSize = size / 2;
+            let drawX = particle.x - halfSize;
+            let drawY = particle.y - halfSize;
+
+            if (snap) {
+                drawX = Math.floor(drawX);
+                drawY = Math.floor(drawY);
+            }
+
+            this.#ctx.fillRect(drawX, drawY, size, size);
+
         }
 
         this.#ctx.fillStyle = '#e1e1e1';
@@ -192,7 +205,7 @@ export class Sandbox {
         this.#ctx.textBaseline = 'top';
 
         this.#ctx.fillText(`FPS: ${this.#fps}`, 25, 25);
-        this.#ctx.fillText(`Particle count: ${count}`, 25, 50);
+        this.#ctx.fillText(`Particle count: ${particleCount}`, 25, 50);
         this.#ctx.fillText(`Avg. physics update time: ${this.#avgPhysicsUpdateTimeMs.toFixed(3)} ms`, 25, 75);
     }
 
