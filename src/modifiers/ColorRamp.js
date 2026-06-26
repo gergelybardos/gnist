@@ -44,28 +44,29 @@ export class ColorRamp extends Modifier {
      * @returns {void}
      */
     update(particle, normalizedAge) {
-        const t = Math.max(0, Math.min(1, normalizedAge));
+        const particleAge = Math.max(0, Math.min(1, normalizedAge));
+        const totalColorStopCount = this.#colorStops.length;
 
-        let lower = this.#colorStops[0];
-        let upper = this.#colorStops[this.#colorStops.length - 1];
+        // Map the normalized particle age onto the array indices of the color stops.
+        // E.g., if there are 5 stops, the max index is 4. An age of 0.5 results in 2.0.
+        const fractionalIndex = particleAge * (totalColorStopCount - 1);
 
-        // Find the current segment of the gradient (two sequential color stops that flank the current progress)
-        for (let i = 0; i < this.#colorStops.length - 1; i++) {
-            if (t >= this.#colorStops[i].pos && t <= this.#colorStops[i + 1].pos) {
-                lower = this.#colorStops[i];
-                upper = this.#colorStops[i + 1];
-                break;
-            }
-        }
+        // The integer part of the index represents the lower color stop flanking the particle's age
+        const lowerColorStopIndex = Math.floor(fractionalIndex);
 
-        // Calculate the local progress factor (0.0 to 1.0) within the current segment
-        const segmentLength = upper.pos - lower.pos;
-        const localT = segmentLength === 0 ? 0 : (t - lower.pos) / segmentLength;
+        // The next integer represents the upper color stop, capped to stay inside array bounds
+        const upperColorStopIndex = Math.min(lowerColorStopIndex + 1, totalColorStopCount - 1);
 
-        // Linear interpolation of each RGB channel between the lower and upper colors of the current segment
-        // using the local progress factor
-        particle.color.r = lower.r + (upper.r - lower.r) * localT;
-        particle.color.g = lower.g + (upper.g - lower.g) * localT;
-        particle.color.b = lower.b + (upper.b - lower.b) * localT;
+        const lowerColorStop = this.#colorStops[lowerColorStopIndex];
+        const upperColorStop = this.#colorStops[upperColorStopIndex];
+
+        // The decimal part is the particle's local age (progress factor) within this segment
+        const interpolationFactor = fractionalIndex - lowerColorStopIndex;
+
+        // Linear interpolation on each RGB channel between the lower and upper colors of this segment
+        // based on the particle's local progress
+        particle.color.r = lowerColorStop.r + (upperColorStop.r - lowerColorStop.r) * interpolationFactor;
+        particle.color.g = lowerColorStop.g + (upperColorStop.g - lowerColorStop.g) * interpolationFactor;
+        particle.color.b = lowerColorStop.b + (upperColorStop.b - lowerColorStop.b) * interpolationFactor;
     }
 }
