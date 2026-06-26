@@ -8,6 +8,12 @@ import { Particle } from './Particle.js';
  * @class
  */
 export class Gnist {
+    /** Optional simulation boundaries. If set, particles traveling completely outside these limits
+     * (including a safety padding based on particle size) will be culled.
+     * @type {object|null}
+     */
+    cullingBounds;
+
     /**
      * Registered emitters emitting active particles.
      * @type {Array<Emitter>}
@@ -29,11 +35,14 @@ export class Gnist {
     /**
      * Initializes an empty Gnist simulation pipeline.
      * @constructor
+     * @param {object} [config={}] Configuration parameters.
      */
-    constructor() {
+    constructor(config = {}) {
         this.#emitters = [];
         this.#globalForces = [];
         this.#particles = [];
+
+        this.cullingBounds = config.cullingBounds ?? null;
     }
 
     /**
@@ -178,6 +187,7 @@ export class Gnist {
         const globalForcesCount = globalForces.length;
         const particles = this.#particles;
         const particleCount = particles.length;
+        const cullingBounds = this.cullingBounds;
 
         let aliveCount = 0;
 
@@ -210,6 +220,19 @@ export class Gnist {
             const activeModifiersCount = activeModifiers.length;
             for (let j = 0; j < activeModifiersCount; j++) {
                 activeModifiers[j].update(particle, normalizedAge, dt);
+            }
+
+            if (cullingBounds !== null) {
+                const padding = particle.size || 0;
+
+                if (particle.x < cullingBounds.xMin - padding ||
+                    particle.x > cullingBounds.xMax + padding ||
+                    particle.y < cullingBounds.yMin - padding ||
+                    particle.y > cullingBounds.yMax + padding
+                ) {
+                    particle.alive = false;
+                    continue;
+                }
             }
 
             // In-place dual-pointer compaction avoids Array.filter allocations,
