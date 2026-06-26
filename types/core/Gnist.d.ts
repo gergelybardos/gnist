@@ -4,6 +4,22 @@
  */
 export class Gnist {
     /**
+     * The current semantic version of the Gnist particle engine.
+     * @returns {string}
+     */
+    static get VERSION(): string;
+    /**
+     * Initializes an empty Gnist simulation pipeline.
+     * @constructor
+     * @param {object} [config={}] Configuration parameters.
+     */
+    constructor(config?: object);
+    /** Optional simulation boundaries. If set, particles traveling completely outside these limits
+     * (including a safety padding based on particle size) will be culled.
+     * @type {object|null}
+     */
+    cullingBounds: object | null;
+    /**
      * Gets the current list of registered emitters.
      * @returns {Array<Emitter>}
      */

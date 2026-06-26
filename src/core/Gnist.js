@@ -8,6 +8,14 @@ import { Particle } from './Particle.js';
  * @class
  */
 export class Gnist {
+    /**
+     * The current semantic version of the Gnist particle engine.
+     * @returns {string}
+     */
+    static get VERSION() {
+        return '0.0.0';
+    }
+
     /** Optional simulation boundaries. If set, particles traveling completely outside these limits
      * (including a safety padding based on particle size) will be culled.
      * @type {object|null}
