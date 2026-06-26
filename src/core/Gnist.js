@@ -179,8 +179,10 @@ export class Gnist {
         const particles = this.#particles;
         const particleCount = particles.length;
 
+        let aliveCount = 0;
+
         for (let i = 0; i < particleCount; i++) {
-            const particle = this.#particles[i];
+            const particle = particles[i];
 
             particle.age += dt;
             if (particle.age >= particle.lifespan) {
@@ -209,8 +211,17 @@ export class Gnist {
             for (let j = 0; j < activeModifiersCount; j++) {
                 activeModifiers[j].update(particle, normalizedAge, dt);
             }
+
+            // In-place dual-pointer compaction avoids Array.filter allocations,
+            // eliminating garbage collection spikes
+
+            if (aliveCount !== i) {
+                particles[aliveCount] = particle;
+            }
+
+            aliveCount++;
         }
 
-        this.#particles = particles.filter(p => p.alive);
+        particles.length = aliveCount;
     }
 }
