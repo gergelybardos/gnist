@@ -78,7 +78,7 @@ export class Sandbox {
 
         this.#gnistEngine = new Gnist();
 
-        const gravity = new DirectionalForce({ax:0, ay: 10});
+        const gravity = new DirectionalForce({ax:0, ay: 200});
         const friction = new LinearDrag({drag: 0.1});
 
         const fade = new OpacityFade(1.0, 0.0);
@@ -94,9 +94,9 @@ export class Sandbox {
             y: this.#canvas.height / 2,
             particlesPerSecond: 500,
             spawnConfig: {
-                size: [20, 20],
+                size: [1, 8],
                 lifespan: [1, 3],
-                speed: [0.01, 0.01],
+                speed: [15, 150],
                 rotation: [0, Math.PI * 2],
             }
         });
