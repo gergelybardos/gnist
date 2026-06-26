@@ -4,6 +4,9 @@ import { Gnist, PointEmitter, DirectionalForce, LinearDrag, ColorRamp, OpacityFa
  * @class
  */
 export class Sandbox {
+    /** @type {number} */
+    static #PERFORMANCE_SAMPLE_WINDOW = 100;
+
     /** @type {HTMLCanvasElement|null} */
     #canvas;
 
@@ -20,13 +23,19 @@ export class Sandbox {
     #previousTime;
 
     /** @type {number} */
-    #frameCounter;
+    #frameCount;
 
     /** @type {number} */
-    #totalExecutionTime;
+    #totalExecutionTimeMs;
 
     /** @type {number} */
-    #avgFrameUpdateDurationMs;
+    #avgPhysicsUpdateTimeMs;
+
+    /** @type {number} */
+    #fps;
+
+    /** @type {number} */
+    #totalFrameTimeS;
 
     /**
      * @constructor
@@ -37,9 +46,11 @@ export class Sandbox {
         this.#gnistEngine = null;
         this.#pointEmitter = null;
         this.#previousTime = 0;
-        this.#frameCounter = 0;
-        this.#totalExecutionTime = 0;
-        this.#avgFrameUpdateDurationMs = 0;
+        this.#frameCount = 0;
+        this.#totalExecutionTimeMs = 0;
+        this.#avgPhysicsUpdateTimeMs = 0;
+        this.#fps = 0;
+        this.#totalFrameTimeS = 0;
     }
 
     /**
@@ -127,12 +138,17 @@ export class Sandbox {
         this.#gnistEngine.update(safeDt);
         const end = performance.now();
 
-        this.#totalExecutionTime += (end - start);
-        this.#frameCounter++;
-        if (this.#frameCounter >= 100) {
-            this.#avgFrameUpdateDurationMs = this.#totalExecutionTime / 1000;
-            this.#frameCounter = 0;
-            this.#totalExecutionTime = 0;
+        this.#totalExecutionTimeMs += (end - start);
+        this.#totalFrameTimeS += dt;
+        this.#frameCount++;
+
+        if (this.#frameCount >= Sandbox.#PERFORMANCE_SAMPLE_WINDOW) {
+            this.#avgPhysicsUpdateTimeMs = this.#totalExecutionTimeMs / Sandbox.#PERFORMANCE_SAMPLE_WINDOW;
+            this.#fps = Math.round(Sandbox.#PERFORMANCE_SAMPLE_WINDOW / this.#totalFrameTimeS);
+
+            this.#frameCount = 0;
+            this.#totalExecutionTimeMs = 0;
+            this.#totalFrameTimeS = 0;
         }
 
         this.#render();
@@ -174,8 +190,10 @@ export class Sandbox {
         this.#ctx.font = '14px monospace';
         this.#ctx.textAlign = 'left';
         this.#ctx.textBaseline = 'top';
-        this.#ctx.fillText(`Particle count: ${count}`, 25, 25);
-        this.#ctx.fillText(`Avg. update time: ${this.#avgFrameUpdateDurationMs} ms`, 25, 50);
+
+        this.#ctx.fillText(`FPS: ${this.#fps}`, 25, 25);
+        this.#ctx.fillText(`Particle count: ${count}`, 25, 50);
+        this.#ctx.fillText(`Avg. physics update time: ${this.#avgPhysicsUpdateTimeMs.toFixed(3)} ms`, 25, 75);
     }
 
     /**
