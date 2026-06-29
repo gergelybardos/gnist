@@ -6,7 +6,7 @@ import { Particle } from './Particle.js';
 /**
  * Simulation configuration.
  * @typedef {Object} EngineConfig
- * @property {SimulationAreaBounds} [simulationAreaBounds={}]
+ * @property {SimulationAreaBounds|null} [simulationAreaBounds=null] Optional simulation area used for particle culling.
  */
 
 /**
