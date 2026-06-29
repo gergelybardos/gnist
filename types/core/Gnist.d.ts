@@ -1,4 +1,19 @@
 /**
+ * Simulation configuration.
+ * @typedef {Object} EngineConfig
+ * @property {SimulationAreaBounds} [simulationAreaBounds={}]
+ */
+/**
+ * Defines a region beyond which particles are considered outside the simulation and are marked dead.
+ * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
+ * partially inside the region.
+ * @typedef {Object} SimulationAreaBounds
+ * @property {number} xMin Left boundary of the simulation area.
+ * @property {number} yMin Top boundary of the simulation area.
+ * @property {number} xMax Right boundary of the simulation area.
+ * @property {number} yMax Bottom boundary of the simulation area.
+ */
+/**
  * The core particle engine that manages the simulation pipeline and particle lifecycle.
  * @class
  */
@@ -9,16 +24,16 @@ export class Gnist {
      */
     static get VERSION(): string;
     /**
-     * Initializes an empty Gnist simulation pipeline.
+     * Initializes an empty simulation pipeline.
      * @constructor
-     * @param {object} [config={}] Configuration parameters.
+     * @param {EngineConfig} [config={}] Engine configuration options.
      */
-    constructor(config?: object);
-    /** Optional simulation boundaries. If set, particles traveling completely outside these limits
-     * (including a safety padding based on particle size) will be culled.
-     * @type {object|null}
+    constructor(config?: EngineConfig);
+    /**
+     * Engine configuration options.
+     * @type {EngineConfig}
      */
-    cullingBounds: object | null;
+    config: EngineConfig;
     /**
      * Gets the current list of registered emitters.
      * @returns {Array<Emitter>}
@@ -91,6 +106,35 @@ export class Gnist {
     tickParticles(dt: number): void;
     #private;
 }
+/**
+ * Simulation configuration.
+ */
+export type EngineConfig = {
+    simulationAreaBounds?: SimulationAreaBounds | undefined;
+};
+/**
+ * Defines a region beyond which particles are considered outside the simulation and are marked dead.
+ * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
+ * partially inside the region.
+ */
+export type SimulationAreaBounds = {
+    /**
+     * Left boundary of the simulation area.
+     */
+    xMin: number;
+    /**
+     * Top boundary of the simulation area.
+     */
+    yMin: number;
+    /**
+     * Right boundary of the simulation area.
+     */
+    xMax: number;
+    /**
+     * Bottom boundary of the simulation area.
+     */
+    yMax: number;
+};
 import { Emitter } from '../emitters/Emitter.js';
 import { Force } from '../forces/Force.js';
 import { Particle } from './Particle.js';

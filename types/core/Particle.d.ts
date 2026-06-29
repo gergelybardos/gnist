@@ -1,5 +1,5 @@
 /**
- * @import {Color} from '../shared/Types.js'
+ * @import { Color } from '../shared/Types.js'
  */
 /**
  * Represents a single particle within the simulation.
