@@ -1,6 +1,6 @@
-import {Particle} from '../core/Particle.js';
+import { Particle } from '../core/Particle.js';
 
-import {Force} from './Force.js';
+import { Force } from './Force.js';
 
 /**
  * Environmental force that applies a constant directional push to particles.

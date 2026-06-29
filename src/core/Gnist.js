@@ -34,6 +34,14 @@ export class Gnist {
     }
 
     /**
+     * Constant value representing an infinite particle lifespan.
+     * @type {number}
+     */
+    static get INFINITE_DURATION() {
+        return -1;
+    }
+
+    /**
      * Engine configuration options.
      * @type {EngineConfig}
      */
@@ -249,7 +257,7 @@ export class Gnist {
                 }
 
                 if (cullingBounds !== null) {
-                    const safetyMargin = particle.size || 0;
+                    const safetyMargin = particle.size ?? 0;
 
                     if (particle.x < cullingBounds.xMin - safetyMargin ||
                         particle.x > cullingBounds.xMax + safetyMargin ||

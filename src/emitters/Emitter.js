@@ -1,11 +1,7 @@
 import { Force } from '../forces/Force.js';
+import { Gnist } from '../core/Gnist.js';
 import { Modifier } from '../modifiers/Modifier.js';
 import { Particle } from '../core/Particle.js';
-
-/**
- * @type {number}
- */
-const INFINITE_DURATION = -1;
 
 /**
  * Abstract base class for particle emitters.
@@ -100,7 +96,7 @@ export class Emitter {
         this.enabled = config.enabled ?? true;
         this.looping = config.looping ?? true;
         this.particlesPerSecond = config.particlesPerSecond ?? 10;
-        this.duration = config.duration ?? INFINITE_DURATION;
+        this.duration = config.duration ?? Gnist.INFINITE_DURATION;
         this.x = config.x ?? 0;
         this.y = config.y ?? 0;
 
