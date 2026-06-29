@@ -25,7 +25,7 @@ export class ColorRamp extends Modifier {
 
         const count = colors.length;
         for (let i = 0; i < count; i++) {
-            const relativePosition = i / (count - 1);  // [0.0, 1.0]
+            const relativePosition = count === 1 ? 0 : i / (count - 1);  // [0.0, 1.0]
 
             this.#colorStops.push({
                 pos: relativePosition,
