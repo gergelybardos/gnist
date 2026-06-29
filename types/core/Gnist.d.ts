@@ -1,13 +1,13 @@
 /**
  * Simulation configuration.
  * @typedef {Object} EngineConfig
- * @property {SimulationAreaBounds} [simulationAreaBounds={}]
+ * @property {CullingBounds|null} [cullingBounds=null] Optional simulation area used for particle culling.
  */
 /**
  * Defines a region beyond which particles are considered outside the simulation and are marked dead.
  * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
  * partially inside the region.
- * @typedef {Object} SimulationAreaBounds
+ * @typedef {Object} CullingBounds
  * @property {number} xMin Left boundary of the simulation area.
  * @property {number} yMin Top boundary of the simulation area.
  * @property {number} xMax Right boundary of the simulation area.
@@ -110,14 +110,17 @@ export class Gnist {
  * Simulation configuration.
  */
 export type EngineConfig = {
-    simulationAreaBounds?: SimulationAreaBounds | undefined;
+    /**
+     * Optional simulation area used for particle culling.
+     */
+    cullingBounds?: CullingBounds | null | undefined;
 };
 /**
  * Defines a region beyond which particles are considered outside the simulation and are marked dead.
  * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
  * partially inside the region.
  */
-export type SimulationAreaBounds = {
+export type CullingBounds = {
     /**
      * Left boundary of the simulation area.
      */

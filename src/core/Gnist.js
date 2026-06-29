@@ -6,14 +6,14 @@ import { Particle } from './Particle.js';
 /**
  * Simulation configuration.
  * @typedef {Object} EngineConfig
- * @property {SimulationAreaBounds|null} [simulationAreaBounds=null] Optional simulation area used for particle culling.
+ * @property {CullingBounds|null} [cullingBounds=null] Optional simulation area used for particle culling.
  */
 
 /**
  * Defines a region beyond which particles are considered outside the simulation and are marked dead.
  * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
  * partially inside the region.
- * @typedef {Object} SimulationAreaBounds
+ * @typedef {Object} CullingBounds
  * @property {number} xMin Left boundary of the simulation area.
  * @property {number} yMin Top boundary of the simulation area.
  * @property {number} xMax Right boundary of the simulation area.
@@ -68,7 +68,7 @@ export class Gnist {
         this.#particles = [];
 
         this.config = {};
-        this.config.simulationAreaBounds = config.simulationAreaBounds ?? null;
+        this.config.cullingBounds = config.cullingBounds ?? null;
     }
 
     /**
@@ -213,7 +213,7 @@ export class Gnist {
         const globalForcesCount = globalForces.length;
         const particles = this.#particles;
         const particleCount = particles.length;
-        const simulationAreaBounds = this.config.simulationAreaBounds;
+        const cullingBounds = this.config.cullingBounds;
 
         let aliveCount = 0;
 
@@ -248,13 +248,13 @@ export class Gnist {
                     activeModifiers[j].update(particle, normalizedAge, dt);
                 }
 
-                if (simulationAreaBounds !== null) {
+                if (cullingBounds !== null) {
                     const safetyMargin = particle.size || 0;
 
-                    if (particle.x < simulationAreaBounds.xMin - safetyMargin ||
-                        particle.x > simulationAreaBounds.xMax + safetyMargin ||
-                        particle.y < simulationAreaBounds.yMin - safetyMargin ||
-                        particle.y > simulationAreaBounds.yMax + safetyMargin
+                    if (particle.x < cullingBounds.xMin - safetyMargin ||
+                        particle.x > cullingBounds.xMax + safetyMargin ||
+                        particle.y < cullingBounds.yMin - safetyMargin ||
+                        particle.y > cullingBounds.yMax + safetyMargin
                     ) {
                         particle.alive = false;
                     }

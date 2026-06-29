@@ -5,7 +5,7 @@ import { Gnist, PointEmitter, DirectionalForce, LinearDrag, ColorRamp, OpacityFa
  */
 export class Sandbox {
     /** @type {number} */
-    static #SIMULATION_AREA_BOUNDS_MARGIN = 50;
+    static #CULLING_BOUNDS_MARGIN = 50;
 
     /** @type {HTMLCanvasElement|null} */
     #canvas;
@@ -88,7 +88,7 @@ export class Sandbox {
 
         this.#initCanvas();
         this.#initSimulation();
-        this.#updateGnistSimulationAreaBounds();
+        this.#updateGnistCullingBounds();
 
         this.#canvas.addEventListener('mousemove', (event) => this.#handleMouseMove(event));
         window.addEventListener('resize', () => this.#handleResize());
@@ -227,7 +227,7 @@ export class Sandbox {
         this.#ctx.textBaseline = 'top';
 
         const hudRowHeight = 20;
-        const hudPadding = Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN + 20;
+        const hudPadding = Sandbox.#CULLING_BOUNDS_MARGIN + 20;
 
         const performanceMetricsHudRows = [
             `Gnist version:  ${Gnist.VERSION}`,
@@ -249,10 +249,10 @@ export class Sandbox {
         }
 
         this.#ctx.strokeRect(
-            this.#gnistEngine.config.simulationAreaBounds.xMin,
-            this.#gnistEngine.config.simulationAreaBounds.yMin,
-            this.#gnistEngine.config.simulationAreaBounds.xMax - this.#gnistEngine.config.simulationAreaBounds.xMin,
-            this.#gnistEngine.config.simulationAreaBounds.yMax - this.#gnistEngine.config.simulationAreaBounds.yMin,
+            this.#gnistEngine.config.cullingBounds.xMin,
+            this.#gnistEngine.config.cullingBounds.yMin,
+            this.#gnistEngine.config.cullingBounds.xMax - this.#gnistEngine.config.cullingBounds.xMin,
+            this.#gnistEngine.config.cullingBounds.yMax - this.#gnistEngine.config.cullingBounds.yMin,
         );
     }
 
@@ -276,7 +276,7 @@ export class Sandbox {
      */
     #handleResize() {
         this.#resizeCanvasToViewport();
-        this.#updateGnistSimulationAreaBounds();
+        this.#updateGnistCullingBounds();
     }
 
     /**
@@ -290,16 +290,16 @@ export class Sandbox {
     /**
      * @returns {void}
      */
-    #updateGnistSimulationAreaBounds() {
+    #updateGnistCullingBounds() {
         if (!this.#gnistEngine || !this.#canvas) {
             return;
         }
 
-        this.#gnistEngine.config.simulationAreaBounds = {
-            xMin: Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN,
-            yMin: Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN,
-            xMax: this.#canvas.width - Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN,
-            yMax: this.#canvas.height - Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN,
+        this.#gnistEngine.config.cullingBounds = {
+            xMin: Sandbox.#CULLING_BOUNDS_MARGIN,
+            yMin: Sandbox.#CULLING_BOUNDS_MARGIN,
+            xMax: this.#canvas.width - Sandbox.#CULLING_BOUNDS_MARGIN,
+            yMax: this.#canvas.height - Sandbox.#CULLING_BOUNDS_MARGIN,
         };
     }
     /**
