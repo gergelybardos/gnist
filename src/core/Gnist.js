@@ -223,50 +223,51 @@ export class Gnist {
             particle.age += dt;
             if (particle.age >= particle.lifespan) {
                 particle.alive = false;
-                continue;
             }
 
-            const normalizedAge = Math.min(particle.age / particle.lifespan, 1.0);
+            if (particle.alive) {
+                const normalizedAge = Math.min(particle.age / particle.lifespan, 1.0);
 
-            for (let j = 0; j < globalForcesCount; j++) {
-                globalForces[j].apply(particle, dt);
-            }
+                for (let j = 0; j < globalForcesCount; j++) {
+                    globalForces[j].apply(particle, dt);
+                }
 
-            const scopedForces = particle.getScopedForces();
-            const scopedForcesCount = scopedForces.length;
-            for (let j = 0; j < scopedForcesCount; j++) {
-                scopedForces[j].apply(particle, dt);
-            }
+                const scopedForces = particle.getScopedForces();
+                const scopedForcesCount = scopedForces.length;
+                for (let j = 0; j < scopedForcesCount; j++) {
+                    scopedForces[j].apply(particle, dt);
+                }
 
-            particle.x += particle.vx * dt;
-            particle.y += particle.vy * dt;
-            particle.rotation += particle.angularVelocity * dt;
+                particle.x += particle.vx * dt;
+                particle.y += particle.vy * dt;
+                particle.rotation += particle.angularVelocity * dt;
 
-            const activeModifiers = particle.getModifiers();
-            const activeModifiersCount = activeModifiers.length;
-            for (let j = 0; j < activeModifiersCount; j++) {
-                activeModifiers[j].update(particle, normalizedAge, dt);
-            }
+                const activeModifiers = particle.getModifiers();
+                const activeModifiersCount = activeModifiers.length;
+                for (let j = 0; j < activeModifiersCount; j++) {
+                    activeModifiers[j].update(particle, normalizedAge, dt);
+                }
 
-            if (simulationAreaBounds !== null) {
-                const safetyMargin = particle.size || 0;
+                if (simulationAreaBounds !== null) {
+                    const safetyMargin = particle.size || 0;
 
-                if (particle.x < simulationAreaBounds.xMin - safetyMargin ||
-                    particle.x > simulationAreaBounds.xMax + safetyMargin ||
-                    particle.y < simulationAreaBounds.yMin - safetyMargin ||
-                    particle.y > simulationAreaBounds.yMax + safetyMargin
-                ) {
-                    particle.alive = false;
-                    continue;
+                    if (particle.x < simulationAreaBounds.xMin - safetyMargin ||
+                        particle.x > simulationAreaBounds.xMax + safetyMargin ||
+                        particle.y < simulationAreaBounds.yMin - safetyMargin ||
+                        particle.y > simulationAreaBounds.yMax + safetyMargin
+                    ) {
+                        particle.alive = false;
+                    }
                 }
             }
 
             // In-place dual-pointer compaction avoids Array.filter allocations, eliminating garbage collection spikes
-            if (aliveCount !== i) {
-                particles[aliveCount] = particle;
+            if (particle.alive) {
+                if (aliveCount !== i) {
+                    particles[aliveCount] = particle;
+                }
+                aliveCount++;
             }
-
-            aliveCount++;
         }
 
         particles.length = aliveCount;
