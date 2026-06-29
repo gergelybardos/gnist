@@ -257,7 +257,7 @@ export class Gnist {
                 }
 
                 if (cullingBounds !== null) {
-                    const safetyMargin = particle.size ?? 0;
+                    const safetyMargin = particle.size;
 
                     if (particle.x < cullingBounds.xMin - safetyMargin ||
                         particle.x > cullingBounds.xMax + safetyMargin ||
