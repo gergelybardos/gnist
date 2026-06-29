@@ -5,16 +5,13 @@ import { Gnist, PointEmitter, DirectionalForce, LinearDrag, ColorRamp, OpacityFa
  */
 export class Sandbox {
     /** @type {number} */
-    static #PERFORMANCE_SAMPLE_WINDOW = 100;
+    static #SIMULATION_AREA_BOUNDS_MARGIN = 50;
 
     /** @type {HTMLCanvasElement|null} */
     #canvas;
 
     /** @type {CanvasRenderingContext2D|null} */
     #ctx;
-
-    /** @type {boolean} */
-    #snapToPixelGrid;
 
     /** @type {Gnist|null} */
     #gnistEngine;
@@ -25,6 +22,10 @@ export class Sandbox {
     /** @type {DOMHighResTimeStamp} */
     #previousTime;
 
+    // =========================================================================
+    // PERFORMANCE METRICS
+    // =========================================================================
+
     /** @type {number} */
     #frameCount;
 
@@ -32,7 +33,10 @@ export class Sandbox {
     #totalExecutionTimeMs;
 
     /** @type {number} */
-    #avgPhysicsUpdateTimeMs;
+    #avgGnistUpdateTimeMs;
+
+    /** @type {number} */
+    #peakAvgGnistUpdateTimeMs;
 
     /** @type {number} */
     #fps;
@@ -40,21 +44,26 @@ export class Sandbox {
     /** @type {number} */
     #totalFrameTimeS;
 
+    /** @type {string} */
+    #userAgentInfo;
+
     /**
      * @constructor
      */
     constructor() {
         this.#canvas = null;
         this.#ctx = null;
-        this.#snapToPixelGrid = false;
         this.#gnistEngine = null;
         this.#pointEmitter = null;
         this.#previousTime = 0;
+
         this.#frameCount = 0;
         this.#totalExecutionTimeMs = 0;
-        this.#avgPhysicsUpdateTimeMs = 0;
+        this.#avgGnistUpdateTimeMs = 0;
+        this.#peakAvgGnistUpdateTimeMs = 0;
         this.#fps = 0;
         this.#totalFrameTimeS = 0;
+        this.#userAgentInfo = '';
     }
 
     /**
@@ -74,12 +83,40 @@ export class Sandbox {
      * @returns {void}
      */
     #init() {
-        this.#setupCanvas();
-
+        this.#userAgentInfo = this.#getUserAgentInfo();
         this.#gnistEngine = new Gnist();
 
+        this.#initCanvas();
+        this.#initSimulation();
+        this.#updateGnistSimulationAreaBounds();
+
+        this.#canvas.addEventListener('mousemove', (event) => this.#handleMouseMove(event));
+        window.addEventListener('resize', () => this.#handleResize());
+    }
+
+    /**
+     * @returns {void}
+     */
+    #initCanvas() {
+        let canvas = document.getElementById('canvas');
+
+        if (!canvas) {
+            canvas = document.createElement('canvas');
+            document.body.appendChild(canvas);
+        }
+
+        this.#canvas = canvas;
+        this.#ctx = this.#canvas.getContext('2d');
+
+        this.#resizeCanvasToViewport();
+    }
+
+    /**
+     * @returns {void}
+     */
+    #initSimulation() {
         const gravity = new DirectionalForce({ax:0, ay: 200});
-        const friction = new LinearDrag({drag: 0.1});
+        const friction = new LinearDrag({drag: 0.4});
 
         const fade = new OpacityFade(1.0, 0.0);
         const rainbowRamp = new ColorRamp([
@@ -107,26 +144,6 @@ export class Sandbox {
         this.#gnistEngine.addGlobalForce(gravity);
         this.#gnistEngine.addGlobalForce(friction);
         this.#gnistEngine.addEmitter(this.#pointEmitter);
-
-        this.#canvas.addEventListener('mousemove', (event) => this.#handleMouseMove(event));
-        window.addEventListener('resize', () => this.#handleResize());
-    }
-
-    /**
-     * @returns {void}
-     */
-    #setupCanvas() {
-        let canvas = document.getElementById('canvas');
-
-        if (!canvas) {
-            canvas = document.createElement('canvas');
-            document.body.appendChild(canvas);
-        }
-
-        this.#canvas = canvas;
-        this.#ctx = this.#canvas.getContext('2d');
-
-        this.#resizeCanvasToViewport();
     }
 
     /**
@@ -146,10 +163,12 @@ export class Sandbox {
         this.#totalFrameTimeS += dt;
         this.#frameCount++;
 
-        if (this.#frameCount >= Sandbox.#PERFORMANCE_SAMPLE_WINDOW) {
-            this.#avgPhysicsUpdateTimeMs = this.#totalExecutionTimeMs / Sandbox.#PERFORMANCE_SAMPLE_WINDOW;
-            this.#fps = Math.round(Sandbox.#PERFORMANCE_SAMPLE_WINDOW / this.#totalFrameTimeS);
+        const sampleWindow = 100;
 
+        if (this.#frameCount >= sampleWindow) {
+            this.#avgGnistUpdateTimeMs = this.#totalExecutionTimeMs / sampleWindow;
+            this.#peakAvgGnistUpdateTimeMs = Math.max(this.#peakAvgGnistUpdateTimeMs, this.#avgGnistUpdateTimeMs);
+            this.#fps = Math.round(sampleWindow / this.#totalFrameTimeS);
             this.#frameCount = 0;
             this.#totalExecutionTimeMs = 0;
             this.#totalFrameTimeS = 0;
@@ -167,12 +186,11 @@ export class Sandbox {
         const width = this.#canvas.width;
         const height = this.#canvas.height;
 
-        this.#ctx.fillStyle = '#111';
+        this.#ctx.fillStyle = '#222';
         this.#ctx.fillRect(0, 0, width, height);
 
         const particles = this.#gnistEngine.getParticles();
         const particleCount = particles.length;
-        const snap = this.#snapToPixelGrid;
 
         if (particleCount === 0) {
             return;
@@ -190,23 +208,52 @@ export class Sandbox {
             let drawX = particle.x - halfSize;
             let drawY = particle.y - halfSize;
 
-            if (snap) {
-                drawX = Math.floor(drawX);
-                drawY = Math.floor(drawY);
-            }
-
             this.#ctx.fillRect(drawX, drawY, size, size);
-
         }
 
-        this.#ctx.fillStyle = '#e1e1e1';
+        this.#renderPerformanceMetricsHud(particleCount);
+    }
+
+    /**
+     * @param {number} particleCount
+     * @returns {void}
+     */
+    #renderPerformanceMetricsHud(particleCount) {
+        this.#ctx.fillStyle = '#CCC';
+        this.#ctx.strokeStyle = this.#ctx.fillStyle;
+        this.#ctx.lineWidth = 1;
         this.#ctx.font = '14px monospace';
         this.#ctx.textAlign = 'left';
         this.#ctx.textBaseline = 'top';
 
-        this.#ctx.fillText(`FPS: ${this.#fps}`, 25, 25);
-        this.#ctx.fillText(`Particle count: ${particleCount}`, 25, 50);
-        this.#ctx.fillText(`Avg. physics update time: ${this.#avgPhysicsUpdateTimeMs.toFixed(3)} ms`, 25, 75);
+        const hudRowHeight = 20;
+        const hudPadding = Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN + 20;
+
+        const performanceMetricsHudRows = [
+            `Gnist version:  ${Gnist.VERSION}`,
+            `User agent:     ${this.#userAgentInfo}`,
+            '',
+            '',
+            `Particles:      ${particleCount}`,
+            '',
+            `Simulation:`,
+            `  Avg. update:  ${this.#avgGnistUpdateTimeMs.toFixed(3)} ms`,
+            `  Peak avg.:    ${this.#peakAvgGnistUpdateTimeMs.toFixed(3)} ms`,
+            '',
+            `Rendering:`,
+            `  FPS:          ${this.#fps}`,
+        ];
+
+        for (let i = 0; i < performanceMetricsHudRows.length; i++) {
+            this.#ctx.fillText(performanceMetricsHudRows[i], hudPadding, hudPadding + hudRowHeight * i);
+        }
+
+        this.#ctx.strokeRect(
+            this.#gnistEngine.config.simulationAreaBounds.xMin,
+            this.#gnistEngine.config.simulationAreaBounds.yMin,
+            this.#gnistEngine.config.simulationAreaBounds.xMax - this.#gnistEngine.config.simulationAreaBounds.xMin,
+            this.#gnistEngine.config.simulationAreaBounds.yMax - this.#gnistEngine.config.simulationAreaBounds.yMin,
+        );
     }
 
     /**
@@ -229,6 +276,7 @@ export class Sandbox {
      */
     #handleResize() {
         this.#resizeCanvasToViewport();
+        this.#updateGnistSimulationAreaBounds();
     }
 
     /**
@@ -237,5 +285,35 @@ export class Sandbox {
     #resizeCanvasToViewport() {
         this.#canvas.width = window.innerWidth;
         this.#canvas.height = window.innerHeight;
+    }
+
+    /**
+     * @returns {void}
+     */
+    #updateGnistSimulationAreaBounds() {
+        if (!this.#gnistEngine || !this.#canvas) {
+            return;
+        }
+
+        this.#gnistEngine.config.simulationAreaBounds = {
+            xMin: Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN,
+            yMin: Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN,
+            xMax: this.#canvas.width - Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN,
+            yMax: this.#canvas.height - Sandbox.#SIMULATION_AREA_BOUNDS_MARGIN,
+        };
+    }
+    /**
+     * @returns {string}
+     */
+    #getUserAgentInfo() {
+        const ua = navigator.userAgent;
+
+        if (ua.includes('OPR/')) return `Opera ${ua.split('OPR/')[1].split('.')[0]}`;
+        if (ua.includes('Edg/')) return `Microsoft Edge ${ua.split('Edg/')[1].split('.')[0]}`;
+        if (ua.includes('Chrome/')) return `Google Chrome ${ua.split('Chrome/')[1].split('.')[0]}`;
+        if (ua.includes('Firefox/')) return `Mozilla Firefox ${ua.split('Firefox/')[1].split('.')[0]}`;
+        if (ua.includes('Safari/')) return `Apple Safari ${ua.split('Version/')[1].split(' ')[0]}`;
+
+        return 'Unknown Browser';
     }
 }
