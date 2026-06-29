@@ -1,13 +1,13 @@
 /**
  * Simulation configuration.
- * @typedef {Object} EngineConfig
+ * @typedef {object} EngineConfig
  * @property {CullingBounds|null} [cullingBounds=null] Optional simulation area used for particle culling.
  */
 /**
  * Defines a region beyond which particles are considered outside the simulation and are marked dead.
  * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
  * partially inside the region.
- * @typedef {Object} CullingBounds
+ * @typedef {object} CullingBounds
  * @property {number} xMin Left boundary of the simulation area.
  * @property {number} yMin Top boundary of the simulation area.
  * @property {number} xMax Right boundary of the simulation area.

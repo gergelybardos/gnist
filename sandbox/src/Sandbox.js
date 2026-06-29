@@ -205,8 +205,8 @@ export class Sandbox {
             const size = particle.size ?? 2;
 
             const halfSize = size / 2;
-            let drawX = particle.x - halfSize;
-            let drawY = particle.y - halfSize;
+            const drawX = particle.x - halfSize;
+            const drawY = particle.y - halfSize;
 
             this.#ctx.fillRect(drawX, drawY, size, size);
         }
@@ -236,11 +236,11 @@ export class Sandbox {
             '',
             `Particles:      ${particleCount}`,
             '',
-            `Simulation:`,
+            'Simulation:',
             `  Avg. update:  ${this.#avgGnistUpdateTimeMs.toFixed(3)} ms`,
             `  Peak avg.:    ${this.#peakAvgGnistUpdateTimeMs.toFixed(3)} ms`,
             '',
-            `Rendering:`,
+            'Rendering:',
             `  FPS:          ${this.#fps}`,
         ];
 
@@ -308,11 +308,25 @@ export class Sandbox {
     #getUserAgentInfo() {
         const ua = navigator.userAgent;
 
-        if (ua.includes('OPR/')) return `Opera ${ua.split('OPR/')[1].split('.')[0]}`;
-        if (ua.includes('Edg/')) return `Microsoft Edge ${ua.split('Edg/')[1].split('.')[0]}`;
-        if (ua.includes('Chrome/')) return `Google Chrome ${ua.split('Chrome/')[1].split('.')[0]}`;
-        if (ua.includes('Firefox/')) return `Mozilla Firefox ${ua.split('Firefox/')[1].split('.')[0]}`;
-        if (ua.includes('Safari/')) return `Apple Safari ${ua.split('Version/')[1].split(' ')[0]}`;
+        if (ua.includes('OPR/')) {
+            return `Opera ${ua.split('OPR/')[1].split('.')[0]}`;
+        }
+
+        if (ua.includes('Edg/')) {
+            return `Microsoft Edge ${ua.split('Edg/')[1].split('.')[0]}`;
+        }
+
+        if (ua.includes('Chrome/')) {
+            return `Google Chrome ${ua.split('Chrome/')[1].split('.')[0]}`;
+        }
+
+        if (ua.includes('Firefox/')) {
+            return `Mozilla Firefox ${ua.split('Firefox/')[1].split('.')[0]}`;
+        }
+
+        if (ua.includes('Safari/')) {
+            return `Apple Safari ${ua.split('Version/')[1].split(' ')[0]}`;
+        }
 
         return 'Unknown Browser';
     }
