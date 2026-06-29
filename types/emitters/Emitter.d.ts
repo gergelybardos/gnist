@@ -32,7 +32,7 @@ export class Emitter {
      */
     particlesPerSecond: number;
     /**
-     * Lifetime of the emitter (in seconds), where -1 represents infinite emission.
+     * Duration of particle emission (in seconds), where -1 represents infinite emission.
      * @type {number}
      */
     duration: number;
