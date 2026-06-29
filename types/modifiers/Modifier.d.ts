@@ -1,4 +1,9 @@
 /**
+ * Modifier configuration options.
+ * @typedef {object} ModifierConfig
+ * @property {string} [id] Unique identifier. Defaults to a generated UUID.
+ */
+/**
  * Abstract base class for particle modifiers.
  * Modifiers apply visual or lifecycle changes to particles based on their normalized age.
  * @abstract
@@ -8,12 +13,12 @@ export class Modifier {
     /**
      * Initializes a modifier.
      * @constructor
-     * @param {object} [config={}] Configuration parameters.
+     * @param {ModifierConfig} [config={}] Configuration parameters.
      * @throws {TypeError}
      */
-    constructor(config?: object);
+    constructor(config?: ModifierConfig);
     /**
-     * Unique identifier. Defaults to an auto-generated UUID if none is provided.
+     * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */
     id: string;
@@ -27,4 +32,13 @@ export class Modifier {
      */
     update(_particle: Particle, _normalizedAge: number): void;
 }
+/**
+ * Modifier configuration options.
+ */
+export type ModifierConfig = {
+    /**
+     * Unique identifier. Defaults to a generated UUID.
+     */
+    id?: string | undefined;
+};
 import { Particle } from '../core/Particle.js';

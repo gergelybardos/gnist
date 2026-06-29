@@ -1,13 +1,19 @@
 import { Particle } from '../core/Particle.js';
 
 /**
+ * Force configuration options.
+ * @typedef {object} ForceConfig
+ * @property {string} [id] Unique identifier. Defaults to a generated UUID.
+ */
+
+/**
  * Abstract base class for environmental forces. Forces affect the motion of particles.
  * @abstract
  * @class
  */
 export class Force {
     /**
-     * Unique identifier. Defaults to an auto-generated UUID if none is provided.
+     * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */
     id;
@@ -15,7 +21,7 @@ export class Force {
     /**
      * Initializes an environmental force.
      * @constructor
-     * @param {object} [config={}] Configuration parameters.
+     * @param {ForceConfig} [config={}] Force configuration options.
      * @throws {TypeError}
      */
     constructor(config = {}) {
@@ -23,7 +29,7 @@ export class Force {
             throw new TypeError('Cannot instantiate abstract class Force directly.');
         }
 
-        this.id = config?.id || crypto.randomUUID();
+        this.id = config?.id ?? crypto.randomUUID();
     }
 
     /**

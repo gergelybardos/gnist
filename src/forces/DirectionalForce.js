@@ -3,19 +3,31 @@ import { Particle } from '../core/Particle.js';
 import { Force } from './Force.js';
 
 /**
+ * @import { ForceConfig } from './Force.js';
+ */
+
+/**
+ * DirectionalForce configuration options.
+ * Includes all properties from {@link ForceConfig}.
+ * @typedef {object} DirectionalForceConfig
+ * @property {number} [ax=0] Horizontal acceleration component (in pixels per second).
+ * @property {number} [ay=0] Vertical acceleration component (in pixels per second).
+ */
+
+/**
  * Environmental force that applies a constant directional push to particles.
  * @class
  * @extends Force
  */
 export class DirectionalForce extends Force {
     /**
-     * Horizontal acceleration value.
+     * Current horizontal acceleration component (in pixels per second).
      * @type {number}
      */
     ax;
 
     /**
-     * Vertical acceleration value.
+     * Current vertical acceleration component (in pixels per second).
      * @type {number}
      */
     ay;
@@ -23,10 +35,7 @@ export class DirectionalForce extends Force {
     /**
      * Initializes a directional force with horizontal and vertical acceleration components.
      * @constructor
-     * @param {object} [config={}] Configuration parameters.
-     * @param {string} [config.id] Unique identifier. Defaults to an auto-generated UUID if none is provided.
-     * @param {number} [config.ax=0] Horizontal acceleration component (pixels per second).
-     * @param {number} [config.ay=0] Vertical acceleration component (pixels per second).
+     * @param {DirectionalForceConfig} [config={}] DirectionalForce configuration options.
      */
     constructor(config = {}) {
         super(config);

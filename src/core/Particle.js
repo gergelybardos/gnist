@@ -29,25 +29,25 @@ export class Particle {
     y;
 
     /**
-     * Current horizontal velocity component (pixels per second).
+     * Current horizontal velocity component (in pixels per second).
      * @type {number}
      */
     vx;
 
     /**
-     * Current vertical velocity component (pixels per second).
+     * Current vertical velocity component (in pixels per second).
      * @type {number}
      */
     vy;
 
     /**
-     * Current orientation angle in radians.
+     * Current orientation angle (in radians).
      * @type {number}
      */
     rotation;
 
     /**
-     * Angular rotation speed (radians per second).
+     * Angular rotation speed (in radians per second).
      * @type {number}
      */
     angularVelocity;
@@ -58,7 +58,7 @@ export class Particle {
 
     /**
      * The visual size or scale factor.
-     * Interpreted by the renderer as pixels, radius, or a transform scale
+     * Interpreted by the renderer as pixels, radius, or a transform scale.
      * @type {number}
      */
     size;

@@ -1,6 +1,12 @@
 import { Particle } from '../core/Particle.js';
 
 /**
+ * Modifier configuration options.
+ * @typedef {object} ModifierConfig
+ * @property {string} [id] Unique identifier. Defaults to a generated UUID.
+ */
+
+/**
  * Abstract base class for particle modifiers.
  * Modifiers apply visual or lifecycle changes to particles based on their normalized age.
  * @abstract
@@ -8,7 +14,7 @@ import { Particle } from '../core/Particle.js';
  */
 export class Modifier {
     /**
-     * Unique identifier. Defaults to an auto-generated UUID if none is provided.
+     * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */
     id;
@@ -16,7 +22,7 @@ export class Modifier {
     /**
      * Initializes a modifier.
      * @constructor
-     * @param {object} [config={}] Configuration parameters.
+     * @param {ModifierConfig} [config={}] Configuration parameters.
      * @throws {TypeError}
      */
     constructor(config = {}) {
@@ -24,7 +30,7 @@ export class Modifier {
             throw new TypeError('Cannot instantiate abstract class Modifier directly.');
         }
 
-        this.id = config?.id || crypto.randomUUID();
+        this.id = config?.id ?? crypto.randomUUID();
     }
 
     /**

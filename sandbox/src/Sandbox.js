@@ -118,28 +118,34 @@ export class Sandbox {
         const gravity = new DirectionalForce({ax:0, ay: 200});
         const friction = new LinearDrag({drag: 0.4});
 
-        const fade = new OpacityFade(1.0, 0.0);
-        const rainbowRamp = new ColorRamp([
-            [0, 242, 254],
-            [143, 0, 255],
-            [255, 0, 127],
-            [255, 102, 0],
-        ]);
+        const fadeOut = new OpacityFade({
+            startOpacity: 1.0,
+            endOpacity: 0.0,
+        });
+
+        const gnistColorRamp = new ColorRamp({
+            colors: [
+                [0, 242, 254],
+                [143, 0, 255],
+                [255, 0, 127],
+                [255, 102, 0],
+            ],
+        });
 
         this.#pointEmitter = new PointEmitter({
             x: this.#canvas.width / 2,
             y: this.#canvas.height / 2,
             particlesPerSecond: 500,
-            spawnConfig: {
+            particleBlueprint: {
                 size: [1, 8],
                 lifespan: [1, 3],
                 speed: [15, 150],
-                rotation: [0, Math.PI * 2],
+                direction: [0, Math.PI * 2],
             }
         });
 
-        this.#pointEmitter.addModifier(fade);
-        this.#pointEmitter.addModifier(rainbowRamp);
+        this.#pointEmitter.addModifier(fadeOut);
+        this.#pointEmitter.addModifier(gnistColorRamp);
 
         this.#gnistEngine.addGlobalForce(gravity);
         this.#gnistEngine.addGlobalForce(friction);

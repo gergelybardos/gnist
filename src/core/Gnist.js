@@ -4,9 +4,9 @@ import { Force } from '../forces/Force.js';
 import { Particle } from './Particle.js';
 
 /**
- * Simulation configuration.
+ * Engine configuration options.
  * @typedef {object} EngineConfig
- * @property {CullingBounds|null} [cullingBounds=null] Optional simulation area used for particle culling.
+ * @property {CullingBounds|null} [cullingBounds=null] Optional region used for particle culling.
  */
 
 /**
@@ -14,10 +14,10 @@ import { Particle } from './Particle.js';
  * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
  * partially inside the region.
  * @typedef {object} CullingBounds
- * @property {number} xMin Left boundary of the simulation area.
- * @property {number} yMin Top boundary of the simulation area.
- * @property {number} xMax Right boundary of the simulation area.
- * @property {number} yMax Bottom boundary of the simulation area.
+ * @property {number} xMin Left boundary of the region.
+ * @property {number} yMin Top boundary of the region.
+ * @property {number} xMax Right boundary of the region.
+ * @property {number} yMax Bottom boundary of the region.
  */
 
 /**

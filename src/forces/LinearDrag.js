@@ -1,6 +1,17 @@
 import { Force } from './Force.js';
 
 /**
+ * @import { ForceConfig } from './Force.js';
+ */
+
+/**
+ * LinearDrag configuration options.
+ * Includes all properties from {@link ForceConfig}.
+ * @typedef {object} LinearDragConfig
+ * @property {number} [drag=0.99] Friction coefficient where 0 means no drag and higher values slow particles down faster.
+ */
+
+/**
  * Environmental force that applies linear drag (friction) to slow down particles over time.
  * @class
  * @extends Force
@@ -15,9 +26,7 @@ export class LinearDrag extends Force {
     /**
      * Initializes a linear drag with a specified friction coefficient.
      * @constructor
-     * @param {object} [config={}] Configuration parameters.
-     * @param {string} [config.id] Unique identifier. Defaults to an auto-generated UUID if none is provided.
-     * @param {number} [config.drag=0.99] Friction coefficient.
+     * @param {LinearDragConfig} [config={}] LinearDrag configuration options.
      */
     constructor(config = {}) {
         super(config);

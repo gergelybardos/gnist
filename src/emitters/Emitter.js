@@ -3,6 +3,41 @@ import { Gnist } from '../core/Gnist.js';
 import { Modifier } from '../modifiers/Modifier.js';
 import { Particle } from '../core/Particle.js';
 
+import '../shared/Types.js';
+
+/**
+ * @import { Color } from '../shared/Types.js'
+ */
+
+/**
+ * Emitter configuration options.
+ * @typedef {object} EmitterConfig
+ * @property {string} [id] Unique identifier. Defaults to a generated UUID.
+ * @property {boolean} [enabled=true] Flag indicating whether the emitter is running or not.
+ * @property {boolean} [looping=true] Flag indicating whether a finite-duration emitter restarts when its time is up.
+ * @property {number} [particlesPerSecond=10] Continuous emission rate of new particles per second.
+ * @property {number} [duration=Gnist.INFINITE_DURATION] Duration of particle emission (in seconds), where -1 represents infinite emission.
+ * @property {number} [x=0] Current horizontal coordinate of the emitter origin.
+ * @property {number} [y=0] Current vertical coordinate of the emitter origin.
+ * @property {ParticleBlueprint} [particleBlueprint={}] Configuration for emitted particles.
+ */
+
+/**
+ * Configuration options used by emitters to initialize particles at emission.
+ * This object is not runtime Particle state and does not correspond directly to Particle properties.
+ * Options are interpreted either directly or indirectly to derive Particle properties.
+ * Most options may be specified as a single number or a [min, max] range array.
+ * @typedef {object} ParticleBlueprint
+ * @property {number|number[]} [rotation] Orientation angle in radians.
+ * @property {number|number[]} [angularVelocity] Angular rotation speed (radians per second).
+ * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
+ * @property {Color} [color] RGB color channels.
+ * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
+ * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds).
+ * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
+ * @property {number|number[]} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
+ */
+
 /**
  * Abstract base class for particle emitters.
  * @abstract
@@ -10,7 +45,7 @@ import { Particle } from '../core/Particle.js';
  */
 export class Emitter {
     /**
-     * Unique identifier. Defaults to an auto-generated UUID if none is provided.
+     * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */
     id;
@@ -55,7 +90,7 @@ export class Emitter {
      * Configuration settings used to initialize emitted particles.
      * @type {object}
      */
-    #spawnConfig;
+    #particleBlueprint;
 
     /**
      * Leftover fractional particles to be emitted between frames.
@@ -84,7 +119,7 @@ export class Emitter {
     /**
      * Initializes a particle emitter.
      * @constructor
-     * @param {object} [config={}] Configuration parameters.
+     * @param {EmitterConfig} [config={}] Emitter configuration options.
      * @throws {TypeError}
      */
     constructor(config = {}) {
@@ -92,7 +127,7 @@ export class Emitter {
             throw new TypeError('Cannot instantiate abstract class Emitter directly.');
         }
 
-        this.id = config.id || crypto.randomUUID();
+        this.id = config.id ?? crypto.randomUUID();
         this.enabled = config.enabled ?? true;
         this.looping = config.looping ?? true;
         this.particlesPerSecond = config.particlesPerSecond ?? 10;
@@ -100,7 +135,8 @@ export class Emitter {
         this.x = config.x ?? 0;
         this.y = config.y ?? 0;
 
-        this.#spawnConfig = config.spawnConfig ?? {};
+        this.#particleBlueprint = config.particleBlueprint ?? {};
+
         this.#accumulator = 0;
         this.#elapsedTime = 0;
 
@@ -173,24 +209,28 @@ export class Emitter {
      * @returns {void}
      */
     initParticle(particle) {
-        const config = this.#spawnConfig;
-        const speed = this.#resolveNumber(config.speed, 50);
-        const angle = this.#resolveNumber(config.rotation, 0);
+        // Blueprint values that may be either a single number or a range are resolved via this.#resolveNumber().
+        // Values that may only be numbers are accessed directly.
 
-        particle.vx = Math.cos(angle) * speed;
-        particle.vy = Math.sin(angle) * speed;
-        particle.angularVelocity = this.#resolveNumber(config.angularVelocity, 0);
+        const blueprint = this.#particleBlueprint;
+        const speed = this.#resolveNumber(blueprint.speed, 50);
+        const direction = this.#resolveNumber(blueprint.direction, 0);
 
-        particle.size = this.#resolveNumber(config.size, particle.size);
+        particle.vx = Math.cos(direction) * speed;
+        particle.vy = Math.sin(direction) * speed;
+        particle.rotation = this.#resolveNumber(blueprint.rotation, particle.rotation);
+        particle.angularVelocity = this.#resolveNumber(blueprint.angularVelocity, particle.angularVelocity);
+
+        particle.size = this.#resolveNumber(blueprint.size, particle.size);
         particle.color = {
-            r: config.color?.r ?? 255,
-            g: config.color?.g ?? 255,
-            b: config.color?.b ?? 255,
+            r: blueprint.color?.r ?? 255,
+            g: blueprint.color?.g ?? 255,
+            b: blueprint.color?.b ?? 255,
         };
-        particle.opacity = this.#resolveNumber(config.opacity, particle.opacity);
+        particle.opacity = this.#resolveNumber(blueprint.opacity, particle.opacity);
 
         particle.age = 0;
-        particle.lifespan = this.#resolveNumber(config.lifespan, particle.lifespan);
+        particle.lifespan = this.#resolveNumber(blueprint.lifespan, particle.lifespan);
         particle.alive = true;
     }
 

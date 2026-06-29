@@ -3,6 +3,17 @@ import { Particle } from '../core/Particle.js';
 import { Modifier } from './Modifier.js';
 
 /**
+ * @import { ModifierConfig } from './Modifier.js';
+ */
+
+/**
+ * ColorRamp configuration options.
+ * Includes all properties from {@link ModifierConfig}.
+ * @typedef {object} ColorRampConfig
+ * @property {Array<Array<number>>} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
+ */
+
+/**
  * Particle modifier that blends a particle's color over time by interpolating through an arbitrary number of colors.
  * Colors are distributed evenly along the timeline.
  * @class
@@ -18,10 +29,12 @@ export class ColorRamp extends Modifier {
     /**
      * Initializes a color ramp modifier with evenly distributed color stops.
      * @constructor
-     * @param {Array<Array<number>>} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
+     * @param {ColorRampConfig} [config={}] ColorRampConfig configuration options.
      */
-    constructor(colors = [[255, 255, 255], [0, 0, 0]]) {
-        super();
+    constructor(config = {}) {
+        super(config);
+
+        const colors = config.colors ?? [[255, 255, 255], [0, 0, 0]];
 
         const count = colors.length;
         for (let i = 0; i < count; i++) {

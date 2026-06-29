@@ -1,4 +1,9 @@
 /**
+ * Force configuration options.
+ * @typedef {object} ForceConfig
+ * @property {string} [id] Unique identifier. Defaults to a generated UUID.
+ */
+/**
  * Abstract base class for environmental forces. Forces affect the motion of particles.
  * @abstract
  * @class
@@ -7,12 +12,12 @@ export class Force {
     /**
      * Initializes an environmental force.
      * @constructor
-     * @param {object} [config={}] Configuration parameters.
+     * @param {ForceConfig} [config={}] Force configuration options.
      * @throws {TypeError}
      */
-    constructor(config?: object);
+    constructor(config?: ForceConfig);
     /**
-     * Unique identifier. Defaults to an auto-generated UUID if none is provided.
+     * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */
     id: string;
@@ -26,4 +31,13 @@ export class Force {
      */
     apply(_particle: Particle, _dt: number): void;
 }
+/**
+ * Force configuration options.
+ */
+export type ForceConfig = {
+    /**
+     * Unique identifier. Defaults to a generated UUID.
+     */
+    id?: string | undefined;
+};
 import { Particle } from '../core/Particle.js';
