@@ -4,6 +4,23 @@ import { Force } from '../forces/Force.js';
 import { Particle } from './Particle.js';
 
 /**
+ * Simulation configuration.
+ * @typedef {Object} EngineConfig
+ * @property {SimulationAreaBounds} [simulationAreaBounds={}]
+ */
+
+/**
+ * Defines a region beyond which particles are considered outside the simulation and are marked dead.
+ * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
+ * partially inside the region.
+ * @typedef {Object} SimulationAreaBounds
+ * @property {number} xMin Left boundary of the simulation area.
+ * @property {number} yMin Top boundary of the simulation area.
+ * @property {number} xMax Right boundary of the simulation area.
+ * @property {number} yMax Bottom boundary of the simulation area.
+ */
+
+/**
  * The core particle engine that manages the simulation pipeline and particle lifecycle.
  * @class
  */
@@ -16,11 +33,11 @@ export class Gnist {
         return '0.0.0';
     }
 
-    /** Optional simulation boundaries. If set, particles traveling completely outside these limits
-     * (including a safety padding based on particle size) will be culled.
-     * @type {object|null}
+    /**
+     * Engine configuration options.
+     * @type {EngineConfig}
      */
-    cullingBounds;
+    config;
 
     /**
      * Registered emitters emitting active particles.
@@ -41,16 +58,17 @@ export class Gnist {
     #particles;
 
     /**
-     * Initializes an empty Gnist simulation pipeline.
+     * Initializes an empty simulation pipeline.
      * @constructor
-     * @param {object} [config={}] Configuration parameters.
+     * @param {EngineConfig} [config={}] Engine configuration options.
      */
     constructor(config = {}) {
         this.#emitters = [];
         this.#globalForces = [];
         this.#particles = [];
 
-        this.cullingBounds = config.cullingBounds ?? null;
+        this.config = {};
+        this.config.simulationAreaBounds = config.simulationAreaBounds ?? null;
     }
 
     /**
@@ -195,7 +213,7 @@ export class Gnist {
         const globalForcesCount = globalForces.length;
         const particles = this.#particles;
         const particleCount = particles.length;
-        const cullingBounds = this.cullingBounds;
+        const simulationAreaBounds = this.config.simulationAreaBounds;
 
         let aliveCount = 0;
 
@@ -230,22 +248,20 @@ export class Gnist {
                 activeModifiers[j].update(particle, normalizedAge, dt);
             }
 
-            if (cullingBounds !== null) {
-                const padding = particle.size || 0;
+            if (simulationAreaBounds !== null) {
+                const safetyMargin = particle.size || 0;
 
-                if (particle.x < cullingBounds.xMin - padding ||
-                    particle.x > cullingBounds.xMax + padding ||
-                    particle.y < cullingBounds.yMin - padding ||
-                    particle.y > cullingBounds.yMax + padding
+                if (particle.x < simulationAreaBounds.xMin - safetyMargin ||
+                    particle.x > simulationAreaBounds.xMax + safetyMargin ||
+                    particle.y < simulationAreaBounds.yMin - safetyMargin ||
+                    particle.y > simulationAreaBounds.yMax + safetyMargin
                 ) {
                     particle.alive = false;
                     continue;
                 }
             }
 
-            // In-place dual-pointer compaction avoids Array.filter allocations,
-            // eliminating garbage collection spikes
-
+            // In-place dual-pointer compaction avoids Array.filter allocations, eliminating garbage collection spikes
             if (aliveCount !== i) {
                 particles[aliveCount] = particle;
             }
