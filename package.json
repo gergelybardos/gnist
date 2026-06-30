@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "description": "Lightweight, renderer-agnostic particle simulation engine built with vanilla JavaScript for real-time visual effects",
   "keywords": [
-    "collision-detection",
     "engine",
     "esm",
     "lightweight",
