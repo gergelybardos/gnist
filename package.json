@@ -46,8 +46,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "types": "tsc",
-    "doc:api": "jsdoc -c jsdoc.json",
-    "doc:deploy": "npm run doc:api && gh-pages -d docs/",
+    "doc:api": "jsdoc -c jsdoc.json -R docs/src/api/homepage.md",
+    "doc:deploy": "npm run doc:api && gh-pages -d docs/site",
     "version:changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "prepublishOnly": "npm run lint && npm run types"
   },

@@ -23,14 +23,14 @@ For local development — cloning the repository, running tests, or building fro
 
 The following commands are available for local development and documentation generation:
 
-| Command                     | Description                                                                                |
-|-----------------------------|--------------------------------------------------------------------------------------------|
-| `npm run dev`               | Start the development server and the Sandbox demo                                          |
-| `npm run lint`              | Run ESLint to check the codebase for syntax, style, and formatting issues                  |
-| `npm run lint:fix`          | Automatically fix fixable linting issues                                                   |
-| `npm run types`             | Run the TypeScript compiler to generate type declaration files into the `types/` directory |
-| `npm run doc:api`           | Generate the local API reference documentation using JSDoc and the Docdash theme           |
-| `npm run doc:deploy`        | Generate the latest API documentation and publish it directly to GitHub Pages              |
-| `npm run version:changelog` | Generate or update the changelog based on structured Git commit history                    |
+| Command                     | Description                                                                                        |
+|-----------------------------|----------------------------------------------------------------------------------------------------|
+| `npm run dev`               | Start the development server and the Sandbox demo                                                  |
+| `npm run lint`              | Run ESLint to check the codebase for syntax, style, and formatting issues                          |
+| `npm run lint:fix`          | Automatically fix fixable linting issues                                                           |
+| `npm run types`             | Run the TypeScript compiler to generate type declaration files into the `types/` directory         |
+| `npm run doc:api`           | Generate the local API reference documentation using JSDoc and the Docdash theme                   |
+| `npm run doc:deploy`        | Generate the latest API documentation and publish it along with handwritten guides to GitHub Pages |
+| `npm run version:changelog` | Generate or update the changelog based on structured Git commit history                            |
 
 > **💡 Note:** The `prepublishOnly` script runs automatically whenever `npm publish` is executed to lint the code and generate TypeScript declaration files before publishing.

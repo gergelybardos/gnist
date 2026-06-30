@@ -14,7 +14,7 @@ dist/
 build/
 
 # Generated documentation
-docs/api
+docs/site/api/
 coverage/
 
 # Logs

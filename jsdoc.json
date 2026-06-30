@@ -5,7 +5,7 @@
     "excludePattern": "(node_modules|dist|build|tests)"
   },
   "opts": {
-    "destination": "docs/api",
+    "destination": "docs/site/api",
     "recurse": true,
     "template": "node_modules/docdash"
   },

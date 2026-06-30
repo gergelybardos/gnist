@@ -57,7 +57,9 @@ Coming soon.
 Gnist provides comprehensive resources to help you get started and master the engine:
 
 - [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) — Step-by-step tutorials on how to 
-- [API Reference](https://gergelybardos.github.io/gnist/api/index.html) — Technical specifications for the public-facing API, including core classes, components, and configuration interfaces.
+- [API Reference](https://gergelybardos.github.io/gnist/api/index.html) — Technical specification of the public-facing API, including core classes, components, and configuration interfaces.
+
+> **💡 Note:** Online documentation reflects only the **current stable release**. Version-specific history is maintained via Git tags and the project `CHANGELOG.md`.
 
 ## 🤝 Contributing <a name="contributing"></a>
 
