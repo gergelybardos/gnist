@@ -42,7 +42,96 @@ Coming soon.
 
 ## ⚡ Basic Usage <a name="basic-usage"></a>
 
-Coming soon.
+Gnist is renderer-agnostic; the client is responsible for implementing the main update loop and rendering using their chosen rendering system. The example below shows the minimal setup required to run Gnist.
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
+```
+
+```javascript
+// main.js
+// TODO: Import Gnist classes
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// TODO: Initialize Gnist and an emitter
+
+let lastTime = performance.now();
+
+function loop(currentTime) {
+    requestAnimationFrame(loop);
+
+    const dt = (currentTime - lastTime) / 1000;
+    lastTime = currentTime;
+
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // TODO: Update Gnist and render particles
+}
+requestAnimationFrame(loop);
+```
+
+The complete version looks like this:
+
+```javascript
+// main.js
+// 1. Import Gnist classes
+import { Gnist, PointEmitter } from 'gnist';
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// 2. Initialize Gnist and an emitter
+const engine = new Gnist();
+const emitter = new PointEmitter({
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    particlesPerSecond: 100,
+    particleBlueprint: {
+        color: {r: 255, g: 0, b: 0},
+        lifespan: [1, 3],
+        speed: [15, 150],
+        direction: [0, Math.PI * 2],
+    }
+});
+engine.addEmitter(emitter);
+
+let lastTime = performance.now();
+
+function loop(currentTime) {
+    requestAnimationFrame(loop);
+
+    const dt = (currentTime - lastTime) / 1000;
+    lastTime = currentTime;
+
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // 3. Update Gnist
+    engine.update(dt);
+
+    // 4. Render particles
+    const particles = engine.getParticles();
+    for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const { r, g, b } = p.color;
+        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        ctx.fillRect(p.x - 1, p.y - 1, 2, 2);
+    }
+}
+requestAnimationFrame(loop);
+```
+
+This is a minimal example; real applications typically extend it with additional rendering and control logic.
 
 ## ⚙️ Core Features <a name="core-features"></a>
 
@@ -54,7 +143,7 @@ Coming soon.
 
 Gnist provides comprehensive resources to help you get started and master the engine:
 
-- [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) — Step-by-step tutorials on how to 
+- [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) — Step-by-step tutorials on how to use Gnist in real projects.
 - [API Reference](https://gergelybardos.github.io/gnist/api/index.html) — Technical specification of the public-facing API, including core classes, components, and configuration interfaces.
 
 ## 🤝 Contributing <a name="contributing"></a>
