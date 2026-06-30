@@ -7,16 +7,16 @@
 
 ## 📚 Table of Contents
 
-- [Overview](#overview)
+- [About Gnist](#about-gnist)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
-- [Planned Features](#planned-features)
+- [Core Features](#core-features)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
 
-## 🧠 Overview <a name="overview"></a>
+## ℹ️ About Gnist <a name="about-gnist"></a>
 
 Gnist is a lightweight particle simulation engine.
 
@@ -27,7 +27,7 @@ Key Characteristics:
 - **Renderer-agnostic:** The engine is decoupled from timing and rendering loops, making it reusable across different runtimes and rendering systems.
 - **Zero-dependency:** Gnist is written in vanilla JavaScript with no external runtime dependencies. **Full TypeScript support** is provided via declaration files.
 
-## ⚙️ Requirements <a name="requirements"></a>
+## 📋 Requirements <a name="requirements"></a>
 
 To install and integrate the NPM package into your own project, your environment should support:
 
@@ -40,17 +40,15 @@ Coming soon.
 
 > **💡 Note:** Gnist is distributed as native ECMAScript Modules (ESM) with no build step, preserving a fully readable source in `node_modules` and enabling consumer bundlers to optimize tree-shaking and minification.
 
-## 🚀 Basic Usage <a name="basic-usage"></a>
+## ⚡ Basic Usage <a name="basic-usage"></a>
 
 Coming soon.
 
-## ⭐ Planned Features <a name="planned-features"></a>
+## ⚙️ Core Features <a name="core-features"></a>
 
-- Particle simulation core
-- Physics-based motion system
-- Force system (gravity, wind, custom fields)
-- Collision handling (colliders, boundaries)
-- Configurable emitters
+- **Emitters:** Define and control particle spawning behavior with emission rate, lifespan, size, and more.
+- **Forces:** Apply forces such as gravity (`DirectionalForce`) or friction (`LinearDrag`) globally to the whole system or scoped to specific emitters.
+- **Modifiers:** Transform particle visuals over time with support for linear color gradients (`ColorRamp`) and opacity transitions (`OpacityFade`).
 
 ## 📖 Documentation <a name="documentation"></a>
 
@@ -58,8 +56,6 @@ Gnist provides comprehensive resources to help you get started and master the en
 
 - [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) — Step-by-step tutorials on how to 
 - [API Reference](https://gergelybardos.github.io/gnist/api/index.html) — Technical specification of the public-facing API, including core classes, components, and configuration interfaces.
-
-> **💡 Note:** Online documentation reflects only the **current stable release**. Version-specific history is maintained via Git tags and the project `CHANGELOG.md`.
 
 ## 🤝 Contributing <a name="contributing"></a>
 
