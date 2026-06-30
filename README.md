@@ -3,7 +3,7 @@
 ![node](https://img.shields.io/badge/node-%3E=20.0.0-green)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
-> ⚠️ This project is currently in early development. APIs are not stable yet and breaking changes should be expected.
+> **⚠️ Important:** This project is currently in early development. APIs are not stable yet, and breaking changes should be expected.
 
 ## 📚 Table of Contents
 
@@ -12,6 +12,7 @@
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
 - [Planned Features](#planned-features)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -19,11 +20,12 @@
 
 Gnist is a lightweight particle simulation engine.
 
-It is designed for real-time visual effects rather than physically accurate simulations. Particles do not have mass or momentum. Forces are functions that calculate acceleration contributions applied to velocity, without modeling true Newtonian force dynamics.
+Designed for real-time visual effects rather than physically accurate simulations, it uses a simplified kinematic model optimized for performance over strict Newtonian mechanics. Particles bypass mass and momentum calculations; instead, forces directly influence acceleration.
 
-The engine is decoupled from timing and rendering, which makes it reusable across different runtimes and rendering systems.
+Key Characteristics:
 
-Gnist is written in vanilla JavaScript, with TypeScript support provided through declaration files.
+- **Renderer-agnostic:** The engine is decoupled from timing and rendering loops, making it reusable across different runtimes and rendering systems.
+- **Zero-dependency:** Gnist is written in vanilla JavaScript with no external runtime dependencies. **Full TypeScript support** is provided via declaration files.
 
 ## ⚙️ Requirements <a name="requirements"></a>
 
@@ -36,6 +38,8 @@ To install and integrate the NPM package into your own project, your environment
 
 Coming soon.
 
+> **💡 Note:** Gnist is distributed as native ECMAScript Modules (ESM) with no build step, preserving a fully readable source in `node_modules` and enabling consumer bundlers to optimize tree-shaking and minification.
+
 ## 🚀 Basic Usage <a name="basic-usage"></a>
 
 Coming soon.
@@ -47,6 +51,13 @@ Coming soon.
 - Force system (gravity, wind, custom fields)
 - Collision handling (colliders, boundaries)
 - Configurable emitters
+
+## 📖 Documentation <a name="documentation"></a>
+
+Gnist provides comprehensive resources to help you get started and master the engine:
+
+- [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) — Step-by-step tutorials on how to 
+- [API Reference](https://gergelybardos.github.io/gnist/api/index.html) — Technical specifications for the public-facing API, including core classes, components, and configuration interfaces.
 
 ## 🤝 Contributing <a name="contributing"></a>
 
