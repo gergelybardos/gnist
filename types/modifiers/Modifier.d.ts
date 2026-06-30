@@ -5,7 +5,7 @@
  */
 /**
  * Abstract base class for particle modifiers.
- * Modifiers apply visual or lifecycle changes to particles based on their normalized age.
+ * Modifiers apply per-particle state and appearance transformations based on normalized particle age.
  * @abstract
  * @class
  */

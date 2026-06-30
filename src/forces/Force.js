@@ -7,7 +7,7 @@ import { Particle } from '../core/Particle.js';
  */
 
 /**
- * Abstract base class for environmental forces. Forces affect the motion of particles.
+ * Abstract base class for environmental forces. Forces apply external influences to particle motion.
  * @abstract
  * @class
  */
