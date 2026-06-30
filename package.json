@@ -1,5 +1,5 @@
 {
-  "name": "@gergely-bardos/gnist",
+  "name": "@gergelybardos/gnist",
   "version": "0.0.0",
   "description": "Lightweight, renderer-agnostic particle simulation engine built with vanilla JavaScript for real-time visual effects",
   "keywords": [
@@ -14,7 +14,7 @@
     "simulation",
     "vanilla-js"
   ],
-  "author": "Gergely Bárdos (https://github.com/gergelybardos)",
+  "author": "Gergely BÁRDOS (https://github.com/gergelybardos)",
   "license": "MIT",
   "homepage": "https://github.com/gergelybardos/gnist#readme",
   "repository": {
