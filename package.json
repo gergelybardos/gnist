@@ -47,7 +47,7 @@
     "types": "tsc",
     "doc:api": "jsdoc -c jsdoc.json -R docs/src/api/homepage.md",
     "doc:deploy": "npm run doc:api && gh-pages -d docs/site",
-    "version:changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
+    "version:changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.raw.md -s",
     "prepublishOnly": "npm run lint && npm run types"
   },
   "devDependencies": {

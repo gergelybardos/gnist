@@ -16,6 +16,7 @@ build/
 # Generated documentation
 docs/site/api/
 coverage/
+CHANGELOG.raw.md
 
 # Logs
 *.log
