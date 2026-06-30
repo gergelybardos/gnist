@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>emitters/Emitter.js - Gnist API Reference</title>
+    
+    
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ColorRamp.html">ColorRamp</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ColorRamp.html#update">update</a></li></ul></li><li><a href="DirectionalForce.html">DirectionalForce</a><ul class='methods'><li data-type='method' style='display: none;'><a href="DirectionalForce.html#apply">apply</a></li></ul></li><li><a href="Emitter.html">Emitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Emitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#initParticle">initParticle</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#update">update</a></li></ul></li><li><a href="Force.html">Force</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Force.html#apply">apply</a></li></ul></li><li><a href="Gnist.html">Gnist</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Gnist.html#addEmitter">addEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#addGlobalForce">addGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#emitParticles">emitParticles</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getEmitter">getEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getEmitters">getEmitters</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getGlobalForce">getGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getGlobalForces">getGlobalForces</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getParticles">getParticles</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeEmitter">removeEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeGlobalForce">removeGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#tickParticles">tickParticles</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#update">update</a></li></ul></li><li><a href="LinearDrag.html">LinearDrag</a><ul class='methods'><li data-type='method' style='display: none;'><a href="LinearDrag.html#apply">apply</a></li></ul></li><li><a href="Modifier.html">Modifier</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Modifier.html#update">update</a></li></ul></li><li><a href="OpacityFade.html">OpacityFade</a><ul class='methods'><li data-type='method' style='display: none;'><a href="OpacityFade.html#update">update</a></li></ul></li><li><a href="Particle.html">Particle</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Particle.html#getModifiers">getModifiers</a></li><li data-type='method' style='display: none;'><a href="Particle.html#getScopedForces">getScopedForces</a></li><li data-type='method' style='display: none;'><a href="Particle.html#setModifiers">setModifiers</a></li><li data-type='method' style='display: none;'><a href="Particle.html#setScopedForces">setScopedForces</a></li></ul></li><li><a href="PointEmitter.html">PointEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PointEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#initParticle">initParticle</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#update">update</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#Color">Color</a></li><li><a href="global.html#ColorRampConfig">ColorRampConfig</a></li><li><a href="global.html#CullingBounds">CullingBounds</a></li><li><a href="global.html#DirectionalForceConfig">DirectionalForceConfig</a></li><li><a href="global.html#EmitterConfig">EmitterConfig</a></li><li><a href="global.html#EngineConfig">EngineConfig</a></li><li><a href="global.html#ForceConfig">ForceConfig</a></li><li><a href="global.html#LinearDragConfig">LinearDragConfig</a></li><li><a href="global.html#ModifierConfig">ModifierConfig</a></li><li><a href="global.html#OpacityFadeConfig">OpacityFadeConfig</a></li><li><a href="global.html#ParticleBlueprint">ParticleBlueprint</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">emitters/Emitter.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Force } from '../forces/Force.js';
+import { Gnist } from '../core/Gnist.js';
+import { Modifier } from '../modifiers/Modifier.js';
+import { Particle } from '../core/Particle.js';
+
+import '../shared/Types.js';
+
+/**
+ * @import { Color } from '../shared/Types.js'
+ */
+
+/**
+ * Emitter configuration options.
+ * @typedef {object} EmitterConfig
+ * @property {string} [id] Unique identifier. Defaults to a generated UUID.
+ * @property {boolean} [enabled=true] Flag indicating whether the emitter is running or not.
+ * @property {boolean} [looping=true] Flag indicating whether a finite-duration emitter restarts when its time is up.
+ * @property {number} [particlesPerSecond=10] Continuous emission rate of new particles per second.
+ * @property {number} [duration=Gnist.INFINITE_DURATION] Duration of particle emission (in seconds), where -1 represents infinite emission.
+ * @property {number} [x=0] Current horizontal coordinate of the emitter origin.
+ * @property {number} [y=0] Current vertical coordinate of the emitter origin.
+ * @property {ParticleBlueprint} [particleBlueprint={}] Configuration for emitted particles.
+ */
+
+/**
+ * Configuration options used by emitters to initialize particles at emission.
+ * This object is not runtime Particle state and does not correspond directly to Particle properties.
+ * Options are interpreted either directly or indirectly to derive Particle properties.
+ * Most options may be specified as a single number or a [min, max] range array.
+ * @typedef {object} ParticleBlueprint
+ * @property {number|number[]} [rotation] Orientation angle in radians.
+ * @property {number|number[]} [angularVelocity] Angular rotation speed (radians per second).
+ * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
+ * @property {Color} [color] RGB color channels.
+ * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
+ * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds).
+ * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
+ * @property {number|number[]} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
+ */
+
+/**
+ * Abstract base class for particle emitters.
+ * @abstract
+ * @class
+ */
+export class Emitter {
+    /**
+     * Unique identifier. Defaults to a generated UUID.
+     * @type {string}
+     */
+    id;
+
+    /**
+     * Flag indicating whether the emitter is running or not.
+     * @type {boolean}
+     */
+    enabled;
+
+    /**
+     * Flag indicating whether a finite-duration emitter restarts when its time is up.
+     * @type {boolean}
+     */
+    looping;
+
+    /**
+     * Continuous emission rate of new particles per second.
+     * @type {number}
+     */
+    particlesPerSecond;
+
+    /**
+     * Duration of particle emission (in seconds), where -1 represents infinite emission.
+     * @type {number}
+     */
+    duration;
+
+    /**
+     * Current horizontal coordinate of the emitter origin.
+     * @type {number}
+     */
+    x;
+
+    /**
+     * Current vertical coordinate of the emitter origin.
+     * @type {number}
+     */
+    y;
+
+    /**
+     * Configuration settings used to initialize emitted particles.
+     * @type {object}
+     */
+    #particleBlueprint;
+
+    /**
+     * Leftover fractional particles to be emitted between frames.
+     * @type {number}
+     */
+    #accumulator;
+
+    /**
+     * Total elapsed running time of the emitter (in seconds).
+     * @type {number}
+     */
+    #elapsedTime;
+
+    /**
+     * Shared reference to the emitter's modifier array.
+     * @type {Array&lt;Modifier>}
+     */
+    #modifiers;
+
+    /**
+     * Shared reference to the emitter's scoped emitter-specific force array.
+     * @type {Array&lt;Force>}
+     */
+    #scopedForces;
+
+    /**
+     * Initializes a particle emitter.
+     * @constructor
+     * @param {EmitterConfig} [config={}] Emitter configuration options.
+     * @throws {TypeError}
+     */
+    constructor(config = {}) {
+        if (new.target === Emitter) {
+            throw new TypeError('Cannot instantiate abstract class Emitter directly.');
+        }
+
+        this.id = config.id ?? crypto.randomUUID();
+        this.enabled = config.enabled ?? true;
+        this.looping = config.looping ?? true;
+        this.particlesPerSecond = config.particlesPerSecond ?? 10;
+        this.duration = config.duration ?? Gnist.INFINITE_DURATION;
+        this.x = config.x ?? 0;
+        this.y = config.y ?? 0;
+
+        this.#particleBlueprint = config.particleBlueprint ?? {};
+
+        this.#accumulator = 0;
+        this.#elapsedTime = 0;
+
+        this.#modifiers = [];
+        this.#scopedForces = [];
+    }
+
+    /**
+     * Registers a modifier to be applied to the particles emitted by the emitter.
+     * @param {Modifier} modifier Modifier instance to register.
+     * @returns {void}
+     */
+    addModifier(modifier) {
+        this.#modifiers.push(modifier);
+    }
+
+    /**
+     * Registers a scoped emitter-specific force to be applied to the particles emitted by the emitter.
+     * @param {Force} force Force instance to register.
+     * @returns {void}
+     */
+    addScopedForce(force) {
+        this.#scopedForces.push(force);
+    }
+
+    /**
+     * Updates the emitter's internal timer and returns any new particles to be emitted in the current frame.
+     * @param {number} dt Time elapsed since the last frame (in seconds).
+     * @returns {Array&lt;Particle>} An array of particles emitted this frame.
+     */
+    update(dt) {
+        if (!this.enabled) {
+            return [];
+        }
+
+        if (this.duration > 0) {
+            this.#elapsedTime += dt;
+            if (this.#elapsedTime >= this.duration) {
+                if (this.looping) {
+                    this.#elapsedTime = 0;
+                } else {
+                    this.enabled = false;
+                    return [];
+                }
+            }
+        }
+
+        this.#accumulator += dt * this.particlesPerSecond;
+        const spawnCount = Math.floor(this.#accumulator);
+        this.#accumulator -= spawnCount;
+
+        const newParticles = [];
+        for (let i = 0; i &lt; spawnCount; i++) {
+            const particle = new Particle();
+
+            this.initParticle(particle);
+
+            particle.setModifiers(this.#modifiers);
+            particle.setScopedForces(this.#scopedForces);
+
+            newParticles.push(particle);
+        }
+
+        return newParticles;
+    }
+
+    /**
+     * Sets up a particle's movement, visuals, and lifecycle state.
+     * @param {Particle} particle Particle instance to initialize.
+     * @returns {void}
+     */
+    initParticle(particle) {
+        // Blueprint values that may be either a single number or a range are resolved via this.#resolveNumber().
+        // Values that may only be numbers are accessed directly.
+
+        const blueprint = this.#particleBlueprint;
+        const speed = this.#resolveNumber(blueprint.speed, 50);
+        const direction = this.#resolveNumber(blueprint.direction, 0);
+
+        particle.vx = Math.cos(direction) * speed;
+        particle.vy = Math.sin(direction) * speed;
+        particle.rotation = this.#resolveNumber(blueprint.rotation, particle.rotation);
+        particle.angularVelocity = this.#resolveNumber(blueprint.angularVelocity, particle.angularVelocity);
+
+        particle.size = this.#resolveNumber(blueprint.size, particle.size);
+        particle.color = {
+            r: blueprint.color?.r ?? 255,
+            g: blueprint.color?.g ?? 255,
+            b: blueprint.color?.b ?? 255,
+        };
+        particle.opacity = this.#resolveNumber(blueprint.opacity, particle.opacity);
+
+        particle.age = 0;
+        particle.lifespan = this.#resolveNumber(blueprint.lifespan, particle.lifespan);
+        particle.alive = true;
+    }
+
+    /**
+     * Resolves an input - usually a property - into a single number, picking a random value if a [min, max] range array is provided.
+     * @param {number|Array&lt;number>} value Number or [min, max] range array to resolve.
+     * @param {number} defaultValue Fallback value to use if the property is neither a number nor a valid [min, max] range array.
+     * @returns {number} Resolved numeric value.
+     */
+    #resolveNumber(value, defaultValue) {
+        if (typeof value === 'number') {
+            return value;
+        }
+
+        if (Array.isArray(value) &amp;&amp; value.length === 2) {
+            const min = value[0];
+            const max = value[1];
+
+            if (typeof min === 'number' &amp;&amp; typeof max === 'number') {
+                return min + Math.random() * (max - min);
+            }
+        }
+
+        return defaultValue;
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Tue Jun 30 2026 17:19:19 GMT+0200 (közép-európai nyári idő) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

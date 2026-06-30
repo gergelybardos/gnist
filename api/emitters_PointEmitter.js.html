@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Home - Gnist API Reference</title>
+    <title>emitters/PointEmitter.js - Gnist API Reference</title>
     
     
     
@@ -40,31 +40,42 @@
 
 <div id="main">
     
+    <h1 class="page-title">emitters/PointEmitter.js</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Particle } from '../core/Particle.js';
 
+import { Emitter } from './Emitter.js';
 
-    <section class="package">
-        <h3> </h3>		
+/**
+ * Particle emitter that emits particles from a single point.
+ * @class
+ * @extends Emitter
+ */
+export class PointEmitter extends Emitter {
+    /**
+     * Extends the base initialization by positioning the particle at the coordinates of the emitter origin.
+     * @override
+     * @param {Particle} particle Particle instance to initialize.
+     * @returns {void}
+     */
+    initParticle(particle) {
+        super.initParticle(particle);
+
+        particle.x = this.x;
+        particle.y = this.y;
+    }
+}
+</code></pre>
+        </article>
     </section>
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
 
 
 

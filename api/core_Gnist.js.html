@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>core/Gnist.js - Gnist API Reference</title>
+    
+    
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ColorRamp.html">ColorRamp</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ColorRamp.html#update">update</a></li></ul></li><li><a href="DirectionalForce.html">DirectionalForce</a><ul class='methods'><li data-type='method' style='display: none;'><a href="DirectionalForce.html#apply">apply</a></li></ul></li><li><a href="Emitter.html">Emitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Emitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#initParticle">initParticle</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#update">update</a></li></ul></li><li><a href="Force.html">Force</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Force.html#apply">apply</a></li></ul></li><li><a href="Gnist.html">Gnist</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Gnist.html#addEmitter">addEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#addGlobalForce">addGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#emitParticles">emitParticles</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getEmitter">getEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getEmitters">getEmitters</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getGlobalForce">getGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getGlobalForces">getGlobalForces</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getParticles">getParticles</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeEmitter">removeEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeGlobalForce">removeGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#tickParticles">tickParticles</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#update">update</a></li></ul></li><li><a href="LinearDrag.html">LinearDrag</a><ul class='methods'><li data-type='method' style='display: none;'><a href="LinearDrag.html#apply">apply</a></li></ul></li><li><a href="Modifier.html">Modifier</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Modifier.html#update">update</a></li></ul></li><li><a href="OpacityFade.html">OpacityFade</a><ul class='methods'><li data-type='method' style='display: none;'><a href="OpacityFade.html#update">update</a></li></ul></li><li><a href="Particle.html">Particle</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Particle.html#getModifiers">getModifiers</a></li><li data-type='method' style='display: none;'><a href="Particle.html#getScopedForces">getScopedForces</a></li><li data-type='method' style='display: none;'><a href="Particle.html#setModifiers">setModifiers</a></li><li data-type='method' style='display: none;'><a href="Particle.html#setScopedForces">setScopedForces</a></li></ul></li><li><a href="PointEmitter.html">PointEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PointEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#initParticle">initParticle</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#update">update</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#Color">Color</a></li><li><a href="global.html#ColorRampConfig">ColorRampConfig</a></li><li><a href="global.html#CullingBounds">CullingBounds</a></li><li><a href="global.html#DirectionalForceConfig">DirectionalForceConfig</a></li><li><a href="global.html#EmitterConfig">EmitterConfig</a></li><li><a href="global.html#EngineConfig">EngineConfig</a></li><li><a href="global.html#ForceConfig">ForceConfig</a></li><li><a href="global.html#LinearDragConfig">LinearDragConfig</a></li><li><a href="global.html#ModifierConfig">ModifierConfig</a></li><li><a href="global.html#OpacityFadeConfig">OpacityFadeConfig</a></li><li><a href="global.html#ParticleBlueprint">ParticleBlueprint</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">core/Gnist.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Emitter } from '../emitters/Emitter.js';
+import { Force } from '../forces/Force.js';
+
+import { Particle } from './Particle.js';
+
+/**
+ * Engine configuration options.
+ * @typedef {object} EngineConfig
+ * @property {CullingBounds|null} [cullingBounds=null] Optional region used for particle culling.
+ */
+
+/**
+ * Defines a region beyond which particles are considered outside the simulation and are marked dead.
+ * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
+ * partially inside the region.
+ * @typedef {object} CullingBounds
+ * @property {number} xMin Left boundary of the region.
+ * @property {number} yMin Top boundary of the region.
+ * @property {number} xMax Right boundary of the region.
+ * @property {number} yMax Bottom boundary of the region.
+ */
+
+/**
+ * The core particle engine that manages the simulation pipeline and particle lifecycle.
+ * @class
+ */
+export class Gnist {
+    /**
+     * The current semantic version of the Gnist particle engine.
+     * @returns {string}
+     */
+    static get VERSION() {
+        return '0.0.0';
+    }
+
+    /**
+     * Constant value representing an infinite particle lifespan.
+     * @type {number}
+     */
+    static get INFINITE_DURATION() {
+        return -1;
+    }
+
+    /**
+     * Engine configuration options.
+     * @type {EngineConfig}
+     */
+    config;
+
+    /**
+     * Registered emitters emitting active particles.
+     * @type {Array&lt;Emitter>}
+     */
+    #emitters;
+
+    /**
+     * Registered global environmental forces affecting all active particles.
+     * @type {Array&lt;Force>}
+     */
+    #globalForces;
+
+    /**
+     * Common pool of active particles.
+     * @type {Array&lt;Particle>}
+     */
+    #particles;
+
+    /**
+     * Initializes an empty simulation pipeline.
+     * @constructor
+     * @param {EngineConfig} [config={}] Engine configuration options.
+     */
+    constructor(config = {}) {
+        this.#emitters = [];
+        this.#globalForces = [];
+        this.#particles = [];
+
+        this.config = {};
+        this.config.cullingBounds = config.cullingBounds ?? null;
+    }
+
+    /**
+     * Gets the current list of registered emitters.
+     * @returns {Array&lt;Emitter>}
+     */
+    getEmitters() {
+        return this.#emitters;
+    }
+
+    /**
+     * Finds a registered emitter by its unique identifier.
+     * @param {string} id The unique identifier of the target emitter.
+     * @returns {Emitter|null} The emitter instance if found, null otherwise.
+     */
+    getEmitter(id) {
+        for (let i = 0; i &lt; this.#emitters.length; i++) {
+            if (this.#emitters[i].id === id) {
+                return this.#emitters[i];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Registers an emitter into the simulation pipeline.
+     * @param {Emitter} emitter The emitter instance to register.
+     * @returns {this} The Gnist engine instance for method chaining.
+     */
+    addEmitter(emitter) {
+        this.#emitters.push(emitter);
+
+        return this;
+    }
+
+    /**
+     * Removes an emitter from the simulation pipeline by its unique identifier.
+     * @param {string} id The unique identifier of the target emitter.
+     * @returns {boolean} True if found and successfully removed, false otherwise.
+     */
+    removeEmitter(id) {
+        const initialLength = this.#emitters.length;
+
+        this.#emitters = this.#emitters.filter(e => e.id !== id);
+
+        return this.#emitters.length &lt; initialLength;
+    }
+
+    /**
+     * Gets the current list of registered global environmental forces.
+     * @returns {Array&lt;Force>}
+     */
+    getGlobalForces() {
+        return this.#globalForces;
+    }
+
+    /**
+     * Finds a registered global environmental force by its unique identifier.
+     * @param {string} id The unique identifier of the target force.
+     * @returns {Force|null} The force instance if found, null otherwise.
+     */
+    getGlobalForce(id) {
+        for (let i = 0; i &lt; this.#globalForces.length; i++) {
+            if (this.#globalForces[i].id === id) {
+                return this.#globalForces[i];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Registers a global environmental force into the simulation pipeline.
+     * @param {Force} force The force instance to register.
+     * @returns {this} The Gnist engine instance for method chaining.
+     */
+    addGlobalForce(force) {
+        this.#globalForces.push(force);
+
+        return this;
+    }
+
+    /**
+     * Removes a global environmental force from the simulation pipeline by its unique identifier.
+     * @param {string} id The unique identifier of the target force.
+     * @returns {boolean} True if found and successfully removed, false otherwise.
+     */
+    removeGlobalForce(id) {
+        const initialLength = this.#globalForces.length;
+
+        this.#globalForces = this.#globalForces.filter(e => e.id !== id);
+
+        return this.#globalForces.length &lt; initialLength;
+    }
+
+    /**
+     * Gets the current list of active particles of the common particle pool.
+     * @returns {Array&lt;Particle>}
+     */
+    getParticles() {
+        return this.#particles;
+    }
+
+    /**
+     * Steps the simulation pipeline forward by a given time delta.
+     * @param {number} dt Time elapsed since the last frame (in seconds).
+     * @returns {void}
+     */
+    update(dt) {
+        if (dt &lt;= 0) {
+            return;
+        }
+
+        this.emitParticles(dt);
+        this.tickParticles(dt);
+    }
+
+    /**
+     * Iterates through registered emitters to emit new particles.
+     * @param {number} dt Time elapsed since the last frame (in seconds).
+     * @returns {void}
+     */
+    emitParticles(dt) {
+        for (let i = 0; i &lt; this.#emitters.length; i++) {
+            const newParticles = this.#emitters[i].update(dt);
+
+            if (newParticles.length > 0) {
+                this.#particles.push(...newParticles);
+            }
+        }
+    }
+
+    /**
+     * Updates particle lifecycles, applies global and scoped emitter-specific forces, moves particles, and
+     * applies modifiers.
+     * @param {number} dt Time elapsed since the last frame (in seconds).
+     * @returns {void}
+     */
+    tickParticles(dt) {
+        const globalForces = this.#globalForces;
+        const globalForcesCount = globalForces.length;
+        const particles = this.#particles;
+        const particleCount = particles.length;
+        const cullingBounds = this.config.cullingBounds;
+
+        let aliveCount = 0;
+
+        for (let i = 0; i &lt; particleCount; i++) {
+            const particle = particles[i];
+
+            particle.age += dt;
+            if (particle.age >= particle.lifespan) {
+                particle.alive = false;
+            }
+
+            if (particle.alive) {
+                const normalizedAge = Math.min(particle.age / particle.lifespan, 1.0);
+
+                for (let j = 0; j &lt; globalForcesCount; j++) {
+                    globalForces[j].apply(particle, dt);
+                }
+
+                const scopedForces = particle.getScopedForces();
+                const scopedForcesCount = scopedForces.length;
+                for (let j = 0; j &lt; scopedForcesCount; j++) {
+                    scopedForces[j].apply(particle, dt);
+                }
+
+                particle.x += particle.vx * dt;
+                particle.y += particle.vy * dt;
+                particle.rotation += particle.angularVelocity * dt;
+
+                const activeModifiers = particle.getModifiers();
+                const activeModifiersCount = activeModifiers.length;
+                for (let j = 0; j &lt; activeModifiersCount; j++) {
+                    activeModifiers[j].update(particle, normalizedAge, dt);
+                }
+
+                if (cullingBounds !== null) {
+                    const safetyMargin = particle.size;
+
+                    if (particle.x &lt; cullingBounds.xMin - safetyMargin ||
+                        particle.x > cullingBounds.xMax + safetyMargin ||
+                        particle.y &lt; cullingBounds.yMin - safetyMargin ||
+                        particle.y > cullingBounds.yMax + safetyMargin
+                    ) {
+                        particle.alive = false;
+                    }
+                }
+            }
+
+            // In-place dual-pointer compaction avoids Array.filter allocations, eliminating garbage collection spikes
+            if (particle.alive) {
+                if (aliveCount !== i) {
+                    particles[aliveCount] = particle;
+                }
+                aliveCount++;
+            }
+        }
+
+        particles.length = aliveCount;
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Tue Jun 30 2026 17:19:19 GMT+0200 (közép-európai nyári idő) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

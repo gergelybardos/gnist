@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>OpacityFade - Gnist API Reference</title>
+    
+    
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ColorRamp.html">ColorRamp</a><ul class='methods'><li data-type='method' style='display: none;'><a href="ColorRamp.html#update">update</a></li></ul></li><li><a href="DirectionalForce.html">DirectionalForce</a><ul class='methods'><li data-type='method' style='display: none;'><a href="DirectionalForce.html#apply">apply</a></li></ul></li><li><a href="Emitter.html">Emitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Emitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#initParticle">initParticle</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#update">update</a></li></ul></li><li><a href="Force.html">Force</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Force.html#apply">apply</a></li></ul></li><li><a href="Gnist.html">Gnist</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Gnist.html#addEmitter">addEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#addGlobalForce">addGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#emitParticles">emitParticles</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getEmitter">getEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getEmitters">getEmitters</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getGlobalForce">getGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getGlobalForces">getGlobalForces</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getParticles">getParticles</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeEmitter">removeEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeGlobalForce">removeGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#tickParticles">tickParticles</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#update">update</a></li></ul></li><li><a href="LinearDrag.html">LinearDrag</a><ul class='methods'><li data-type='method' style='display: none;'><a href="LinearDrag.html#apply">apply</a></li></ul></li><li><a href="Modifier.html">Modifier</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Modifier.html#update">update</a></li></ul></li><li><a href="OpacityFade.html">OpacityFade</a><ul class='methods'><li data-type='method' style='display: none;'><a href="OpacityFade.html#update">update</a></li></ul></li><li><a href="Particle.html">Particle</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Particle.html#getModifiers">getModifiers</a></li><li data-type='method' style='display: none;'><a href="Particle.html#getScopedForces">getScopedForces</a></li><li data-type='method' style='display: none;'><a href="Particle.html#setModifiers">setModifiers</a></li><li data-type='method' style='display: none;'><a href="Particle.html#setScopedForces">setScopedForces</a></li></ul></li><li><a href="PointEmitter.html">PointEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PointEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#initParticle">initParticle</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#update">update</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#Color">Color</a></li><li><a href="global.html#ColorRampConfig">ColorRampConfig</a></li><li><a href="global.html#CullingBounds">CullingBounds</a></li><li><a href="global.html#DirectionalForceConfig">DirectionalForceConfig</a></li><li><a href="global.html#EmitterConfig">EmitterConfig</a></li><li><a href="global.html#EngineConfig">EngineConfig</a></li><li><a href="global.html#ForceConfig">ForceConfig</a></li><li><a href="global.html#LinearDragConfig">LinearDragConfig</a></li><li><a href="global.html#ModifierConfig">ModifierConfig</a></li><li><a href="global.html#OpacityFadeConfig">OpacityFadeConfig</a></li><li><a href="global.html#ParticleBlueprint">ParticleBlueprint</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">OpacityFade</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        
+            OpacityFade
+        
+        </h2>
+        
+            <div class="class-description usertext">Particle modifier that blends a particle's opacity over time between two target levels.</div>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="OpacityFade"><span class="type-signature"></span>new OpacityFade<span class="signature">(config<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Initializes an opacity fade modifier with starting and ending opacity levels.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modifiers_OpacityFade.js.html">modifiers/OpacityFade.js</a>, <a href="modifiers_OpacityFade.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#OpacityFadeConfig">OpacityFadeConfig</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">ColorRampConfig configuration options.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+    
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="Modifier.html">Modifier</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="OpacityFade.html">OpacityFade</a></dt>
+            <dd></dd>
+        </dl>
+    
+    
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="endOpacity"><span class="type-signature"></span>endOpacity<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Opacity at particle death.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modifiers_OpacityFade.js.html">modifiers/OpacityFade.js</a>, <a href="modifiers_OpacityFade.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Opacity at particle death.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Unique identifier. Defaults to a generated UUID.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modifiers_Modifier.js.html">modifiers/Modifier.js</a>, <a href="modifiers_Modifier.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Modifier.html#id">Modifier#id</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Unique identifier. Defaults to a generated UUID.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="startOpacity"><span class="type-signature"></span>startOpacity<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Opacity at particle emission.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modifiers_OpacityFade.js.html">modifiers/OpacityFade.js</a>, <a href="modifiers_OpacityFade.js.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Opacity at particle emission.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(particle, normalizedAge)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Blends a particle's opacity based on its normalized age.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modifiers_OpacityFade.js.html">modifiers/OpacityFade.js</a>, <a href="modifiers_OpacityFade.js.html#line54">line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Modifier.html#update">Modifier#update</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>particle</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Particle.html">Particle</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Particle instance to affect.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>normalizedAge</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Normalized age of the particle (0.0 = emitted, 1.0 = dead).</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-throws">Throws:</h5>
+
+        
+
+    <div class="param-desc usertext">
+    
+        
+<span class="param-type">Error</span>
+
+
+
+    
+    </div>
+
+
+    
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Tue Jun 30 2026 17:19:20 GMT+0200 (közép-európai nyári idő) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>
