@@ -32,3 +32,5 @@ The following commands are available for local development and documentation gen
 | `npm run doc:api`           | Generate the local API reference documentation using JSDoc and the Docdash theme           |
 | `npm run doc:deploy`        | Generate the latest API documentation and publish it directly to GitHub Pages              |
 | `npm run version:changelog` | Generate or update the changelog based on structured Git commit history                    |
+
+> **💡 Note:** The `prepublishOnly` script runs automatically whenever `npm publish` is executed to lint the code and generate TypeScript declaration files before publishing.

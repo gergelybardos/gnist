@@ -31,7 +31,8 @@
   },
   "sideEffects": false,
   "files": [
-    "src"
+    "src",
+    "types"
   ],
   "publishConfig": {
     "access": "public"
@@ -47,7 +48,8 @@
     "types": "tsc",
     "doc:api": "jsdoc -c jsdoc.json",
     "doc:deploy": "npm run doc:api && gh-pages -d docs/",
-    "version:changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"
+    "version:changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
+    "prepublishOnly": "npm run lint && npm run types"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
