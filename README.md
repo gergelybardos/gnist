@@ -36,7 +36,9 @@ To install and integrate the NPM package into your own project, your environment
 
 ## 📦 Installation <a name="installation"></a>
 
-Coming soon.
+```bash
+npm i @gergelybardos/gnist
+```
 
 > **💡 Note:** Gnist is distributed as native ECMAScript Modules (ESM) with no build step, preserving a fully readable source in `node_modules` and enabling consumer bundlers to optimize tree-shaking and minification.
 
@@ -85,7 +87,7 @@ The complete version looks like this:
 ```javascript
 // main.js
 // 1. Import Gnist classes
-import { Gnist, PointEmitter } from 'gnist';
+import { Gnist, PointEmitter } from '@gergelybardos/gnist';
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
