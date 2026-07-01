@@ -1,6 +1,6 @@
 {
   "name": "@gergelybardos/gnist",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lightweight, renderer-agnostic particle simulation engine built with vanilla JavaScript for real-time visual effects",
   "keywords": [
     "engine",
