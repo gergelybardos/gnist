@@ -11,6 +11,9 @@
  * @property {number} [duration=Gnist.INFINITE_DURATION] Duration of particle emission (in seconds), where -1 represents infinite emission.
  * @property {number} [x=0] Current horizontal coordinate of the emitter origin.
  * @property {number} [y=0] Current vertical coordinate of the emitter origin.
+ * @property {string} [source=Source.VOLUME] Emission source mode, defining the geometric distribution and initial direction of emitted particles.
+ * The default direction depends on both the source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
+ * See {@link Source} for available configuration constants.
  * @property {ParticleBlueprint} [particleBlueprint={}] Configuration for emitted particles.
  */
 /**
@@ -19,8 +22,8 @@
  * Options are interpreted either directly or indirectly to derive Particle properties.
  * Most options may be specified as a single number or a [min, max] range array.
  * @typedef {object} ParticleBlueprint
- * @property {number|number[]} [rotation] Orientation angle in radians.
- * @property {number|number[]} [angularVelocity] Angular rotation speed (radians per second).
+ * @property {number|number[]} [rotation] Orientation angle (in radians).
+ * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
  * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
  * @property {Color} [color] RGB color channels.
  * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
@@ -77,6 +80,14 @@ export class Emitter {
      */
     y: number;
     /**
+     * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
+     * The default direction depends on both the source mode and the emitter type and can be overridden by specifying
+     * `particleBlueprint.direction` in the emitter config.
+     * @see {@link Source} for available configuration constants.
+     * @type {string}
+     */
+    source: string;
+    /**
      * Registers a modifier to be applied to the particles emitted by the emitter.
      * @param {Modifier} modifier Modifier instance to register.
      * @returns {void}
@@ -100,6 +111,20 @@ export class Emitter {
      * @returns {void}
      */
     initParticle(particle: Particle): void;
+    /**
+     * Sets up a particle's horizontal and vertical velocity components using the `speed` and `direction` values
+     * specified in the emitter config's `particleBlueprint`. If no explicit `direction` was specified, it falls back
+     * to the emitter's shape-specific direction.
+     * @param {Particle} particle - Particle instance to initialize.
+     * @returns {void}
+     */
+    initParticleVelocity(particle: Particle): void;
+    /**
+     * Calculates the default emission direction angle based on the emitter's geometry and source mode.
+     * This is a fallback value when no explicit `direction` was specified in the emitter config's `particleBlueprint`.
+     * @returns {number} The fallback emission direction angle (in radians).
+     */
+    getDefaultDirection(): number;
     #private;
 }
 /**
@@ -135,6 +160,12 @@ export type EmitterConfig = {
      */
     y?: number | undefined;
     /**
+     * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
+     * The default direction depends on both the source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
+     * See {@link Source} for available configuration constants.
+     */
+    source?: string | undefined;
+    /**
      * Configuration for emitted particles.
      */
     particleBlueprint?: ParticleBlueprint | undefined;
@@ -147,11 +178,11 @@ export type EmitterConfig = {
  */
 export type ParticleBlueprint = {
     /**
-     * Orientation angle in radians.
+     * Orientation angle (in radians).
      */
     rotation?: number | number[] | undefined;
     /**
-     * Angular rotation speed (radians per second).
+     * Angular rotation speed (in radians per second).
      */
     angularVelocity?: number | number[] | undefined;
     /**

@@ -2,6 +2,7 @@ import { Force } from '../forces/Force.js';
 import { Gnist } from '../core/Gnist.js';
 import { Modifier } from '../modifiers/Modifier.js';
 import { Particle } from '../core/Particle.js';
+import { Source } from '../shared/Constants.js';
 
 import '../shared/Types.js';
 
@@ -19,6 +20,9 @@ import '../shared/Types.js';
  * @property {number} [duration=Gnist.INFINITE_DURATION] Duration of particle emission (in seconds), where -1 represents infinite emission.
  * @property {number} [x=0] Current horizontal coordinate of the emitter origin.
  * @property {number} [y=0] Current vertical coordinate of the emitter origin.
+ * @property {string} [source=Source.VOLUME] Emission source mode, defining the geometric distribution and initial direction of emitted particles.
+ * The default direction depends on both the source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
+ * See {@link Source} for available configuration constants.
  * @property {ParticleBlueprint} [particleBlueprint={}] Configuration for emitted particles.
  */
 
@@ -28,8 +32,8 @@ import '../shared/Types.js';
  * Options are interpreted either directly or indirectly to derive Particle properties.
  * Most options may be specified as a single number or a [min, max] range array.
  * @typedef {object} ParticleBlueprint
- * @property {number|number[]} [rotation] Orientation angle in radians.
- * @property {number|number[]} [angularVelocity] Angular rotation speed (radians per second).
+ * @property {number|number[]} [rotation] Orientation angle (in radians).
+ * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
  * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
  * @property {Color} [color] RGB color channels.
  * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
@@ -87,8 +91,17 @@ export class Emitter {
     y;
 
     /**
+     * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
+     * The default direction depends on both the source mode and the emitter type and can be overridden by specifying
+     * `particleBlueprint.direction` in the emitter config.
+     * @see {@link Source} for available configuration constants.
+     * @type {string}
+     */
+    source;
+
+    /**
      * Configuration settings used to initialize emitted particles.
-     * @type {object}
+     * @type {ParticleBlueprint}
      */
     #particleBlueprint;
 
@@ -134,6 +147,7 @@ export class Emitter {
         this.duration = config.duration ?? Gnist.INFINITE_DURATION;
         this.x = config.x ?? 0;
         this.y = config.y ?? 0;
+        this.source = config.source ?? Source.VOLUME;
 
         this.#particleBlueprint = config.particleBlueprint ?? {};
 
@@ -209,15 +223,13 @@ export class Emitter {
      * @returns {void}
      */
     initParticle(particle) {
-        // Blueprint values that may be either a single number or a range are resolved via this.#resolveNumber().
-        // Values that may only be numbers are accessed directly.
+        // Blueprint values may be specified either as an explicit value or as a range.
+        // Ranges are resolved to a single random value via this.#resolveNumber().
 
         const blueprint = this.#particleBlueprint;
-        const speed = this.#resolveNumber(blueprint.speed, 50);
-        const direction = this.#resolveNumber(blueprint.direction, 0);
 
-        particle.vx = Math.cos(direction) * speed;
-        particle.vy = Math.sin(direction) * speed;
+        this.initParticleVelocity(particle);
+
         particle.rotation = this.#resolveNumber(blueprint.rotation, particle.rotation);
         particle.angularVelocity = this.#resolveNumber(blueprint.angularVelocity, particle.angularVelocity);
 
@@ -232,6 +244,32 @@ export class Emitter {
         particle.age = 0;
         particle.lifespan = this.#resolveNumber(blueprint.lifespan, particle.lifespan);
         particle.alive = true;
+    }
+
+    /**
+     * Sets up a particle's horizontal and vertical velocity components using the `speed` and `direction` values
+     * specified in the emitter config's `particleBlueprint`. If no explicit `direction` was specified, it falls back
+     * to the emitter's shape-specific direction.
+     * @param {Particle} particle - Particle instance to initialize.
+     * @returns {void}
+     */
+    initParticleVelocity(particle) {
+        const blueprint = this.#particleBlueprint;
+
+        const speed = this.#resolveNumber(blueprint.speed, 50);
+        const direction = this.#resolveNumber(blueprint.direction, this.getDefaultDirection(particle));
+
+        particle.vx = Math.cos(direction) * speed;
+        particle.vy = Math.sin(direction) * speed;
+    }
+
+    /**
+     * Calculates the default emission direction angle based on the emitter's geometry and source mode.
+     * This is a fallback value when no explicit `direction` was specified in the emitter config's `particleBlueprint`.
+     * @returns {number} The fallback emission direction angle (in radians).
+     */
+    getDefaultDirection() {
+        return 0;
     }
 
     /**
