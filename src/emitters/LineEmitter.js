@@ -1,9 +1,15 @@
 import { Particle } from '../core/Particle.js';
+import { Source } from '../shared/Constants.js';
 
 import { Emitter } from './Emitter.js';
 
 /**
+ * @import { EmitterConfig } from './Emitter.js'
+ */
+
+/**
  * LineEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  * @typedef {object} LineEmitterConfig
  * @property {number} [x1=0] Horizontal coordinate of the start point of the emission line segment.
  * @property {number} [y1=0] Vertical coordinate of the start point of the emission line segment.
@@ -57,8 +63,7 @@ export class LineEmitter extends Emitter {
     }
 
     /**
-     * Extends the base initialization by positioning the particle at a random point along the line segment
-     * defined by (x1, y1) and (x2, y2).
+     * Extends the base initialization by positioning the particle at a random point along the line segment.
      * @override
      * @param {Particle} particle Particle instance to initialize.
      * @returns {void}
@@ -70,5 +75,29 @@ export class LineEmitter extends Emitter {
 
         particle.x = this.x1 + (this.x2 - this.x1) * t;
         particle.y = this.y1 + (this.y2 - this.y1) * t;
+    }
+
+    /**
+     * Calculates the default emission direction angle perpendicular to the line segment.
+     * @override
+     * @returns {number} The fallback emission direction angle (in radians).
+     */
+    getDefaultDirection() {
+        const dx = this.x2 - this.x1;
+        const dy = this.y2 - this.y1;
+        const lineAngle = Math.atan2(dy, dx);
+        const normalAngle = lineAngle + Math.PI / 2;
+        const invertedNormalAngle = lineAngle - Math.PI / 2;
+
+        switch (this.source) {
+            case Source.EDGE_OUT:
+                return normalAngle;
+            case Source.EDGE_IN:
+                return invertedNormalAngle;
+            case Source.EDGE_BOTH:
+            case Source.VOLUME:
+            default:
+                return Math.random() > 0.5 ? normalAngle : invertedNormalAngle;
+        }
     }
 }

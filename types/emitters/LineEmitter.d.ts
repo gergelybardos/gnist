@@ -1,5 +1,9 @@
 /**
+ * @import { EmitterConfig } from './Emitter.js'
+ */
+/**
  * LineEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  * @typedef {object} LineEmitterConfig
  * @property {number} [x1=0] Horizontal coordinate of the start point of the emission line segment.
  * @property {number} [y1=0] Vertical coordinate of the start point of the emission line segment.
@@ -42,6 +46,7 @@ export class LineEmitter extends Emitter {
 }
 /**
  * LineEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  */
 export type LineEmitterConfig = {
     /**
