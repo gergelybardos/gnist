@@ -8,3 +8,4 @@ export { LinearDrag } from "./forces/LinearDrag.js";
 export { Modifier } from "./modifiers/Modifier.js";
 export { OpacityFade } from "./modifiers/OpacityFade.js";
 export { ColorRamp } from "./modifiers/ColorRamp.js";
+export { Source } from "./shared/Constants.js";
