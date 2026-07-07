@@ -115,7 +115,7 @@ export class Emitter {
      * Sets up a particle's horizontal and vertical velocity components using the `speed` and `direction` values
      * specified in the emitter config's `particleBlueprint`. If no explicit `direction` was specified, it falls back
      * to the emitter's shape-specific direction.
-     * @param {Particle} particle - Particle instance to initialize.
+     * @param {Particle} particle Particle instance to initialize.
      * @returns {void}
      */
     initParticleVelocity(particle: Particle): void;

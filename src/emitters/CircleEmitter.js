@@ -76,7 +76,7 @@ export class CircleEmitter extends Emitter {
     /**
      * Calculates the default emission direction angle.
      * @override
-     * @param {Particle} particle - Particle instance properties may be necessary for the calculation.
+     * @param {Particle} particle Particle instance properties may be necessary for the calculation.
      * @returns {number} The fallback emission direction angle (in radians).
      */
     getDefaultDirection(particle) {
