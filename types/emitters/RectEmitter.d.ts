@@ -36,7 +36,7 @@ export class RectEmitter extends Emitter {
     /**
      * Calculates the default emission direction angle radially outward or inward from the rectangle's center.
      * @override
-     * @param {Particle} particle Particle instance requiring a geometric heading calculation.
+     * @param {Particle} particle Particle instance properties may be necessary for the calculation.
      * @returns {number} The fallback direction angle (in radians).
      */
     override getDefaultDirection(particle: Particle): number;
