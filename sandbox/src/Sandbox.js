@@ -254,12 +254,14 @@ export class Sandbox {
             this.#ctx.fillText(performanceMetricsHudRows[i], hudPadding, hudPadding + hudRowHeight * i);
         }
 
-        this.#ctx.strokeRect(
-            this.#gnistEngine.config.cullingBounds.xMin,
-            this.#gnistEngine.config.cullingBounds.yMin,
-            this.#gnistEngine.config.cullingBounds.xMax - this.#gnistEngine.config.cullingBounds.xMin,
-            this.#gnistEngine.config.cullingBounds.yMax - this.#gnistEngine.config.cullingBounds.yMin,
-        );
+        if (this.#gnistEngine.cullingBounds !== null) {
+            this.#ctx.strokeRect(
+                this.#gnistEngine.cullingBounds.xMin,
+                this.#gnistEngine.cullingBounds.yMin,
+                this.#gnistEngine.cullingBounds.xMax - this.#gnistEngine.cullingBounds.xMin,
+                this.#gnistEngine.cullingBounds.yMax - this.#gnistEngine.cullingBounds.yMin,
+            );
+        }
     }
 
     /**
@@ -301,7 +303,7 @@ export class Sandbox {
             return;
         }
 
-        this.#gnistEngine.config.cullingBounds = {
+        this.#gnistEngine.cullingBounds = {
             xMin: Sandbox.#CULLING_BOUNDS_MARGIN,
             yMin: Sandbox.#CULLING_BOUNDS_MARGIN,
             xMax: this.#canvas.width - Sandbox.#CULLING_BOUNDS_MARGIN,
