@@ -8,54 +8,62 @@ import { Emitter } from './Emitter.js';
  */
 
 /**
- * CircleEmitter configuration options.
+ * EllipseEmitter configuration options.
  * Includes all properties from {@link EmitterConfig}.
- * @typedef {object} CircleEmitterConfig
- * @property {number} [x=0] Horizontal coordinate of the emission circle center.
- * @property {number} [y=0] Vertical coordinate of the emission circle center.
- * @property {number} [radius=50] Radius of the emission circle.
+ * @typedef {object} EllipseEmitterConfig
+ * @property {number} [x=0] Horizontal coordinate of the emission ellipse center.
+ * @property {number} [y=0] Vertical coordinate of the emission ellipse center.
+ * @property {number} [radiusX=50] Horizontal radius of the emission ellipse.
+ * @property {number} [radiusY=50] Vertical radius of the emission ellipse.
  */
 
 /**
- * Particle emitter that emits particles randomly from a circular area, using a uniform distribution.
+ * Particle emitter that emits particles randomly from an elliptical area, using a uniform distribution.
  * @class
  * @extends Emitter
  */
-export class CircleEmitter extends Emitter {
+export class EllipseEmitter extends Emitter {
     /**
-     * Horizontal coordinate of the emission circle center.
+     * Horizontal coordinate of the emission ellipse center.
      * @type {number}
      */
     x;
 
     /**
-     * Vertical coordinate of the emission circle center.
+     * Vertical coordinate of the emission ellipse center.
      * @type {number}
      */
     y;
 
     /**
-     * Radius of the emission circle.
+     * Horizontal radius of the emission ellipse.
      * @type {number}
      */
-    radius;
+    radiusX;
 
     /**
-     * Initializes a circle emitter with a given position and radius.
-     * Particles are emitted randomly from the circular area using a uniform distribution.
+     * Vertical radius of the emission ellipse.
+     * @type {number}
+     */
+    radiusY;
+
+    /**
+     * Initializes an ellipse emitter with a given position and radius.
+     * Particles are emitted randomly from the elliptical area using a uniform distribution.
      * @constructor
-     * @param {CircleEmitterConfig} [config={}] CircleEmitter configuration options.
+     * @param {EllipseEmitterConfig} [config={}] EllipseEmitter configuration options.
      */
     constructor(config = {}) {
         super(config);
 
         this.x = config.x ?? 0;
         this.y = config.y ?? 0;
-        this.radius = config.radius ?? 50;
+        this.radiusX = config.radiusX ?? 50;
+        this.radiusY = config.radiusY ?? 50;
     }
 
     /**
-     * Extends the base initialization by positioning the particle at a random point along or within the circle.
+     * Extends the base initialization by positioning the particle at a random point along or within the ellipse.
      * @override
      * @param {Particle} particle Particle instance to initialize.
      * @returns {void}
@@ -63,12 +71,12 @@ export class CircleEmitter extends Emitter {
     initParticle(particle) {
         const angle = Math.random() * Math.PI * 2;
 
-        const r = this.source === Source.VOLUME
-            ? Math.sqrt(Math.random()) * this.radius
-            : this.radius;
+        const factor = this.source === Source.VOLUME
+            ? Math.sqrt(Math.random())
+            : 1;
 
-        particle.x = this.x + Math.cos(angle) * r;
-        particle.y = this.y + Math.sin(angle) * r;
+        particle.x = this.x + Math.cos(angle) * this.radiusX * factor;
+        particle.y = this.y + Math.sin(angle) * this.radiusY * factor;
 
         super.initParticle(particle);
     }
