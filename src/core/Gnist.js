@@ -42,12 +42,6 @@ export class Gnist {
     }
 
     /**
-     * Engine configuration options.
-     * @type {EngineConfig}
-     */
-    config;
-
-    /**
      * Registered emitters emitting active particles.
      * @type {Array<Emitter>}
      */
@@ -66,6 +60,12 @@ export class Gnist {
     #particles;
 
     /**
+     * Optional region used for particle culling.
+     * @type {CullingBounds|null}
+     */
+    #cullingBounds;
+
+    /**
      * Initializes an empty simulation pipeline.
      * @constructor
      * @param {EngineConfig} [config={}] Engine configuration options.
@@ -75,8 +75,7 @@ export class Gnist {
         this.#globalForces = [];
         this.#particles = [];
 
-        this.config = {};
-        this.config.cullingBounds = config.cullingBounds ?? null;
+        this.cullingBounds = config.cullingBounds;
     }
 
     /**
@@ -182,6 +181,36 @@ export class Gnist {
     }
 
     /**
+     * Gets the optional region used for particle culling.
+     * @returns {CullingBounds|null}
+     */
+    get cullingBounds() {
+        return this.#cullingBounds;
+    }
+
+    /**
+     * Sets the optional region used for particle culling.
+     * @param {CullingBounds|null} cullingBounds The new region or null to disable culling.
+     */
+    set cullingBounds(cullingBounds) {
+        if (!cullingBounds) {
+            this.#cullingBounds = null;
+            return;
+        }
+
+        const xMin = cullingBounds.xMin ?? -10_000_000;
+        const yMin = cullingBounds.yMin ?? -10_000_000;
+        const xMax = cullingBounds.xMax ?? 10_000_000;
+        const yMax = cullingBounds.yMax ?? 10_000_000;
+
+        if (xMin > xMax || yMin > yMax) {
+            throw new Error('Invalid culling bounds: xMin must be less than or equal to xMax and yMin must be less than or equal to yMax.');
+        }
+
+        this.#cullingBounds = { xMin, yMin, xMax, yMax };
+    }
+
+    /**
      * Steps the simulation pipeline forward by a given time delta.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
@@ -191,8 +220,11 @@ export class Gnist {
             return;
         }
 
-        this.emitParticles(dt);
-        this.tickParticles(dt);
+        // Cap maximum step size to preserve physics stability during tab switches
+        const safeDt = Math.min(dt, 0.1);
+
+        this.emitParticles(safeDt);
+        this.tickParticles(safeDt);
     }
 
     /**
@@ -221,7 +253,7 @@ export class Gnist {
         const globalForcesCount = globalForces.length;
         const particles = this.#particles;
         const particleCount = particles.length;
-        const cullingBounds = this.config.cullingBounds;
+        const cullingBounds = this.cullingBounds;
 
         let aliveCount = 0;
 
@@ -257,7 +289,7 @@ export class Gnist {
                 }
 
                 if (cullingBounds !== null) {
-                    const safetyMargin = particle.size;
+                    const safetyMargin = particle.size || 0;
 
                     if (particle.x < cullingBounds.xMin - safetyMargin ||
                         particle.x > cullingBounds.xMax + safetyMargin ||

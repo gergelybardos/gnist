@@ -35,10 +35,15 @@ export class Gnist {
      */
     constructor(config?: EngineConfig);
     /**
-     * Engine configuration options.
-     * @type {EngineConfig}
+     * Sets the optional region used for particle culling.
+     * @param {CullingBounds|null} cullingBounds The new region or null to disable culling.
      */
-    config: EngineConfig;
+    set cullingBounds(cullingBounds: CullingBounds | null);
+    /**
+     * Gets the optional region used for particle culling.
+     * @returns {CullingBounds|null}
+     */
+    get cullingBounds(): CullingBounds | null;
     /**
      * Gets the current list of registered emitters.
      * @returns {Array<Emitter>}
