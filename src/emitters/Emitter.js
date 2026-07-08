@@ -208,8 +208,8 @@ export class Emitter {
 
             this.initParticle(particle);
 
-            particle.setModifiers(this.#modifiers);
-            particle.setScopedForces(this.#scopedForces);
+            particle.modifiers = this.#modifiers;
+            particle.scopedForces = this.#scopedForces;
 
             newParticles.push(particle);
         }

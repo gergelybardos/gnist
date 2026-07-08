@@ -104,13 +104,13 @@ export class Particle {
      * Shared reference to the owner emitter's modifier array.
      * @type {Array<Modifier>}
      */
-    #modifiers;
+    modifiers;
 
     /**
      * Shared reference to the owner emitter's scoped emitter-specific force array.
      * @type {Array<Force>}
      */
-    #scopedForces;
+    scopedForces;
 
     /**
      * Initializes a blank, inactive particle.
@@ -136,41 +136,7 @@ export class Particle {
         this.lifespan = 0;
         this.alive = false;
 
-        this.#modifiers = [];
-        this.#scopedForces = [];
-    }
-
-    /**
-     * Gets the shared reference to the emitter's modifier array.
-     * @returns {Array<Modifier>}
-     */
-    getModifiers() {
-        return this.#modifiers;
-    }
-
-    /**
-     * Sets the shared reference to the emitter's modifier array.
-     * @param {Array<Modifier>} modifiers The shared reference to the emitter's modifier array.
-     * @returns {void}
-     */
-    setModifiers(modifiers) {
-        this.#modifiers = modifiers;
-    }
-
-    /**
-     * Gets the shared reference to the emitter's scoped emitter-specific force array.
-     * @returns {Array<Force>}
-     */
-    getScopedForces() {
-        return this.#scopedForces;
-    }
-
-    /**
-     * Sets the shared reference to the emitter's scoped emitter-specific force array.
-     * @param {Array<Force>} scopedForces The shared reference to the emitter's scoped emitter-specific force array.
-     * @returns {void}
-     */
-    setScopedForces(scopedForces) {
-        this.#scopedForces = scopedForces;
+        this.modifiers = [];
+        this.scopedForces = [];
     }
 }

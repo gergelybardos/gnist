@@ -272,7 +272,7 @@ export class Gnist {
                     globalForces[j].apply(particle, dt);
                 }
 
-                const scopedForces = particle.getScopedForces();
+                const scopedForces = particle.scopedForces;
                 const scopedForcesCount = scopedForces.length;
                 for (let j = 0; j < scopedForcesCount; j++) {
                     scopedForces[j].apply(particle, dt);
@@ -282,7 +282,7 @@ export class Gnist {
                 particle.y += particle.vy * dt;
                 particle.rotation += particle.angularVelocity * dt;
 
-                const activeModifiers = particle.getModifiers();
+                const activeModifiers = particle.modifiers;
                 const activeModifiersCount = activeModifiers.length;
                 for (let j = 0; j < activeModifiersCount; j++) {
                     activeModifiers[j].update(particle, normalizedAge, dt);

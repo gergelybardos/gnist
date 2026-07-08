@@ -67,28 +67,15 @@ export class Particle {
      */
     alive: boolean;
     /**
-     * Gets the shared reference to the emitter's modifier array.
-     * @returns {Array<Modifier>}
+     * Shared reference to the owner emitter's modifier array.
+     * @type {Array<Modifier>}
      */
-    getModifiers(): Array<Modifier>;
+    modifiers: Array<Modifier>;
     /**
-     * Sets the shared reference to the emitter's modifier array.
-     * @param {Array<Modifier>} modifiers The shared reference to the emitter's modifier array.
-     * @returns {void}
+     * Shared reference to the owner emitter's scoped emitter-specific force array.
+     * @type {Array<Force>}
      */
-    setModifiers(modifiers: Array<Modifier>): void;
-    /**
-     * Gets the shared reference to the emitter's scoped emitter-specific force array.
-     * @returns {Array<Force>}
-     */
-    getScopedForces(): Array<Force>;
-    /**
-     * Sets the shared reference to the emitter's scoped emitter-specific force array.
-     * @param {Array<Force>} scopedForces The shared reference to the emitter's scoped emitter-specific force array.
-     * @returns {void}
-     */
-    setScopedForces(scopedForces: Array<Force>): void;
-    #private;
+    scopedForces: Array<Force>;
 }
 import type { Color } from '../shared/Types.js';
 import { Modifier } from '../modifiers/Modifier.js';
