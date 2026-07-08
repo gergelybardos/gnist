@@ -63,6 +63,13 @@ export class Particle {
      */
     size;
 
+    /**
+     * The initial, unmodified birth size of the particle.
+     * Used as the baseline reference for scale calculations over time.
+     * @type {number}
+     */
+    baseSize;
+
     /** Current RGB color channels.
      * @type {Color}
      */
@@ -125,6 +132,7 @@ export class Particle {
         this.angularVelocity = 0;
 
         this.size = 1;
+        this.baseSize = 1;
         this.color = {
             r: 255,
             g: 255,

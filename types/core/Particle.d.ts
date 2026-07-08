@@ -42,6 +42,12 @@ export class Particle {
      * @type {number}
      */
     size: number;
+    /**
+     * The initial, unmodified birth size of the particle.
+     * Used as the baseline reference for scale calculations over time.
+     * @type {number}
+     */
+    baseSize: number;
     /** Current RGB color channels.
      * @type {Color}
      */

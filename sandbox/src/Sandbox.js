@@ -1,4 +1,12 @@
-import { Gnist, PointEmitter, DirectionalForce, LinearDrag, ColorRamp, OpacityFade } from 'gnist';
+import {
+    Gnist,
+    PointEmitter,
+    DirectionalForce,
+    LinearDrag,
+    ScaleTween,
+    ColorRamp,
+    OpacityFade,
+} from 'gnist';
 
 /**
  * @class
@@ -118,6 +126,11 @@ export class Sandbox {
         const gravity = new DirectionalForce({ax:0, ay: 200});
         const friction = new LinearDrag({drag: 0.4});
 
+        const enlarge = new ScaleTween({
+            startScale: 1,
+            endScale: 5,
+        });
+
         const fadeOut = new OpacityFade({
             startOpacity: 1.0,
             endOpacity: 0.0,
@@ -137,13 +150,14 @@ export class Sandbox {
             y: this.#canvas.height / 2,
             particlesPerSecond: 500,
             particleBlueprint: {
-                size: [1, 8],
+                size: [1, 5],
                 lifespan: [1, 3],
                 speed: [15, 150],
                 direction: [0, Math.PI * 2],
             }
         });
 
+        this.#pointEmitter.addModifier(enlarge);
         this.#pointEmitter.addModifier(fadeOut);
         this.#pointEmitter.addModifier(gnistColorRamp);
 

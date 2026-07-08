@@ -234,6 +234,7 @@ export class Emitter {
         particle.angularVelocity = this.#resolveNumber(blueprint.angularVelocity, particle.angularVelocity);
 
         particle.size = this.#resolveNumber(blueprint.size, particle.size);
+        particle.baseSize = particle.size;
         particle.color = {
             r: blueprint.color?.r ?? 255,
             g: blueprint.color?.g ?? 255,
