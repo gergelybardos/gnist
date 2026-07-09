@@ -13,7 +13,7 @@ export class Modifier {
     /**
      * Initializes a modifier.
      * @constructor
-     * @param {ModifierConfig} [config={}] Configuration parameters.
+     * @param {ModifierConfig} [config={}] Modifier configuration options.
      * @throws {TypeError}
      */
     constructor(config?: ModifierConfig);

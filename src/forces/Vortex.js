@@ -87,6 +87,7 @@ export class Vortex extends Force {
 
     /**
      * Applies a swirling combination of centripetal (suction) and tangential (orbital) forces to a particle.
+     * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
