@@ -172,14 +172,14 @@ export class Emitter {
      * @throws {Error}
      */
     addModifier(modifier) {
-        this.#visualModifiers.push(modifier);
-
         const category = modifier.constructor.category;
 
         switch (category) {
             case ModifierCategory.VISUAL:
+                this.#visualModifiers.push(modifier);
                 break;
             case ModifierCategory.PATH:
+                this.#pathModifiers.push(modifier);
                 break;
             default:
                 throw new Error(`[Gnist] Unknown modifier category: "${category}"`);
