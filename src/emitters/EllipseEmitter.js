@@ -88,7 +88,13 @@ export class EllipseEmitter extends Emitter {
      * @returns {number} The fallback emission direction angle (in radians).
      */
     getDefaultDirection(particle) {
-        const outwardAngle = Math.atan2(particle.y - this.y, particle.x - this.x);
+        const dy = particle.y - this.y;
+        const dx = particle.x - this.x;
+
+        // If a particle spawns at the center, fallback to a random direction
+        const outwardAngle = (dx === 0 && dy === 0)
+            ? Math.random() * Math.PI * 2
+            : Math.atan2(dy, dx);
 
         switch (this.source) {
             case Source.EDGE_OUT:
