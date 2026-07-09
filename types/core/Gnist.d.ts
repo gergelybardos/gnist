@@ -37,16 +37,25 @@ export class Gnist {
      */
     set cullingBounds(cullingBounds: CullingBounds | null);
     /**
-     * Gets the optional region used for particle culling.
+     * Optional region used for particle culling.
      * @type {CullingBounds|null}
-     * @returns {CullingBounds|null}
      */
     get cullingBounds(): CullingBounds | null;
     /**
-     * Gets the current list of registered emitters.
-     * @returns {Array<Emitter>}
+     * Registered emitters emitting active particles.
+     * @type {Array<Emitter>}
      */
-    getEmitters(): Array<Emitter>;
+    get emitters(): Array<Emitter>;
+    /**
+     * Registered global environmental forces affecting all active particles.
+     * @type {Array<Force>}
+     */
+    get globalForces(): Array<Force>;
+    /**
+     * Common pool of active particles.
+     * @type {Array<Particle>}
+     */
+    get particles(): Array<Particle>;
     /**
      * Finds a registered emitter by its unique identifier.
      * @param {string} id The unique identifier of the target emitter.
@@ -66,11 +75,6 @@ export class Gnist {
      */
     removeEmitter(id: string): boolean;
     /**
-     * Gets the current list of registered global environmental forces.
-     * @returns {Array<Force>}
-     */
-    getGlobalForces(): Array<Force>;
-    /**
      * Finds a registered global environmental force by its unique identifier.
      * @param {string} id The unique identifier of the target force.
      * @returns {Force|null} The force instance if found, null otherwise.
@@ -89,29 +93,11 @@ export class Gnist {
      */
     removeGlobalForce(id: string): boolean;
     /**
-     * Gets the current list of active particles of the common particle pool.
-     * @returns {Array<Particle>}
-     */
-    getParticles(): Array<Particle>;
-    /**
      * Steps the simulation pipeline forward by a given time delta.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
     update(dt: number): void;
-    /**
-     * Iterates through registered emitters to emit new particles.
-     * @param {number} dt Time elapsed since the last frame (in seconds).
-     * @returns {void}
-     */
-    emitParticles(dt: number): void;
-    /**
-     * Updates particle lifecycles, applies global and scoped emitter-specific forces, moves particles, and
-     * applies modifiers.
-     * @param {number} dt Time elapsed since the last frame (in seconds).
-     * @returns {void}
-     */
-    tickParticles(dt: number): void;
     #private;
 }
 /**

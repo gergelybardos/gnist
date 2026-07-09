@@ -209,7 +209,7 @@ export class Sandbox {
         this.#ctx.fillStyle = '#222';
         this.#ctx.fillRect(0, 0, width, height);
 
-        const particles = this.#gnistEngine.getParticles();
+        const particles = this.#gnistEngine.particles;
         const particleCount = particles.length;
 
         for (let i = 0; i < particleCount; i++) {

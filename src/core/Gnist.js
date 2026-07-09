@@ -35,25 +35,25 @@ export class Gnist {
     }
 
     /**
-     * Registered emitters emitting active particles.
+     * Internal collection of registered emitters.
      * @type {Array<Emitter>}
      */
     #emitters;
 
     /**
-     * Registered global environmental forces affecting all active particles.
+     * Internal collection of registered global environmental forces
      * @type {Array<Force>}
      */
     #globalForces;
 
     /**
-     * Common pool of active particles.
+     * Internal collection of active particles.
      * @type {Array<Particle>}
      */
     #particles;
 
     /**
-     * Optional region used for particle culling.
+     * Internal state of the optional region used for particle culling.
      * @type {CullingBounds|null}
      */
     #cullingBounds;
@@ -72,11 +72,58 @@ export class Gnist {
     }
 
     /**
-     * Gets the current list of registered emitters.
-     * @returns {Array<Emitter>}
+     * Registered emitters emitting active particles.
+     * @type {Array<Emitter>}
      */
-    getEmitters() {
+    get emitters() {
         return this.#emitters;
+    }
+
+    /**
+     * Registered global environmental forces affecting all active particles.
+     * @type {Array<Force>}
+     */
+    get globalForces() {
+        return this.#globalForces;
+    }
+
+    /**
+     * Common pool of active particles.
+     * @type {Array<Particle>}
+     */
+    get particles() {
+        return this.#particles;
+    }
+
+    /**
+     * Optional region used for particle culling.
+     * @type {CullingBounds|null}
+     */
+    get cullingBounds() {
+        return this.#cullingBounds;
+    }
+
+    /**
+     * Sets the optional region used for particle culling.
+     * @param {CullingBounds|null} cullingBounds The new region or null to disable culling.
+     * @throws {Error}
+     */
+    set cullingBounds(cullingBounds) {
+        if (!cullingBounds) {
+            this.#cullingBounds = null;
+            return;
+        }
+
+        const xMin = cullingBounds.xMin ?? -10_000_000;
+        const yMin = cullingBounds.yMin ?? -10_000_000;
+        const xMax = cullingBounds.xMax ?? 10_000_000;
+        const yMax = cullingBounds.yMax ?? 10_000_000;
+
+        if (xMin > xMax || yMin > yMax) {
+            throw new Error('[Gnist] Invalid culling bounds: xMin must be less than or equal to xMax and yMin must be less than or equal to yMax.');
+        }
+
+        this.#cullingBounds = { xMin, yMin, xMax, yMax };
     }
 
     /**
@@ -119,14 +166,6 @@ export class Gnist {
     }
 
     /**
-     * Gets the current list of registered global environmental forces.
-     * @returns {Array<Force>}
-     */
-    getGlobalForces() {
-        return this.#globalForces;
-    }
-
-    /**
      * Finds a registered global environmental force by its unique identifier.
      * @param {string} id The unique identifier of the target force.
      * @returns {Force|null} The force instance if found, null otherwise.
@@ -166,46 +205,6 @@ export class Gnist {
     }
 
     /**
-     * Gets the current list of active particles of the common particle pool.
-     * @returns {Array<Particle>}
-     */
-    getParticles() {
-        return this.#particles;
-    }
-
-    /**
-     * Gets the optional region used for particle culling.
-     * @type {CullingBounds|null}
-     * @returns {CullingBounds|null}
-     */
-    get cullingBounds() {
-        return this.#cullingBounds;
-    }
-
-    /**
-     * Sets the optional region used for particle culling.
-     * @param {CullingBounds|null} cullingBounds The new region or null to disable culling.
-     * @throws {Error}
-     */
-    set cullingBounds(cullingBounds) {
-        if (!cullingBounds) {
-            this.#cullingBounds = null;
-            return;
-        }
-
-        const xMin = cullingBounds.xMin ?? -10_000_000;
-        const yMin = cullingBounds.yMin ?? -10_000_000;
-        const xMax = cullingBounds.xMax ?? 10_000_000;
-        const yMax = cullingBounds.yMax ?? 10_000_000;
-
-        if (xMin > xMax || yMin > yMax) {
-            throw new Error('[Gnist] Invalid culling bounds: xMin must be less than or equal to xMax and yMin must be less than or equal to yMax.');
-        }
-
-        this.#cullingBounds = { xMin, yMin, xMax, yMax };
-    }
-
-    /**
      * Steps the simulation pipeline forward by a given time delta.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
@@ -218,8 +217,8 @@ export class Gnist {
         // Cap maximum step size to preserve physics stability during tab switches
         const safeDt = Math.min(dt, 0.1);
 
-        this.emitParticles(safeDt);
-        this.tickParticles(safeDt);
+        this.#emitParticles(safeDt);
+        this.#tickParticles(safeDt);
     }
 
     /**
@@ -227,7 +226,7 @@ export class Gnist {
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    emitParticles(dt) {
+    #emitParticles(dt) {
         for (let i = 0; i < this.#emitters.length; i++) {
             const newParticles = this.#emitters[i].update(dt);
 
@@ -243,12 +242,12 @@ export class Gnist {
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    tickParticles(dt) {
+    #tickParticles(dt) {
         const globalForces = this.#globalForces;
         const globalForcesCount = globalForces.length;
         const particles = this.#particles;
         const particleCount = particles.length;
-        const cullingBounds = this.cullingBounds;
+        const cullingBounds = this.#cullingBounds;
 
         let aliveCount = 0;
 
