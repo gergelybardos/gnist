@@ -26,10 +26,10 @@ export class Modifier {
     }
 
     /**
-     * Unique identifier. Defaults to a generated UUID.
+     * Internal state of the modifier's unique identifier.
      * @type {string}
      */
-    id;
+    #id;
 
     /**
      * Initializes a modifier.
@@ -42,7 +42,16 @@ export class Modifier {
             throw new TypeError('[Gnist] Cannot instantiate abstract class Modifier directly.');
         }
 
-        this.id = config?.id ?? crypto.randomUUID();
+        this.#id = config?.id ?? crypto.randomUUID();
+    }
+
+    /**
+     * Unique identifier. Defaults to a generated UUID.
+     * @type {string}
+     * @readonly
+     */
+    get id() {
+        return this.#id;
     }
 
     /**
