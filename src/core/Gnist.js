@@ -268,6 +268,8 @@ export class Gnist {
             if (particle.alive) {
                 const normalizedAge = Math.min(particle.age / particle.lifespan, 1.0);
 
+                // 1. Environmental forces
+
                 for (let j = 0; j < globalForcesCount; j++) {
                     globalForces[j].apply(particle, dt);
                 }
@@ -278,15 +280,29 @@ export class Gnist {
                     scopedForces[j].apply(particle, dt);
                 }
 
+                // 2. Path modifiers (must run BEFORE position integration so vx/vy changes apply immediately)
+
+                const pathModifiers = particle.pathModifiers;
+                const pathModifiersCount = pathModifiers.length;
+                for (let j = 0; j < pathModifiersCount; j++) {
+                    pathModifiers[j].update(particle, normalizedAge, dt);
+                }
+
+                // 3. Position integration
+
                 particle.x += particle.vx * dt;
                 particle.y += particle.vy * dt;
                 particle.rotation += particle.angularVelocity * dt;
 
-                const activeModifiers = particle.modifiers;
-                const activeModifiersCount = activeModifiers.length;
-                for (let j = 0; j < activeModifiersCount; j++) {
-                    activeModifiers[j].update(particle, normalizedAge, dt);
+                // 4. Visual Modifiers (must run AFTER position integration)
+
+                const visualModifiers = particle.visualModifiers;
+                const visualModifiersCount = visualModifiers.length;
+                for (let j = 0; j < visualModifiersCount; j++) {
+                    visualModifiers[j].update(particle, normalizedAge, dt);
                 }
+
+                // 5. Culling
 
                 if (cullingBounds !== null) {
                     const safetyMargin = particle.size || 0;

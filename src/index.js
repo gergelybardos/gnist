@@ -14,8 +14,8 @@ export { RadialForce } from './forces/RadialForce.js';
 export { Vortex } from './forces/Vortex.js';
 
 export { Modifier } from './modifiers/Modifier.js';
-export { ColorRamp } from './modifiers/ColorRamp.js';
-export { OpacityFade } from './modifiers/OpacityFade.js';
-export { ScaleTween } from './modifiers/ScaleTween.js';
+export { ColorRamp } from './modifiers/visual/ColorRamp.js';
+export { OpacityFade } from './modifiers/visual/OpacityFade.js';
+export { ScaleTween } from './modifiers/visual/ScaleTween.js';
 
 export { Source } from './shared/Constants.js';

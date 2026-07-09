@@ -30,6 +30,14 @@ export class ScaleTween extends Modifier {
      * @type {number}
      */
     endScale: number;
+    /**
+     * Scales the particle relative to its base size based on its normalized age.
+     * @override
+     * @param {Particle} particle Particle instance to affect.
+     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @returns {void}
+     */
+    override update(particle: Particle, normalizedAge: number): void;
 }
 /**
  * ScaleTween configuration options.
@@ -45,4 +53,5 @@ export type ScaleTweenConfig = {
      */
     endScale?: number | undefined;
 };
-import { Modifier } from './Modifier.js';
+import { Modifier } from '../Modifier.js';
+import { Particle } from '../../core/Particle.js';

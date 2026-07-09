@@ -20,6 +20,14 @@ export class ColorRamp extends Modifier {
      * @param {ColorRampConfig} [config={}] ColorRamp configuration options.
      */
     constructor(config?: ColorRampConfig);
+    /**
+     * Blends a particle's color channels based on its normalized age.
+     * @override
+     * @param {Particle} particle Particle instance to affect.
+     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @returns {void}
+     */
+    override update(particle: Particle, normalizedAge: number): void;
     #private;
 }
 /**
@@ -32,4 +40,5 @@ export type ColorRampConfig = {
      */
     colors?: number[][] | undefined;
 };
-import { Modifier } from './Modifier.js';
+import { Modifier } from '../Modifier.js';
+import { Particle } from '../../core/Particle.js';

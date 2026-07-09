@@ -2,7 +2,7 @@ import { Force } from '../forces/Force.js';
 import { Gnist } from '../core/Gnist.js';
 import { Modifier } from '../modifiers/Modifier.js';
 import { Particle } from '../core/Particle.js';
-import { Source } from '../shared/Constants.js';
+import { ModifierCategory, Source } from '../shared/Constants.js';
 
 import '../shared/Types.js';
 
@@ -118,10 +118,16 @@ export class Emitter {
     #elapsedTime;
 
     /**
-     * Shared reference to the emitter's modifier array.
+     * Shared reference to the emitter's visual modifier array.
      * @type {Array<Modifier>}
      */
-    #modifiers;
+    #visualModifiers;
+
+    /**
+     * Shared reference to the emitter's path modifier array.
+     * @type {Array<Modifier>}
+     */
+    #pathModifiers;
 
     /**
      * Shared reference to the emitter's scoped emitter-specific force array.
@@ -154,7 +160,8 @@ export class Emitter {
         this.#accumulator = 0;
         this.#elapsedTime = 0;
 
-        this.#modifiers = [];
+        this.#visualModifiers = [];
+        this.#pathModifiers = [];
         this.#scopedForces = [];
     }
 
@@ -164,7 +171,18 @@ export class Emitter {
      * @returns {void}
      */
     addModifier(modifier) {
-        this.#modifiers.push(modifier);
+        this.#visualModifiers.push(modifier);
+
+        const category = modifier.constructor.category;
+
+        switch (category) {
+            case ModifierCategory.VISUAL:
+                break;
+            case ModifierCategory.PATH:
+                break;
+            default:
+                throw new Error(`Unknown modifier category: "${category}"`);
+        }
     }
 
     /**
@@ -208,7 +226,8 @@ export class Emitter {
 
             this.initParticle(particle);
 
-            particle.modifiers = this.#modifiers;
+            particle.visualModifiers = this.#visualModifiers;
+            particle.pathModifiers = this.#pathModifiers;
             particle.scopedForces = this.#scopedForces;
 
             newParticles.push(particle);

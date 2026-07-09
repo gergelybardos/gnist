@@ -73,10 +73,15 @@ export class Particle {
      */
     alive: boolean;
     /**
-     * Shared reference to the owner emitter's modifier array.
+     * Shared reference to the owner emitter's visual modifier array.
      * @type {Array<Modifier>}
      */
-    modifiers: Array<Modifier>;
+    visualModifiers: Array<Modifier>;
+    /**
+     * Shared reference to the owner emitter's path modifier array.
+     * @type {Array<Modifier>}
+     */
+    pathModifiers: Array<Modifier>;
     /**
      * Shared reference to the owner emitter's scoped emitter-specific force array.
      * @type {Array<Force>}

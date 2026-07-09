@@ -15,3 +15,14 @@ export const Source: Readonly<{
     EDGE_BOTH: "edge-both";
     VOLUME: "volume";
 }>;
+/**
+ * Architectural categories for particle modifiers.
+ * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
+ * @readonly
+ * @property {string} VISUAL Modifiers that manipulate visual appearance (e.g., color, opacity, scale).
+ * @property {string} PATH Modifiers that manipulate trajectories (e.g., zig-zag, orbit).
+ */
+export const ModifierCategory: Readonly<{
+    VISUAL: "visual";
+    PATH: "path";
+}>;

@@ -108,10 +108,16 @@ export class Particle {
     // =========================================================================
 
     /**
-     * Shared reference to the owner emitter's modifier array.
+     * Shared reference to the owner emitter's visual modifier array.
      * @type {Array<Modifier>}
      */
-    modifiers;
+    visualModifiers;
+
+    /**
+     * Shared reference to the owner emitter's path modifier array.
+     * @type {Array<Modifier>}
+     */
+    pathModifiers;
 
     /**
      * Shared reference to the owner emitter's scoped emitter-specific force array.
@@ -144,7 +150,8 @@ export class Particle {
         this.lifespan = 0;
         this.alive = false;
 
-        this.modifiers = [];
+        this.visualModifiers = [];
+        this.pathModifiers = [];
         this.scopedForces = [];
     }
 }

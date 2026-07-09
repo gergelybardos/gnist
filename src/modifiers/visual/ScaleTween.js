@@ -1,6 +1,7 @@
-import { Particle } from '../core/Particle.js';
+import { Particle } from '../../core/Particle.js';
+import { ModifierCategory } from '../../shared/Constants.js';
 
-import { Modifier } from './Modifier.js';
+import { Modifier } from '../Modifier.js';
 
 /**
  * @import { ModifierConfig } from './Modifier.js';
@@ -20,6 +21,17 @@ import { Modifier } from './Modifier.js';
  * @extends Modifier
  */
 export class ScaleTween extends Modifier {
+    /**
+     * Gets the architectural category of the modifier.
+     * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
+     * @override
+     * @type {string}
+     * @returns {string}
+     */
+    static get category() {
+        return ModifierCategory.VISUAL;
+    }
+
     /**
      * Scale multiplier at particle emission.
      * @type {number}
