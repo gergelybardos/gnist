@@ -44,18 +44,21 @@ export class Gnist {
     /**
      * Registered emitters emitting active particles.
      * @type {Array<Emitter>}
+     * @readonly
      */
-    get emitters(): Array<Emitter>;
+    readonly get emitters(): Array<Emitter>;
     /**
      * Registered global environmental forces affecting all active particles.
      * @type {Array<Force>}
+     * @readonly
      */
-    get globalForces(): Array<Force>;
+    readonly get globalForces(): Array<Force>;
     /**
      * Common pool of active particles.
      * @type {Array<Particle>}
+     * @readonly
      */
-    get particles(): Array<Particle>;
+    readonly get particles(): Array<Particle>;
     /**
      * Finds a registered emitter by its unique identifier.
      * @param {string} id The unique identifier of the target emitter.
