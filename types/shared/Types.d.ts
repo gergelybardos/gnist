@@ -19,7 +19,7 @@ export type Color = {
  * Architectural categories for particle modifiers.
  * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
  */
-export type ModifierCategoryType = {
+export type ModifierCategoryValues = {
     /**
      * Modifiers that manipulate visual appearance (e.g., color, opacity, scale).
      */
@@ -35,7 +35,7 @@ export type ModifierCategoryType = {
  * The default direction depends on both the source mode and the emitter type and can be overridden by specifying
  * `particleBlueprint.direction` in the emitter config.
  */
-export type SourceType = {
+export type SourceValues = {
     /**
      * Emit from the shape's boundary, directing particles outward.
      */

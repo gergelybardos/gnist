@@ -1,13 +1,15 @@
 /**
- * @import { ModifierCategoryType, SourceType } from './Types.js'
+ * @import { ModifierCategoryValues, SourceValues } from './Types.js'
  */
 /**
- * @type {ModifierCategoryType}
+ * Runtime constant mapping for modifier categories. For the list of available categories, see {@link ModifierCategoryValues}.
+ * @type {ModifierCategoryValues}
  */
-export const ModifierCategory: ModifierCategoryType;
+export const ModifierCategory: ModifierCategoryValues;
 /**
- * @type {SourceType}
+ * Runtime constant mapping for emission source modes. For the list of available modes, see {@link SourceValues}.
+ * @type {SourceValues}
  */
-export const Source: SourceType;
-import type { ModifierCategoryType } from './Types.js';
-import type { SourceType } from './Types.js';
+export const Source: SourceValues;
+import type { ModifierCategoryValues } from './Types.js';
+import type { SourceValues } from './Types.js';

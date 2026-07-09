@@ -1,9 +1,10 @@
 /**
- * @import { ModifierCategoryType, SourceType } from './Types.js'
+ * @import { ModifierCategoryValues, SourceValues } from './Types.js'
  */
 
 /**
- * @type {ModifierCategoryType}
+ * Runtime constant mapping for modifier categories. For the list of available categories, see {@link ModifierCategoryValues}.
+ * @type {ModifierCategoryValues}
  */
 export const ModifierCategory = Object.freeze({
     VISUAL: 'visual',
@@ -11,7 +12,8 @@ export const ModifierCategory = Object.freeze({
 });
 
 /**
- * @type {SourceType}
+ * Runtime constant mapping for emission source modes. For the list of available modes, see {@link SourceValues}.
+ * @type {SourceValues}
  */
 export const Source = Object.freeze({
     EDGE_OUT: 'edge-out',
