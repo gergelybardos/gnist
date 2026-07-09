@@ -234,7 +234,10 @@ export class Gnist {
         const emitterCount = this.#emitters.length;
 
         for (let i = 0; i < emitterCount; i++) {
-            this.#emitters[i].update(dt, particlePool);
+            const emitter = this.#emitters[i];
+            if (emitter) {
+                emitter.update(dt, particlePool);
+            }
         }
     }
 
