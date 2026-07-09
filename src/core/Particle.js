@@ -107,19 +107,19 @@ export class Particle {
 
     /**
      * Shared reference to the owner emitter's visual modifier array.
-     * @type {Array<Modifier>}
+     * @type {Array<Modifier>|null}
      */
     visualModifiers;
 
     /**
      * Shared reference to the owner emitter's path modifier array.
-     * @type {Array<Modifier>}
+     * @type {Array<Modifier>|null}
      */
     pathModifiers;
 
     /**
      * Shared reference to the owner emitter's scoped emitter-specific force array.
-     * @type {Array<Force>}
+     * @type {Array<Force>|null}
      */
     scopedForces;
 
@@ -148,8 +148,9 @@ export class Particle {
         this.lifespan = 0;
         this.alive = false;
 
-        this.visualModifiers = [];
-        this.pathModifiers = [];
-        this.scopedForces = [];
+        // Emitter classes will initialize these immediately. No need to allocate empty arrays here.
+        this.visualModifiers = null;
+        this.pathModifiers = null;
+        this.scopedForces = null;
     }
 }

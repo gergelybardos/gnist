@@ -1,5 +1,4 @@
 export { Gnist } from './core/Gnist.js';
-export { Particle } from './core/Particle.js';
 
 export { Emitter } from './emitters/Emitter.js';
 export { EllipseEmitter } from './emitters/EllipseEmitter.js';
