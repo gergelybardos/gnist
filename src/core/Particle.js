@@ -1,8 +1,6 @@
 import { Force } from '../forces/Force.js';
 import { Modifier } from '../modifiers/Modifier.js';
 
-import '../shared/Types.js';
-
 /**
  * @import { Color } from '../shared/Types.js'
  */

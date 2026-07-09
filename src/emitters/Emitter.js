@@ -4,8 +4,6 @@ import { Modifier } from '../modifiers/Modifier.js';
 import { Particle } from '../core/Particle.js';
 import { ModifierCategory, Source } from '../shared/Constants.js';
 
-import '../shared/Types.js';
-
 /**
  * @import { Color } from '../shared/Types.js'
  */
@@ -143,7 +141,7 @@ export class Emitter {
      */
     constructor(config = {}) {
         if (new.target === Emitter) {
-            throw new TypeError('Cannot instantiate abstract class Emitter directly.');
+            throw new TypeError('[Gnist] Cannot instantiate abstract class Emitter directly.');
         }
 
         this.id = config.id ?? crypto.randomUUID();
@@ -169,6 +167,7 @@ export class Emitter {
      * Registers a modifier to be applied to the particles emitted by the emitter.
      * @param {Modifier} modifier Modifier instance to register.
      * @returns {void}
+     * @throws {Error}
      */
     addModifier(modifier) {
         this.#visualModifiers.push(modifier);
@@ -181,7 +180,7 @@ export class Emitter {
             case ModifierCategory.PATH:
                 break;
             default:
-                throw new Error(`Unknown modifier category: "${category}"`);
+                throw new Error(`[Gnist] Unknown modifier category: "${category}"`);
         }
     }
 

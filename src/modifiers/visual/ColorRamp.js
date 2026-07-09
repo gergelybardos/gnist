@@ -21,10 +21,10 @@ import { Modifier } from '../Modifier.js';
  * @extends Modifier
  */
 export class ColorRamp extends Modifier {
+    // Skipped @override because it fails on static members in TypeScript
     /**
      * Gets the architectural category of the modifier.
      * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
-     * @override
      * @type {string}
      * @returns {string}
      */

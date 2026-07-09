@@ -91,6 +91,7 @@ export class Emitter {
      * Registers a modifier to be applied to the particles emitted by the emitter.
      * @param {Modifier} modifier Modifier instance to register.
      * @returns {void}
+     * @throws {Error}
      */
     addModifier(modifier: Modifier): void;
     /**

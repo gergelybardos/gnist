@@ -27,6 +27,7 @@ import { Particle } from './Particle.js';
 export class Gnist {
     /**
      * The current semantic version of the Gnist particle engine.
+     * @type {string}
      * @returns {string}
      */
     static get VERSION() {
@@ -36,6 +37,7 @@ export class Gnist {
     /**
      * Constant value representing an infinite particle lifespan.
      * @type {number}
+     * @returns {number}
      */
     static get INFINITE_DURATION() {
         return -1;
@@ -182,6 +184,7 @@ export class Gnist {
 
     /**
      * Gets the optional region used for particle culling.
+     * @type {CullingBounds|null}
      * @returns {CullingBounds|null}
      */
     get cullingBounds() {
@@ -191,6 +194,7 @@ export class Gnist {
     /**
      * Sets the optional region used for particle culling.
      * @param {CullingBounds|null} cullingBounds The new region or null to disable culling.
+     * @throws {Error}
      */
     set cullingBounds(cullingBounds) {
         if (!cullingBounds) {
@@ -204,7 +208,7 @@ export class Gnist {
         const yMax = cullingBounds.yMax ?? 10_000_000;
 
         if (xMin > xMax || yMin > yMax) {
-            throw new Error('Invalid culling bounds: xMin must be less than or equal to xMax and yMin must be less than or equal to yMax.');
+            throw new Error('[Gnist] Invalid culling bounds: xMin must be less than or equal to xMax and yMin must be less than or equal to yMax.');
         }
 
         this.#cullingBounds = { xMin, yMin, xMax, yMax };

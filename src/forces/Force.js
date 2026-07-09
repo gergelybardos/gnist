@@ -26,7 +26,7 @@ export class Force {
      */
     constructor(config = {}) {
         if (new.target === Force) {
-            throw new TypeError('Cannot instantiate abstract class Force directly.');
+            throw new TypeError('[Gnist] Cannot instantiate abstract class Force directly.');
         }
 
         this.id = config?.id ?? crypto.randomUUID();
@@ -38,9 +38,9 @@ export class Force {
      * @param {Particle} _particle Particle instance to affect.
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
-     * @throws {Error}
+     * @throws {TypeError}
      */
     apply(_particle, _dt) {
-        throw new Error('Method apply() must be implemented by subclass.');
+        throw new TypeError('[Gnist] Method apply() must be implemented by subclass.');
     }
 }

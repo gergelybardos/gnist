@@ -27,7 +27,7 @@ export class Force {
      * @param {Particle} _particle Particle instance to affect.
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
-     * @throws {Error}
+     * @throws {TypeError}
      */
     apply(_particle: Particle, _dt: number): void;
 }

@@ -20,12 +20,14 @@
 export class Gnist {
     /**
      * The current semantic version of the Gnist particle engine.
+     * @type {string}
      * @returns {string}
      */
     static get VERSION(): string;
     /**
      * Constant value representing an infinite particle lifespan.
      * @type {number}
+     * @returns {number}
      */
     static get INFINITE_DURATION(): number;
     /**
@@ -37,10 +39,12 @@ export class Gnist {
     /**
      * Sets the optional region used for particle culling.
      * @param {CullingBounds|null} cullingBounds The new region or null to disable culling.
+     * @throws {Error}
      */
     set cullingBounds(cullingBounds: CullingBounds | null);
     /**
      * Gets the optional region used for particle culling.
+     * @type {CullingBounds|null}
      * @returns {CullingBounds|null}
      */
     get cullingBounds(): CullingBounds | null;

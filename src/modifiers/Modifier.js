@@ -19,10 +19,10 @@ export class Modifier {
      * @abstract
      * @type {string}
      * @returns {string}
-     * @throws {Error}
+     * @throws {TypeError}
      */
     static get category() {
-        throw new Error('"category" getter must be implemented by subclass.');
+        throw new TypeError('[Gnist] "category" getter must be implemented by subclass.');
     }
 
     /**
@@ -39,7 +39,7 @@ export class Modifier {
      */
     constructor(config = {}) {
         if (new.target === Modifier) {
-            throw new TypeError('Cannot instantiate abstract class Modifier directly.');
+            throw new TypeError('[Gnist] Cannot instantiate abstract class Modifier directly.');
         }
 
         this.id = config?.id ?? crypto.randomUUID();
@@ -52,9 +52,9 @@ export class Modifier {
      * @param {number} _normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
-     * @throws {Error}
+     * @throws {TypeError}
      */
     update(_particle, _normalizedAge, _dt) {
-        throw new Error('Method update() must be implemented by subclass.');
+        throw new TypeError('[Gnist] Method update() must be implemented by subclass.');
     }
 }

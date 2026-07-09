@@ -16,7 +16,7 @@ export class Modifier {
      * @abstract
      * @type {string}
      * @returns {string}
-     * @throws {Error}
+     * @throws {TypeError}
      */
     static get category(): string;
     /**
@@ -38,7 +38,7 @@ export class Modifier {
      * @param {number} _normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
-     * @throws {Error}
+     * @throws {TypeError}
      */
     update(_particle: Particle, _normalizedAge: number, _dt: number): void;
 }
