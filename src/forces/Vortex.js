@@ -62,7 +62,12 @@ export class Vortex extends Force {
      * soft-aging buffer zone to prevent visual popping. Note that high velocities or long lifespans may cause particles
      * to mathematically bypass the center and slingshot outward. In such cases, increase this radius to intercept
      * particles before they reach their escape brink. Omit or set to 0 to disable.
-     * Stored internally as a squared value for high-performance comparisons.
+     * @type {number}
+     */
+    cullingRadius;
+
+    /**
+     * Culling radius stored internally as a squared value for high-performance comparisons.
      * @type {number}
      */
     cullingRadiusSquared;
@@ -81,8 +86,8 @@ export class Vortex extends Force {
         this.suctionSpeed = config.suctionSpeed ?? 50;
         this.radius = config.radius ?? Infinity;
 
-        const cullingRadius = config.cullingRadius ?? 0;
-        this.cullingRadiusSquared = cullingRadius * cullingRadius;
+        this.cullingRadius = config.cullingRadius ?? 0;
+        this.cullingRadiusSquared = this.cullingRadius * this.cullingRadius;
     }
 
     /**
@@ -97,39 +102,43 @@ export class Vortex extends Force {
         const dy = this.y - particle.y;
         const distanceSq = dx * dx + dy * dy;
 
+        // Influence radius exit check
         if (this.radius !== Infinity && distanceSq > this.radius * this.radius) {
             return;
         }
 
+        // Inside dead zone check
         if (this.cullingRadiusSquared > 0 && distanceSq <= this.cullingRadiusSquared) {
             particle.age = particle.lifespan;
             particle.alive = false;
             return;
         }
 
+        // Singularity gate check
         if (distanceSq < 0.01) {
             return;
         }
 
         const distance = Math.sqrt(distanceSq);
 
+        // Soft-aging buffer zone
         if (this.cullingRadiusSquared > 0) {
-            const cullingRadius = Math.sqrt(this.cullingRadiusSquared);
-
-            const agingZoneThickness = cullingRadius * 0.5;
-            const agingThreshold = cullingRadius + agingZoneThickness;
+            const agingZoneThickness = this.cullingRadius * 0.5;
+            const agingThreshold = this.cullingRadius + agingZoneThickness;
 
             if (distance < agingThreshold) {
-                const proximityFactor = 1.0 - ((distance - cullingRadius) / agingZoneThickness);
+                const proximityFactor = 1.0 - ((distance - this.cullingRadius) / agingZoneThickness);
                 particle.age += dt * proximityFactor * 5.0;
             }
         }
 
+        // Calculate directional and tangential vectors
         const nx = dx / distance;
         const ny = dy / distance;
         const tx = -ny;
         const ty = nx;
 
+        // Apply velocity update
         particle.vx += (nx * this.suctionSpeed + tx * this.rotationSpeed) * dt;
         particle.vy += (ny * this.suctionSpeed + ty * this.rotationSpeed) * dt;
     }
