@@ -1,5 +1,5 @@
 import { Particle } from '../core/Particle.js';
-import {Source} from '../shared/Constants.js';
+import { Source } from '../shared/Constants.js';
 
 import { Emitter } from './Emitter.js';
 

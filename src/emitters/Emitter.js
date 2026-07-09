@@ -9,6 +9,10 @@ import { ModifierCategory, Source } from '../shared/Constants.js';
  */
 
 /**
+ * @import { Source } from '../shared/Constants.js'
+ */
+
+/**
  * Emitter configuration options.
  * @typedef {object} EmitterConfig
  * @property {string} [id] Unique identifier. Defaults to a generated UUID.
