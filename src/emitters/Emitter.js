@@ -1,5 +1,4 @@
 import { Force } from '../forces/Force.js';
-import { Gnist } from '../core/Gnist.js';
 import { Modifier } from '../modifiers/Modifier.js';
 import { Particle } from '../core/Particle.js';
 import { ModifierCategory, Source } from '../shared/Constants.js';
@@ -13,9 +12,8 @@ import { ModifierCategory, Source } from '../shared/Constants.js';
  * @typedef {object} EmitterConfig
  * @property {string} [id] Unique identifier. Defaults to a generated UUID.
  * @property {boolean} [enabled=true] Flag indicating whether the emitter is running or not.
- * @property {boolean} [looping=true] Flag indicating whether a finite-duration emitter restarts when its time is up.
  * @property {number} [particlesPerSecond=10] Continuous emission rate of new particles per second.
- * @property {number} [duration=Gnist.INFINITE_DURATION] Duration of particle emission (in seconds), where -1 represents infinite emission.
+ * @property {number|Infinity} [duration=Infinity] Duration of particle emission (in seconds) or JavaScript's native Infinity global object or a negative number for infinite emission.
  * @property {number} [x=0] Current horizontal coordinate of the emitter origin.
  * @property {number} [y=0] Current vertical coordinate of the emitter origin.
  * @property {string} [source=Source.VOLUME] Emission source mode, defining the geometric distribution and initial direction of emitted particles.
@@ -53,28 +51,10 @@ export class Emitter {
     id;
 
     /**
-     * Flag indicating whether the emitter is running or not.
-     * @type {boolean}
-     */
-    enabled;
-
-    /**
-     * Flag indicating whether a finite-duration emitter restarts when its time is up.
-     * @type {boolean}
-     */
-    looping;
-
-    /**
      * Continuous emission rate of new particles per second.
      * @type {number}
      */
     particlesPerSecond;
-
-    /**
-     * Duration of particle emission (in seconds), where -1 represents infinite emission.
-     * @type {number}
-     */
-    duration;
 
     /**
      * Current horizontal coordinate of the emitter origin.
@@ -96,6 +76,18 @@ export class Emitter {
      * @type {string}
      */
     source;
+
+    /**
+     * Duration of particle emission (in seconds), where Infinity and negative numbers represent infinite emission.
+     * @type {number}
+     */
+    #duration;
+
+    /**
+     * Flag indicating whether the emitter is running or not.
+     * @type {boolean}
+     */
+    #enabled;
 
     /**
      * Configuration settings used to initialize emitted particles.
@@ -145,10 +137,11 @@ export class Emitter {
         }
 
         this.id = config.id ?? crypto.randomUUID();
-        this.enabled = config.enabled ?? true;
-        this.looping = config.looping ?? true;
+        this.#enabled = config.enabled ?? true;
         this.particlesPerSecond = config.particlesPerSecond ?? 10;
-        this.duration = config.duration ?? Gnist.INFINITE_DURATION;
+
+        this.#duration = (config.duration === Infinity || config.duration < 0) ? -1 : (config.duration ?? -1);
+
         this.x = config.x ?? 0;
         this.y = config.y ?? 0;
         this.source = config.source ?? Source.VOLUME;
@@ -161,6 +154,15 @@ export class Emitter {
         this.#visualModifiers = [];
         this.#pathModifiers = [];
         this.#scopedForces = [];
+    }
+
+    /**
+     * Indicates whether the emitter is currently active.
+     * @type {boolean}
+     * @readonly
+     */
+    get isRunning() {
+        return this.#enabled;
     }
 
     /**
@@ -194,24 +196,58 @@ export class Emitter {
     }
 
     /**
+     * Starts or forcefully restarts particle emission from the beginning.
+     * Resets internal tracking and sets the emitter to an active state.
+     * @returns {void}
+     */
+    start() {
+        this.#enabled = true;
+        this.#elapsedTime = 0;
+        this.#accumulator = 0;
+    }
+
+    /**
+     * Temporarily halts particle emission and locks internal tracking.
+     * @returns {void}
+     */
+    pause() {
+        this.#enabled = false;
+    }
+
+    /**
+     * Resumes particle emission and internal tracking from where they were paused.
+     * @returns {void}
+     */
+    resume() {
+        this.#enabled = true;
+    }
+
+    /**
+     * Halts particle emission and resets internal tracking.
+     * The emitter is deactivated but remains ready to be started again.
+     * @returns {void}
+     */
+    stop() {
+        this.#enabled = false;
+        this.#elapsedTime = 0;
+        this.#accumulator = 0;
+    }
+
+    /**
      * Updates the emitter's internal timer and returns any new particles to be emitted in the current frame.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {Array<Particle>} An array of particles emitted this frame.
      */
     update(dt) {
-        if (!this.enabled) {
+        if (!this.#enabled) {
             return [];
         }
 
-        if (this.duration > 0) {
+        if (this.#duration > 0) {
             this.#elapsedTime += dt;
-            if (this.#elapsedTime >= this.duration) {
-                if (this.looping) {
-                    this.#elapsedTime = 0;
-                } else {
-                    this.enabled = false;
-                    return [];
-                }
+            if (this.#elapsedTime >= this.#duration) {
+                this.stop();
+                return [];
             }
         }
 

@@ -35,15 +35,6 @@ export class Gnist {
     }
 
     /**
-     * Constant value representing an infinite particle lifespan.
-     * @type {number}
-     * @returns {number}
-     */
-    static get INFINITE_DURATION() {
-        return -1;
-    }
-
-    /**
      * Registered emitters emitting active particles.
      * @type {Array<Emitter>}
      */

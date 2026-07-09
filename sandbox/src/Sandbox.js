@@ -212,10 +212,6 @@ export class Sandbox {
         const particles = this.#gnistEngine.getParticles();
         const particleCount = particles.length;
 
-        if (particleCount === 0) {
-            return;
-        }
-
         for (let i = 0; i < particleCount; i++) {
             const particle = particles[i];
             const { r, g, b } = particle.color;

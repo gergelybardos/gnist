@@ -6,9 +6,8 @@
  * @typedef {object} EmitterConfig
  * @property {string} [id] Unique identifier. Defaults to a generated UUID.
  * @property {boolean} [enabled=true] Flag indicating whether the emitter is running or not.
- * @property {boolean} [looping=true] Flag indicating whether a finite-duration emitter restarts when its time is up.
  * @property {number} [particlesPerSecond=10] Continuous emission rate of new particles per second.
- * @property {number} [duration=Gnist.INFINITE_DURATION] Duration of particle emission (in seconds), where -1 represents infinite emission.
+ * @property {number|Infinity} [duration=Infinity] Duration of particle emission (in seconds) or JavaScript's native Infinity global object or a negative number for infinite emission.
  * @property {number} [x=0] Current horizontal coordinate of the emitter origin.
  * @property {number} [y=0] Current vertical coordinate of the emitter origin.
  * @property {string} [source=Source.VOLUME] Emission source mode, defining the geometric distribution and initial direction of emitted particles.
@@ -50,25 +49,10 @@ export class Emitter {
      */
     id: string;
     /**
-     * Flag indicating whether the emitter is running or not.
-     * @type {boolean}
-     */
-    enabled: boolean;
-    /**
-     * Flag indicating whether a finite-duration emitter restarts when its time is up.
-     * @type {boolean}
-     */
-    looping: boolean;
-    /**
      * Continuous emission rate of new particles per second.
      * @type {number}
      */
     particlesPerSecond: number;
-    /**
-     * Duration of particle emission (in seconds), where -1 represents infinite emission.
-     * @type {number}
-     */
-    duration: number;
     /**
      * Current horizontal coordinate of the emitter origin.
      * @type {number}
@@ -88,6 +72,12 @@ export class Emitter {
      */
     source: string;
     /**
+     * Indicates whether the emitter is currently active.
+     * @type {boolean}
+     * @readonly
+     */
+    readonly get isRunning(): boolean;
+    /**
      * Registers a modifier to be applied to the particles emitted by the emitter.
      * @param {Modifier} modifier Modifier instance to register.
      * @returns {void}
@@ -100,6 +90,28 @@ export class Emitter {
      * @returns {void}
      */
     addScopedForce(force: Force): void;
+    /**
+     * Starts or forcefully restarts particle emission from the beginning.
+     * Resets internal tracking and sets the emitter to an active state.
+     * @returns {void}
+     */
+    start(): void;
+    /**
+     * Temporarily halts particle emission and locks internal tracking.
+     * @returns {void}
+     */
+    pause(): void;
+    /**
+     * Resumes particle emission and internal tracking from where they were paused.
+     * @returns {void}
+     */
+    resume(): void;
+    /**
+     * Halts particle emission and resets internal tracking.
+     * The emitter is deactivated but remains ready to be started again.
+     * @returns {void}
+     */
+    stop(): void;
     /**
      * Updates the emitter's internal timer and returns any new particles to be emitted in the current frame.
      * @param {number} dt Time elapsed since the last frame (in seconds).
@@ -141,15 +153,11 @@ export type EmitterConfig = {
      */
     enabled?: boolean | undefined;
     /**
-     * Flag indicating whether a finite-duration emitter restarts when its time is up.
-     */
-    looping?: boolean | undefined;
-    /**
      * Continuous emission rate of new particles per second.
      */
     particlesPerSecond?: number | undefined;
     /**
-     * Duration of particle emission (in seconds), where -1 represents infinite emission.
+     * Duration of particle emission (in seconds) or JavaScript's native Infinity global object or a negative number for infinite emission.
      */
     duration?: number | undefined;
     /**

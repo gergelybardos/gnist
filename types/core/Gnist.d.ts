@@ -25,12 +25,6 @@ export class Gnist {
      */
     static get VERSION(): string;
     /**
-     * Constant value representing an infinite particle lifespan.
-     * @type {number}
-     * @returns {number}
-     */
-    static get INFINITE_DURATION(): number;
-    /**
      * Initializes an empty simulation pipeline.
      * @constructor
      * @param {EngineConfig} [config={}] Engine configuration options.
