@@ -17,7 +17,7 @@ export class OpacityFade extends Modifier {
     /**
      * Initializes an opacity fade modifier with starting and ending opacity levels.
      * @constructor
-     * @param {OpacityFadeConfig} [config={}] ColorRampConfig configuration options.
+     * @param {OpacityFadeConfig} [config={}] OpacityFade configuration options.
      */
     constructor(config?: OpacityFadeConfig);
     /**

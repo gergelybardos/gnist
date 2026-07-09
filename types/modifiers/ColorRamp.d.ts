@@ -17,7 +17,7 @@ export class ColorRamp extends Modifier {
     /**
      * Initializes a color ramp modifier with evenly distributed color stops.
      * @constructor
-     * @param {ColorRampConfig} [config={}] ColorRampConfig configuration options.
+     * @param {ColorRampConfig} [config={}] ColorRamp configuration options.
      */
     constructor(config?: ColorRampConfig);
     #private;

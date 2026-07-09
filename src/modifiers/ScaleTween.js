@@ -35,7 +35,7 @@ export class ScaleTween extends Modifier {
     /**
      * Initializes a scale tween modifier with starting and ending scale multipliers.
      * @constructor
-     * @param {ScaleTweenConfig} [config={}] ScaleTweenConfig configuration options.
+     * @param {ScaleTweenConfig} [config={}] ScaleTween configuration options.
      */
     constructor(config = {}) {
         super(config);
