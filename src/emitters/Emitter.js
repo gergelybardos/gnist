@@ -45,12 +45,6 @@ import { ModifierCategory, Source } from '../shared/Constants.js';
  */
 export class Emitter {
     /**
-     * Unique identifier. Defaults to a generated UUID.
-     * @type {string}
-     */
-    id;
-
-    /**
      * Continuous emission rate of new particles per second.
      * @type {number}
      */
@@ -78,13 +72,19 @@ export class Emitter {
     source;
 
     /**
+     * Internal state of the emitter's unique identifier. Defaults to a generated UUID.
+     * @type {string}
+     */
+    #id;
+
+    /**
      * Duration of particle emission (in seconds), where Infinity and negative numbers represent infinite emission.
      * @type {number}
      */
     #duration;
 
     /**
-     * Flag indicating whether the emitter is running or not.
+     * Internal state of the flag indicating whether the emitter is running or not.
      * @type {boolean}
      */
     #enabled;
@@ -136,7 +136,7 @@ export class Emitter {
             throw new TypeError('[Gnist] Cannot instantiate abstract class Emitter directly.');
         }
 
-        this.id = config.id ?? crypto.randomUUID();
+        this.#id = config.id ?? crypto.randomUUID();
         this.#enabled = config.enabled ?? true;
         this.particlesPerSecond = config.particlesPerSecond ?? 10;
 
@@ -157,7 +157,16 @@ export class Emitter {
     }
 
     /**
-     * Indicates whether the emitter is currently active.
+     * Unique identifier. Defaults to a generated UUID.
+     * @type {string}
+     * @readonly
+     */
+    get id() {
+        return this.#id;
+    }
+
+    /**
+     * Flag indicating whether the emitter is running or not.
      * @type {boolean}
      * @readonly
      */
@@ -236,18 +245,19 @@ export class Emitter {
     /**
      * Updates the emitter's internal timer and returns any new particles to be emitted in the current frame.
      * @param {number} dt Time elapsed since the last frame (in seconds).
-     * @returns {Array<Particle>} An array of particles emitted this frame.
+     * @param {Array<Particle>} particlePool Reference to the internal collection of active particles in the main {Gnist} class.
+     * @returns {void}
      */
-    update(dt) {
+    update(dt, particlePool) {
         if (!this.#enabled) {
-            return [];
+            return;
         }
 
         if (this.#duration > 0) {
             this.#elapsedTime += dt;
             if (this.#elapsedTime >= this.#duration) {
                 this.stop();
-                return [];
+                return;
             }
         }
 
@@ -255,7 +265,6 @@ export class Emitter {
         const spawnCount = Math.floor(this.#accumulator);
         this.#accumulator -= spawnCount;
 
-        const newParticles = [];
         for (let i = 0; i < spawnCount; i++) {
             const particle = new Particle();
 
@@ -265,10 +274,8 @@ export class Emitter {
             particle.pathModifiers = this.#pathModifiers;
             particle.scopedForces = this.#scopedForces;
 
-            newParticles.push(particle);
+            particlePool.push(particle);
         }
-
-        return newParticles;
     }
 
     /**
@@ -282,40 +289,25 @@ export class Emitter {
 
         const blueprint = this.#particleBlueprint;
 
-        this.initParticleVelocity(particle);
+        this.#initParticleVelocity(particle);
 
         particle.rotation = this.#resolveNumber(blueprint.rotation, particle.rotation);
         particle.angularVelocity = this.#resolveNumber(blueprint.angularVelocity, particle.angularVelocity);
 
         particle.size = this.#resolveNumber(blueprint.size, particle.size);
         particle.baseSize = particle.size;
-        particle.color = {
-            r: blueprint.color?.r ?? 255,
-            g: blueprint.color?.g ?? 255,
-            b: blueprint.color?.b ?? 255,
-        };
+
+        const pColor = particle.color;
+        const bColor = blueprint.color;
+        pColor.r = bColor?.r ?? 255;
+        pColor.g = bColor?.g ?? 255;
+        pColor.b = bColor?.b ?? 255;
+
         particle.opacity = this.#resolveNumber(blueprint.opacity, particle.opacity);
 
         particle.age = 0;
         particle.lifespan = this.#resolveNumber(blueprint.lifespan, particle.lifespan);
         particle.alive = true;
-    }
-
-    /**
-     * Sets up a particle's horizontal and vertical velocity components using the `speed` and `direction` values
-     * specified in the emitter config's `particleBlueprint`. If no explicit `direction` was specified, it falls back
-     * to the emitter's shape-specific direction.
-     * @param {Particle} particle Particle instance to initialize.
-     * @returns {void}
-     */
-    initParticleVelocity(particle) {
-        const blueprint = this.#particleBlueprint;
-
-        const speed = this.#resolveNumber(blueprint.speed, 50);
-        const direction = this.#resolveNumber(blueprint.direction, this.getDefaultDirection(particle));
-
-        particle.vx = Math.cos(direction) * speed;
-        particle.vy = Math.sin(direction) * speed;
     }
 
     /**
@@ -325,6 +317,23 @@ export class Emitter {
      */
     getDefaultDirection() {
         return 0;
+    }
+
+    /**
+     * Sets up a particle's horizontal and vertical velocity components using the `speed` and `direction` values
+     * specified in the emitter config's `particleBlueprint`. If no explicit `direction` was specified, it falls back
+     * to the emitter's shape-specific direction.
+     * @param {Particle} particle Particle instance to initialize.
+     * @returns {void}
+     */
+    #initParticleVelocity(particle) {
+        const blueprint = this.#particleBlueprint;
+
+        const speed = this.#resolveNumber(blueprint.speed, 50);
+        const direction = this.#resolveNumber(blueprint.direction, this.getDefaultDirection(particle));
+
+        particle.vx = Math.cos(direction) * speed;
+        particle.vy = Math.sin(direction) * speed;
     }
 
     /**
