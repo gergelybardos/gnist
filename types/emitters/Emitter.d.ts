@@ -1,8 +1,5 @@
 /**
- * @import { Color } from '../shared/Types.js'
- */
-/**
- * @import { Source } from '../shared/Constants.js'
+ * @import { Color, SourceType } from '../shared/Types.js'
  */
 /**
  * Emitter configuration options.
@@ -16,7 +13,7 @@
  * @property {number} [y=0] Current vertical coordinate of the emitter origin.
  * @property {string} [source=Source.VOLUME] Emission source mode, defining the geometric distribution and initial direction of emitted particles.
  * The default direction depends on both the source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
- * See {@link Source} for available configuration constants.
+ * See {@link SourceType} for available configuration constants.
  * @property {ParticleBlueprint} [particleBlueprint={}] Configuration for emitted particles.
  */
 /**
@@ -86,7 +83,7 @@ export class Emitter {
      * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
      * The default direction depends on both the source mode and the emitter type and can be overridden by specifying
      * `particleBlueprint.direction` in the emitter config.
-     * @see {@link Source} for available configuration constants.
+     * @see {@link SourceType} for available configuration constants.
      * @type {string}
      */
     source: string;
@@ -166,7 +163,7 @@ export type EmitterConfig = {
     /**
      * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
      * The default direction depends on both the source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
-     * See {@link Source} for available configuration constants.
+     * See {@link SourceType} for available configuration constants.
      */
     source?: string | undefined;
     /**
