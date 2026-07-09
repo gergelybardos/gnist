@@ -69,8 +69,21 @@ export class ColorRamp extends Modifier {
      * @returns {void}
      */
     update(particle, normalizedAge) {
-        const particleAge = Math.max(0, Math.min(1, normalizedAge));
         const totalColorStopCount = this.#colorStops.length;
+
+        if (totalColorStopCount === 0) {
+            return;
+        }
+
+        if (totalColorStopCount === 1) {
+            const stop = this.#colorStops[0];
+            particle.color.r = stop.r;
+            particle.color.g = stop.g;
+            particle.color.b = stop.b;
+            return;
+        }
+
+        const particleAge = Math.max(0, Math.min(1, normalizedAge));
 
         // Map the normalized particle age onto the array indices of the color stops.
         // E.g., if there are 5 stops, the max index is 4. An age of 0.5 results in 2.0.
