@@ -13,10 +13,10 @@ import { Particle } from '../core/Particle.js';
  */
 export class Force {
     /**
-     * Unique identifier. Defaults to a generated UUID.
+     * Internal state of the force's unique identifier.
      * @type {string}
      */
-    id;
+    #id;
 
     /**
      * Initializes an environmental force.
@@ -29,7 +29,16 @@ export class Force {
             throw new TypeError('[Gnist] Cannot instantiate abstract class Force directly.');
         }
 
-        this.id = config?.id ?? crypto.randomUUID();
+        this.#id = config?.id ?? crypto.randomUUID();
+    }
+
+    /**
+     * Unique identifier. Defaults to a generated UUID.
+     * @type {string}
+     * @readonly
+     */
+    get id() {
+        return this.#id;
     }
 
     /**
