@@ -225,6 +225,38 @@ export class Gnist {
     }
 
     /**
+     * Fills a provided TypedArray with particle data for WebGL.
+     * @param {Float32Array} targetArray - The array to write data into.
+     * @returns {number} The number of particles written.
+     */
+    fillFlatArray(targetArray) {
+        let offset = 0;
+        const count = this.#particles.length;
+
+        for (let i = 0; i < count; i++) {
+            const p = this.particles[i];
+
+            if (!p.alive) {
+                continue;
+            }
+
+            // Physical attributes
+            targetArray[offset++] = p.x;
+            targetArray[offset++] = p.y;
+            targetArray[offset++] = p.size;
+            targetArray[offset++] = p.rotation;
+
+            // Visuals (normalized for WebGL)
+            targetArray[offset++] = p.color.r / 255;
+            targetArray[offset++] = p.color.g / 255;
+            targetArray[offset++] = p.color.b / 255;
+            targetArray[offset++] = p.opacity;
+        }
+
+        return offset / 8;
+    }
+
+    /**
      * Iterates through registered emitters to emit new particles.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}

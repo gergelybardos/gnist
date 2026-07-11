@@ -42,6 +42,8 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:canvas2d": "vite --mode canvas2d",
+    "dev:webgl": "vite --mode webgl",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "types": "tsc",
