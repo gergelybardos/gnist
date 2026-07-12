@@ -1,40 +1,47 @@
 # Gnist
 
+![npm version](https://img.shields.io/npm/v/%40gergelybardos%2Fgnist)
 ![node](https://img.shields.io/badge/node-%3E=20.0.0-green)
-![license](https://img.shields.io/badge/license-MIT-green)
+![license](https://img.shields.io/npm/l/%40gergelybardos%2Fgnist)
 
 > **⚠️ Important:** This project is currently in early development. APIs are not stable yet, and breaking changes should be expected.
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [About Gnist](#about-gnist)
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [Basic Usage](#basic-usage)
+- [Basic Example](#basic-example)
+- [Sandbox](#sandbox)
 - [Core Features](#core-features)
+- [Benchmarks](#benchmarks) 
 - [Documentation](#documentation)
+- [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
 
-## ℹ️ About Gnist <a name="about-gnist"></a>
+## About Gnist <a name="about-gnist"></a>
 
 Gnist is a lightweight particle simulation engine.
 
-Designed for real-time visual effects rather than physically accurate simulations, it uses a simplified kinematic model optimized for performance over strict Newtonian mechanics. Particles bypass mass and momentum calculations; instead, forces directly influence acceleration.
+Designed for real-time visual effects rather than physically accurate simulations, it uses a simplified kinematic model that prioritizes performance over strict Newtonian mechanics. Particles bypass mass and momentum calculations; instead, forces directly influence acceleration.
 
-Key Characteristics:
+Gnist performs particle simulation calculations on the CPU, relying on single-thread performance.
 
-- **Renderer-agnostic:** The engine is decoupled from timing and rendering loops, making it reusable across different runtimes and rendering systems.
+Key characteristics:
+
 - **Zero-dependency:** Gnist is written in vanilla JavaScript with no external runtime dependencies. **Full TypeScript support** is provided via declaration files.
+- **Renderer-agnostic:** The engine is decoupled from timing and rendering loops, making it reusable across different runtimes and rendering systems.
+- **Developer-friendly API:** Gnist provides an intuitive, object-oriented, configuration-driven API rather than a data-oriented architecture. Particle data can still be exported as GPU-friendly flat typed arrays for high-performance rendering pipelines.
 
-## 📋 Requirements <a name="requirements"></a>
+## Requirements <a name="requirements"></a>
 
 To install and integrate the NPM package into your own project, your environment should support:
 
 - [Node.js](https://nodejs.org/): >=20.0.0
 - [npm](https://www.npmjs.com/): >=9.6.4
 
-## 📦 Installation <a name="installation"></a>
+## Installation <a name="installation"></a>
 
 ```bash
 npm i @gergelybardos/gnist
@@ -42,9 +49,11 @@ npm i @gergelybardos/gnist
 
 > **💡 Note:** Gnist is distributed as native ECMAScript Modules (ESM) with no build step, preserving a fully readable source in `node_modules` and enabling consumer bundlers to optimize tree-shaking and minification.
 
-## ⚡ Basic Usage <a name="basic-usage"></a>
+## Basic Example <a name="basic-example"></a>
 
-Gnist is renderer-agnostic; the client is responsible for implementing the main update loop and rendering using their chosen rendering system. The example below shows the minimal setup required to run Gnist.
+Gnist is renderer-agnostic; the client is responsible for implementing the main update loop and rendering using their chosen rendering system. The example below shows the minimal setup required to run Gnist with Canvas 2D rendering.
+
+*Note: This example assumes an existing project setup. If you are starting from scratch, check out the [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) first.*
 
 ```html
 <!-- index.html -->
@@ -122,7 +131,7 @@ function loop(currentTime) {
     engine.update(dt);
 
     // 4. Render particles
-    const particles = engine.getParticles();
+    const particles = engine.particles;
     for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
         const { r, g, b } = p.color;
@@ -135,23 +144,86 @@ requestAnimationFrame(loop);
 
 This is a minimal example; real applications typically extend it with additional rendering and control logic.
 
-## ⚙️ Core Features <a name="core-features"></a>
+## Sandbox <a name="sandbox"></a>
 
-- **Emitters:** Define and control particle spawning behavior with emission rate, lifespan, size, and more.
-- **Forces:** Apply forces such as gravity (`DirectionalForce`) or friction (`LinearDrag`) globally to the whole system or scoped to specific emitters.
-- **Modifiers:** Transform particle visuals over time with support for linear color gradients (`ColorRamp`) and opacity transitions (`OpacityFade`).
+The repository includes a sandbox for experimenting with Gnist and testing rendering integrations. It is intended as a development and demo tool and is not included in the npm package.
 
-## 📖 Documentation <a name="documentation"></a>
+To run the sandbox locally:
+
+```bash
+npm install
+npm run dev
+```
+
+By default, the sandbox uses Canvas 2D rendering. Use `npm run dev:webgl` for the WebGL version.
+
+For additional development scripts, see [Contributing Guide](CONTRIBUTING.md).
+
+## Core Features <a name="core-features"></a>
+
+- **Flexible emitters:** Create particle sources from common shapes including points, lines, rectangles, and ellipses, with configurable emission behavior.
+- **Composable forces:** Combine environmental forces such as directional force, drag, radial attraction/repulsion, and vortex motion globally or per emitter.
+- **Visual modifiers:** Animate particle appearance over its lifetime with color gradients, opacity transitions, and size interpolation.
+
+## Benchmarks <a name="benchmarks"></a>
+
+The benchmarks below measure CPU-side particle simulation performance only. Rendering overhead is excluded, as rendering performance depends on the chosen renderer.
+
+All values represent the average simulation update time measured over 100 frames, with browser developer tools closed.
+
+### Test Environment
+
+- **CPU:** Intel Core i7-6700K (4 cores, 8 threads @ 3.4 GHz)
+- **RAM:** 16 GB
+- **Browser:** Chrome 150
+- **OS:** Windows 10
+- **Gnist version:** v0.2.0
+
+### Scaling
+
+Particle update cost with no forces or modifiers applied.
+
+| Particles | Forces | Modifiers | Avg. update (ms/frame) |
+|-----------|--------|-----------|------------------------|
+| 1,000     | None   | None      | ~0.08 ms               |
+| 10,000    | None   | None      | ~0.7 ms                |
+| 50,000    | None   | None      | ~2.6 ms                |
+| 100,000   | None   | None      | ~5.0 ms                |
+
+### Feature Cost
+
+Realistic workload with forces and visual modifiers applied. ColorRamp uses a four-stop gradient.
+
+| Particles | Forces                        | Modifiers                            | Avg. update (ms/frame) |
+|-----------|-------------------------------|--------------------------------------|------------------------|
+| 1,000     | DirectionalForce + LinearDrag | ColorRamp + OpacityFade + ScaleTween | ~0.2 ms                |
+| 10,000    | DirectionalForce + LinearDrag | ColorRamp + OpacityFade + ScaleTween | ~1.5 ms                |
+| 50,000    | DirectionalForce + LinearDrag | ColorRamp + OpacityFade + ScaleTween | ~7.0 ms                |
+| 100,000   | DirectionalForce + LinearDrag | ColorRamp + OpacityFade + ScaleTween | ~14.0 ms               |
+
+### Stress Test
+
+Performance under an extreme particle count without forces or modifiers.
+
+| Particles | Forces | Modifiers | Avg. update (ms/frame) |
+|-----------|--------|-----------|------------------------|
+| 500,000   | None   | None      | ~31 ms                 |
+
+## Documentation <a name="documentation"></a>
 
 Gnist provides comprehensive resources to help you get started and master the engine:
 
 - [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) — Step-by-step tutorials on how to use Gnist in real projects.
 - [API Reference](https://gergelybardos.github.io/gnist/api/index.html) — Technical specification of the public-facing API, including core classes, components, and configuration interfaces.
 
-## 🤝 Contributing <a name="contributing"></a>
+## Changelog <a name="changelog"></a>
+
+See [Changelog](./CHANGELOG.md) for details.
+
+## Contributing <a name="contributing"></a>
 
 See [Contributing Guide](./CONTRIBUTING.md) for details.
 
-## 📜 License <a name="license"></a>
+## License <a name="license"></a>
 
 Gnist is open-source software licensed under the [MIT license](./LICENSE).
