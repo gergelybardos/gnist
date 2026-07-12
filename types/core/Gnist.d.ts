@@ -101,12 +101,6 @@ export class Gnist {
      * @returns {void}
      */
     update(dt: number): void;
-    /**
-     * Fills a provided TypedArray with particle data for WebGL.
-     * @param {Float32Array} targetArray - The array to write data into.
-     * @returns {number} The number of particles written.
-     */
-    fillFlatArray(targetArray: Float32Array): number;
     #private;
 }
 /**
