@@ -289,9 +289,10 @@ export class Sandbox {
             gl.compileShader(shader);
 
             if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                const infoLog = gl.getShaderInfoLog(shader) || 'Unknown compilation error';
+                console.error(gl.getShaderInfoLog(shader));
                 gl.deleteShader(shader);
-                throw new Error(`Failed to compile WebGL2 shader:\n${infoLog}`);
+
+                return null;
             }
 
             return shader;
@@ -307,12 +308,9 @@ export class Sandbox {
         gl.linkProgram(this.#glProgram);
 
         if (!gl.getProgramParameter(this.#glProgram, gl.LINK_STATUS)) {
-            const infoLog = gl.getProgramInfoLog(this.#glProgram) || 'Unknown linking error';
-            this.#cleanUpWebGL(gl, this.#glProgram, vertexShader, fragmentShader, true);
-            throw new Error(`Failed to link WebGL2 program:\n${infoLog}`);
+            console.error(gl.getProgramInfoLog(this.#glProgram));
+            return;
         }
-
-        this.#cleanUpWebGL(gl, this.#glProgram, vertexShader, fragmentShader, true);
 
         this.#glBuffer = gl.createBuffer();
 
@@ -331,38 +329,6 @@ export class Sandbox {
         gl.bufferData(gl.ARRAY_BUFFER, quadVertices, gl.STATIC_DRAW);
 
         this.#glBufferData = new Float32Array(50000 * 8);
-    }
-
-    /**
-     * @param {WebGL2RenderingContext} gl
-     * @param {WebGLProgram} program
-     * @param {WebGLShader} vertexShader
-     * @param {WebGLShader} fragmentShader
-     * @param {boolean} [deleteProgramToo=false]
-     * @returns {void}
-     */
-    #cleanUpWebGL(
-        gl,
-        program,
-        vertexShader,
-        fragmentShader,
-        deleteProgramToo = false
-    ) {
-        if (!gl || !program) {
-            return;
-        }
-
-        if (vertexShader) {
-            gl.detachShader(program, vertexShader);
-            gl.deleteShader(vertexShader);
-        }
-        if (fragmentShader) {
-            gl.detachShader(program, fragmentShader);
-            gl.deleteShader(fragmentShader);
-        }
-        if (deleteProgramToo) {
-            gl.deleteProgram(program);
-        }
     }
 
     /**
