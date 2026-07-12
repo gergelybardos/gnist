@@ -3,16 +3,18 @@
   "version": "0.1.1",
   "description": "Lightweight, renderer-agnostic particle simulation engine built with vanilla JavaScript for real-time visual effects",
   "keywords": [
-    "engine",
+    "animation",
+    "canvas",
     "esm",
     "lightweight",
     "particle",
     "particle-engine",
-    "particle-physics",
     "particle-system",
-    "physics",
     "simulation",
-    "vanilla-js"
+    "vanilla-js",
+    "vfx",
+    "visual-effects",
+    "webgl"
   ],
   "author": "Gergely BÁRDOS (https://github.com/gergelybardos)",
   "license": "MIT",
