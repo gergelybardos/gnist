@@ -3,11 +3,13 @@ body {
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   background: #0f0f14;
   color: #eaeaea;
+  min-height: 100vh;
+}
 
+.centered-layout {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
 }
 
 .container {
@@ -19,6 +21,21 @@ body {
 h1 {
   font-size: 3rem;
   margin-bottom: 0.5rem;
+}
+
+h1 span {
+  display: inline-block;
+  background: linear-gradient(
+      140deg,
+      rgb(0, 242, 254),
+      rgb(76 122 238),
+      rgb(143, 0, 255),
+      rgb(224 23 122),
+      rgb(255, 102, 0)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .subtitle {
@@ -45,4 +62,126 @@ a {
 a:hover {
   background: #1a1f2a;
   border-color: #3a4150;
+}
+
+.docs-wrapper {
+  display: grid;
+  grid-template-columns: 260px 1000px;
+  gap: 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  align-items: start;
+}
+
+.toc-sidebar {
+  position: sticky;
+  top: 3rem;
+  height: calc(100vh - 6rem);
+  overflow-y: auto;
+}
+
+.toc-sidebar h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9aa0a6;
+  margin-bottom: 0.5rem;
+}
+
+.toc-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.toc-sidebar a {
+  display: block;
+  padding: 0.4rem 0;
+  color: #7aa2ff;
+  text-decoration: none;
+  border: none;
+  border-radius: 0;
+  background: none;
+  transition: color 0.2s;
+}
+
+.toc-sidebar a:hover {
+  color: #eaeaea;
+  background: none;
+  border: none;
+}
+
+.docs-content {
+  background: #141419;
+  border: 1px solid #2a2f3a;
+  border-radius: 8px;
+  padding: 2.5rem;
+}
+
+/*
+  SPA routing via CSS; show a section if it is the explicit target in the URL hash.
+  When no other section is targeted, show a default section (i.e. #overview).
+*/
+.guide-section {
+  display: none;
+}
+.guide-section:target {
+  display: block !important;
+}
+body:not(:has(section:target)) #overview {
+  display: block;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 2rem;
+  color: #9aa0a6;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: #7aa2ff;
+  background: none;
+  border: none;
+}
+
+@media (max-width: 1024px) {
+  .docs-wrapper {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .toc-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: auto;
+    background: #0f0f14;
+    padding: 1rem 0;
+    border-bottom: 1px solid #2a2f3a;
+  }
+
+  .back-link {
+    margin-bottom: 1rem;
+  }
+
+  .toc-sidebar nav {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .toc-sidebar ul {
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .toc-sidebar h3 {
+    margin-bottom: 0.25rem;
+  }
 }
