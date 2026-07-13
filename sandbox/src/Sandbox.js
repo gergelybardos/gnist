@@ -450,7 +450,7 @@ export class Sandbox {
         width,
         height
     ) {
-        this.#canvas2dCtx.fillStyle = '#222';
+        this.#canvas2dCtx.fillStyle = '#141419';
         this.#canvas2dCtx.fillRect(0, 0, width, height);
 
         for (let i = 0; i < particleCount; i++) {
@@ -492,7 +492,7 @@ export class Sandbox {
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
         gl.viewport(0, 0, width, height);
-        gl.clearColor(0.133, 0.133, 0.133, 1.0); // #222 in normalized RGB
+        gl.clearColor(0.0784, 0.0784, 0.0980, 1.0); // #141419
         gl.clear(gl.COLOR_BUFFER_BIT);
 
         if (particleCount === 0) {
@@ -578,9 +578,8 @@ export class Sandbox {
         }
 
         this.#overlayCtx.clearRect(0, 0, this.#overlayCanvas.width, this.#overlayCanvas.height);
-
-        this.#overlayCtx.fillStyle = '#CCC';
-        this.#overlayCtx.strokeStyle = this.#overlayCtx.fillStyle;
+        this.#overlayCtx.fillStyle = '#9AA0A6';
+        this.#overlayCtx.strokeStyle = '#2A2F3A';
         this.#overlayCtx.lineWidth = 1;
         this.#overlayCtx.font = '14px monospace';
         this.#overlayCtx.textAlign = 'left';

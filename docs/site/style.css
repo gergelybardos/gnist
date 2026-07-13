@@ -1,8 +1,8 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  background: #0f0f14;
-  color: #eaeaea;
+  background: #0F0F14;
+  color: #EAEAEA;
   min-height: 100vh;
 }
 
@@ -27,11 +27,11 @@ h1 span {
   display: inline-block;
   background: linear-gradient(
       140deg,
-      rgb(0, 242, 254),
-      rgb(76 122 238),
-      rgb(143, 0, 255),
-      rgb(224 23 122),
-      rgb(255, 102, 0)
+      #00F2FEFF,
+      #4C7AEEFF,
+      #8F00FFFF,
+      #E0177AFF,
+      #FF6600FF
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -39,7 +39,7 @@ h1 span {
 }
 
 .subtitle {
-  color: #9aa0a6;
+  color: #9AA0A6;
   margin-bottom: 2rem;
 }
 
@@ -51,17 +51,17 @@ h1 span {
 }
 
 a {
-  color: #7aa2ff;
+  color: #7AA2FF;
   text-decoration: none;
   padding: 0.6rem 1rem;
-  border: 1px solid #2a2f3a;
+  border: 1px solid #2A2F3A;
   border-radius: 8px;
   transition: 0.2s;
 }
 
 a:hover {
-  background: #1a1f2a;
-  border-color: #3a4150;
+  background: #1A1F2A;
+  border-color: #3A4150;
 }
 
 .docs-wrapper {
@@ -85,7 +85,7 @@ a:hover {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #9aa0a6;
+  color: #9AA0A6;
   margin-bottom: 0.5rem;
 }
 
@@ -98,7 +98,7 @@ a:hover {
 .toc-sidebar a {
   display: block;
   padding: 0.4rem 0;
-  color: #7aa2ff;
+  color: #7AA2FF;
   text-decoration: none;
   border: none;
   border-radius: 0;
@@ -107,21 +107,21 @@ a:hover {
 }
 
 .toc-sidebar a:hover {
-  color: #eaeaea;
+  color: #EAEAEA;
   background: none;
   border: none;
 }
 
 .docs-content {
   background: #141419;
-  border: 1px solid #2a2f3a;
+  border: 1px solid #2A2F3A;
   border-radius: 8px;
   padding: 2.5rem;
 }
 
 /*
-  SPA routing via CSS; show a section if it is the explicit target in the URL hash.
-  When no other section is targeted, show a default section (i.e. #overview).
+  SPA routing via CSS; show a section if it is the explicit target in the URL.
+  If no section is targeted, show a default section (i.e. #overview).
 */
 .guide-section {
   display: none;
@@ -136,14 +136,14 @@ body:not(:has(section:target)) #overview {
 .back-link {
   display: inline-block;
   margin-bottom: 2rem;
-  color: #9aa0a6;
+  color: #9AA0A6;
   font-size: 0.9rem;
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .back-link:hover {
-  color: #7aa2ff;
+  color: #7AA2FF;
   background: none;
   border: none;
 }
@@ -160,9 +160,9 @@ body:not(:has(section:target)) #overview {
     top: 0;
     z-index: 10;
     height: auto;
-    background: #0f0f14;
+    background: #0F0F14;
     padding: 1rem 0;
-    border-bottom: 1px solid #2a2f3a;
+    border-bottom: 1px solid #2A2F3A;
   }
 
   .back-link {
