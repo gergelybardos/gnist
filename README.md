@@ -24,7 +24,7 @@
 
 Gnist is a lightweight particle simulation engine.
 
-Designed for real-time visual effects rather than physically accurate simulations, it uses a simplified kinematic model that prioritizes performance over strict Newtonian mechanics. Particles bypass mass and momentum calculations; instead, forces directly influence acceleration.
+Designed for real-time visual effects rather than physically accurate simulations, it uses a simplified kinematic model that prioritizes performance over strict Newtonian mechanics. Particles bypass mass and momentum calculations; instead, forces directly influence their velocity.
 
 Gnist performs particle simulation calculations on the CPU, relying on single-thread performance.
 

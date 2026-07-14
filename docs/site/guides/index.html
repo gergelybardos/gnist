@@ -46,8 +46,48 @@
 
       <main class="docs-content">
         <section id="overview" class="guide-section">
+
           <h1><span>Overview</span></h1>
-          <p>...</p>
+
+          <p>Gnist is a lightweight, easy-to-use 2D particle simulation engine written in vanilla JavaScript with zero-dependencies.<p>
+
+          <p>Built for real-time visual effects rather than exact physics, it uses a simplified kinematic model that prioritizes performance. Forces directly influence particle velocity, bypassing mass and momentum calculations.</p>
+
+          <p>Gnist is <strong>renderer-agnostic</strong>; by decoupling the simulation from timing and rendering loops, it outputs raw state data, letting you plug it into standard 2D Canvas, WebGL, or any custom JavaScript runtime.</p>
+
+          <p>
+            While offloading simulation calculations to the GPU could yield raw speed, it would introduce complexity to the API. To keep things easy to use and intuitive, Gnist performs calculations on the CPU, relying on single-thread performance. The engine is built on a straightforward, object-oriented, configuration-driven architecture rather than a complex, data-oriented one. However, its output can still be exported as GPU-friendly flat typed arrays for high-performance rendering pipelines.
+          </p>
+
+          <h2>The Core Architecture</h2>
+
+          <p>The simulation pipeline revolves around four primary building blocks:</p>
+          <ol>
+            <li>
+              <strong>The Engine(</strong><code>Gnist</code><strong>)</strong>
+              <p>The central manager of the simulation. It holds the shared particle pool, updates particle lifecycles, applies forces and modifiers, and steps the simulation forward frame-by-frame using a time delta (<var>dt</var>).</p>
+            </li>
+            <li>
+              <strong>Emitters</strong>
+              <p>The particle generators of your system. Defined by 2D primitives (such as Points, Lines, Rectangles, or Ellipses), they spawn particles into a shared pool, relying on their specific geometry to determine where those particles are born. Through configurations and blueprints, you have total control over their emission behavior and the initial properties of the particles, often utilizing randomized ranges to create natural variation.</p>
+            </li>
+            <li>
+              <strong>Forces</strong>
+              <p>Environmental influences that directly modify particle velocity over time. They can be <strong>global</strong> (affecting all particles in the simulation, like wind or gravity) or <strong>scoped</strong> (affecting only the particles spawned by a specific emitter).</p>
+            </li>
+            <li>
+              <strong>Modifiers</strong>
+              <p>Behavioral rules that update particle properties over their lifetime based on their normalized age. Modifiers are split into:</p>
+              <ul>
+                <li>
+                  <strong>Path Modifiers: </strong><span>Custom movement behaviors independent of environmental forces that run <em>before</em> physics step to alter trajectories.</span>
+                </li>
+                <li>
+                  <strong>Visual Modifiers: </strong><span>Run <em>after</em> physics step to adjust appearance (e.g., scale transitions, opacity fades, color ramps)</span>
+                </li>
+              </ul>
+            </li>
+          </ol>
         </section>
 
         <section id="your-first-particle-system" class="guide-section">

@@ -43,6 +43,22 @@ h1 span {
   margin-bottom: 2rem;
 }
 
+code, var {
+  background: #0F0F14;
+  color: #9AA0A6;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+code {
+  font-family: monospace;
+}
+
+var {
+  font-family: inherit;
+  font-style: italic;
+}
+
 .links {
   display: flex;
   gap: 1rem;
