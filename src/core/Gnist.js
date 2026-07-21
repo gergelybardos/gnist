@@ -135,13 +135,7 @@ export class Gnist {
      * @returns {Emitter|null} The emitter instance if found, null otherwise.
      */
     getEmitter(id) {
-        for (let i = 0; i < this.#emitters.length; i++) {
-            if (this.#emitters[i].id === id) {
-                return this.#emitters[i];
-            }
-        }
-
-        return null;
+        return this.#emitters.find(em => em.id === id) ?? null;
     }
 
     /**
@@ -174,13 +168,7 @@ export class Gnist {
      * @returns {Force|null} The force instance if found, null otherwise.
      */
     getGlobalForce(id) {
-        for (let i = 0; i < this.#globalForces.length; i++) {
-            if (this.#globalForces[i].id === id) {
-                return this.#globalForces[i];
-            }
-        }
-
-        return null;
+        return this.#globalForces.find(f => f.id === id) ?? null;
     }
 
     /**

@@ -13,7 +13,7 @@ import { ModifierCategory, Source } from '../shared/Constants.js';
  * @property {string} [id] Unique identifier. Defaults to a generated UUID.
  * @property {boolean} [enabled=true] Flag indicating whether the emitter is running or not.
  * @property {number} [particlesPerSecond=10] Continuous emission rate of new particles per second.
- * @property {number|Infinity} [duration=Infinity] Duration of particle emission (in seconds) or JavaScript's native Infinity global object or a negative number for infinite emission.
+ * @property {number} [duration=Infinity] Duration of particle emission (in seconds) or JavaScript's native Infinity global object or a negative number for infinite emission.
  * @property {number} [x=0] Current horizontal coordinate of the emitter origin.
  * @property {number} [y=0] Current vertical coordinate of the emitter origin.
  * @property {string} [source=Source.VOLUME] Emission source mode, defining the geometric distribution and initial direction of emitted particles.
@@ -31,7 +31,7 @@ import { ModifierCategory, Source } from '../shared/Constants.js';
  * @property {number|number[]} [rotation] Orientation angle (in radians).
  * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
  * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
- * @property {Color} [color] RGB color channels.
+ * @property {Color} [color] The particle color, defined by individual RGB channels.
  * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
  * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds).
  * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
@@ -170,8 +170,19 @@ export class Emitter {
      * @type {boolean}
      * @readonly
      */
-    get isRunning() {
+    get enabled() {
         return this.#enabled;
+    }
+
+    /**
+     * Finds a registered modifier by its unique identifier.
+     * @param {string} id The unique identifier of the target modifier.
+     * @returns {Modifier|null} The modifier instance if found, null otherwise.
+     */
+    getModifier(id) {
+        return this.#visualModifiers.find(m => m.id === id) ||
+               this.#pathModifiers.find(m => m.id === id) ||
+               null;
     }
 
     /**
@@ -196,12 +207,48 @@ export class Emitter {
     }
 
     /**
+     * Removes a modifier from any of the emitter's registered modifier lists by its unique identifier.
+     * @param {string} id The unique identifier of the target modifier.
+     * @returns {boolean} True if found and successfully removed, false otherwise.
+     */
+    removeModifier(id) {
+        const initialLength = this.#visualModifiers.length + this.#pathModifiers.length;
+
+        this.#visualModifiers = this.#visualModifiers.filter(m => m.id !== id);
+        this.#pathModifiers = this.#pathModifiers.filter(m => m.id !== id);
+
+        return this.#visualModifiers.length + this.#pathModifiers.length < initialLength;
+    }
+
+    /**
+     * Finds a registered scoped emitter-specific force by its unique identifier.
+     * @param {string} id The unique identifier of the target force.
+     * @returns {Force|null} The force instance if found, null otherwise.
+     */
+    getScopedForce(id) {
+        return this.#scopedForces.find(f => f.id === id) ?? null;
+    }
+
+    /**
      * Registers a scoped emitter-specific force to be applied to the particles emitted by the emitter.
      * @param {Force} force Force instance to register.
      * @returns {void}
      */
     addScopedForce(force) {
         this.#scopedForces.push(force);
+    }
+
+    /**
+     * Removes a scoped emitter-specific force from the emitter's registered forces lists by its unique identifier.
+     * @param {string} id The unique identifier of the target force.
+     * @returns {boolean} True if found and successfully removed, false otherwise.
+     */
+    removeScopedForce(id) {
+        const initialLength = this.#scopedForces.length;
+
+        this.#scopedForces = this.#scopedForces.filter(f => f.id !== id);
+
+        return this.#scopedForces.length < initialLength;
     }
 
     /**
