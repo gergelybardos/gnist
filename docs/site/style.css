@@ -23,6 +23,10 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
+.docs-content h1,h2,h3,h4,h5,h6 {
+  margin-top: 3rem;
+}
+
 h1 span {
   display: inline-block;
   background: linear-gradient(
@@ -43,11 +47,15 @@ h1 span {
   margin-bottom: 2rem;
 }
 
-code, var {
+pre, code, var {
   background: #0F0F14;
   color: #9AA0A6;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
+}
+
+pre code {
+  line-height: 1.5;
 }
 
 code {
@@ -57,6 +65,27 @@ code {
 var {
   font-family: inherit;
   font-style: italic;
+}
+
+img.illustration {
+  display: block;
+  margin: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+th, td {
+  padding: 0.5rem;
+}
+
+th, td:has(> img), td.not-applicable {
+  text-align: center;
 }
 
 .links {

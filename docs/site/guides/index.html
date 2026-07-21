@@ -46,44 +46,39 @@
 
       <main class="docs-content">
         <section id="overview" class="guide-section">
-
           <h1><span>Overview</span></h1>
 
-          <p>Gnist is a lightweight, easy-to-use 2D particle simulation engine written in vanilla JavaScript with zero-dependencies.<p>
+          <p>Gnist is a lightweight, easy-to-use 2D particle simulation engine written in vanilla JavaScript with zero dependencies.</p>
 
-          <p>Built for real-time visual effects rather than exact physics, it uses a simplified kinematic model that prioritizes performance. Forces directly influence particle velocity, bypassing mass and momentum calculations.</p>
+          <p>Built for real-time visual effects rather than physically accurate simulation, it uses a simplified kinematic model that prioritizes performance. Forces directly influence particle velocity, bypassing mass and momentum calculations.</p>
 
-          <p>Gnist is <strong>renderer-agnostic</strong>; by decoupling the simulation from timing and rendering loops, it outputs raw state data, letting you plug it into standard 2D Canvas, WebGL, or any custom JavaScript runtime.</p>
+          <p>Gnist is renderer-agnostic. It decouples simulation from timing and rendering, exposing raw state data that can be rendered with Canvas 2D, WebGL, or any custom JavaScript runtime.</p>
 
-          <p>
-            While offloading simulation calculations to the GPU could yield raw speed, it would introduce complexity to the API. To keep things easy to use and intuitive, Gnist performs calculations on the CPU, relying on single-thread performance. The engine is built on a straightforward, object-oriented, configuration-driven architecture rather than a complex, data-oriented one. However, its output can still be exported as GPU-friendly flat typed arrays for high-performance rendering pipelines.
-          </p>
-
-          <h2>The Core Architecture</h2>
+          <p>While offloading simulation to the GPU could improve raw performance, it would also significantly increase API complexity. Gnist instead performs simulation on the CPU, prioritizing a simple, intuitive programming model and strong single-thread performance. Its architecture is straightforward, object-oriented, and configuration-driven rather than data-oriented. For rendering, however, simulation state can still be exported as flat typed arrays for efficient GPU-based rendering pipelines.</p>
 
           <p>The simulation pipeline revolves around four primary building blocks:</p>
           <ol>
             <li>
               <strong>The Engine(</strong><code>Gnist</code><strong>)</strong>
-              <p>The central manager of the simulation. It holds the shared particle pool, updates particle lifecycles, applies forces and modifiers, and steps the simulation forward frame-by-frame using a time delta (<var>dt</var>).</p>
+              <p>The central simulation manager. It owns the shared particle pool, updates particle lifecycles, applies forces and modifiers, and advances the simulation frame by frame using a time delta (<var>dt</var>).</p>
             </li>
             <li>
               <strong>Emitters</strong>
-              <p>The particle generators of your system. Defined by 2D primitives (such as Points, Lines, Rectangles, or Ellipses), they spawn particles into a shared pool, relying on their specific geometry to determine where those particles are born. Through configurations and blueprints, you have total control over their emission behavior and the initial properties of the particles, often utilizing randomized ranges to create natural variation.</p>
+              <p>Particle generators that spawn particles into the particle pool. Emitters are defined by 2D primitives such as points, lines, rectangles, and ellipses, which determine where particles are born. Configurations and blueprints provide fine-grained control over emission behavior and initial particle properties, with randomized ranges available to create natural variation.</p>
             </li>
             <li>
               <strong>Forces</strong>
-              <p>Environmental influences that directly modify particle velocity over time. They can be <strong>global</strong> (affecting all particles in the simulation, like wind or gravity) or <strong>scoped</strong> (affecting only the particles spawned by a specific emitter).</p>
+              <p>Environmental influences that directly modify particle velocity over time. Forces can be <strong>global</strong>, affecting every particle in the simulation (such as gravity or wind) or <strong>scoped</strong> to particles emitted by a specific emitter.</p>
             </li>
             <li>
               <strong>Modifiers</strong>
-              <p>Behavioral rules that update particle properties over their lifetime based on their normalized age. Modifiers are split into:</p>
+              <p>Rules that update particle properties over their lifetime based on their normalized age.</p>
               <ul>
                 <li>
-                  <strong>Path Modifiers: </strong><span>Custom movement behaviors independent of environmental forces that run <em>before</em> physics step to alter trajectories.</span>
+                  <strong>Path Modifiers</strong><span> alter particle trajectories independently of environmental forces.</span>
                 </li>
                 <li>
-                  <strong>Visual Modifiers: </strong><span>Run <em>after</em> physics step to adjust appearance (e.g., scale transitions, opacity fades, color ramps)</span>
+                  <strong>Visual Modifiers</strong><span> alter visual properties such as scale, opacity, and color over a particle's lifetime.</span>
                 </li>
               </ul>
             </li>
@@ -107,7 +102,415 @@
 
         <section id="emitters" class="guide-section">
           <h1><span>Emitters</span></h1>
-          <p>...</p>
+
+          <p>Emitters are the particle generators of the simulation. Each emitter type is defined by its geometric shape, which determines its emitting area and where newly emitted particles initially appear.</p>
+
+          <h2>Creating Emitters</h2>
+
+          <p>To add an emitter to the simulation, you need to instantiate one of the emitter classes, configure it via its constructor, register modifiers and scoped forces with the emitter, and then register the emitter itself with the main <code>Gnist</code> class. Upon instantiating, the emitter is automatically assigned a unique <code>id</code> value if one is not specified.</p>
+
+          <h3>Configuration</h3>
+
+          <p>Emitters are configured by a single configuration object passed at instantiation. While most emitter types have their own specialized parameters, they all share a set of core configuration options. Many of the corresponding emitter instance properties are public and can be dynamically updated in real-time within your update loop, while others remain static or are accessed through dedicated API methods.</p>
+
+          <p>The common properties of an emitter configuration object and their corresponding emitter instance properties:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Default value</th>
+                <th>Public property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>id</code></td>
+                <td><code>string</code></td>
+                <td>Auto-generated UUID</td>
+                <td>Native getter</td>
+                <td>A unique identifier for the emitter.</td>
+              </tr>
+              <tr>
+                <td><code>enabled</code></td>
+                <td><code>boolean</code></td>
+                <td><code>true</code></td>
+                <td>Native getter</td>
+                <td>Whether the emitter is currently active.</td>
+              </tr>
+              <tr>
+                <td><code>particlesPerSecond</code></td>
+                <td><code>number</code></td>
+                <td><code>100</code></td>
+                <td>✔</td>
+                <td>The number of particles to emit per second.</td>
+              </tr>
+              <tr>
+                <td><code>duration</code></td>
+                <td><code>number</code></td>
+                <td><code>Infinity</code></td>
+                <td></td>
+                <td>The duration of the emitter's emission in seconds, or <code>Infinity</code> for infinite emission.</td>
+              </tr>
+              <tr>
+                <td><code>x</code></td>
+                <td><code>number</code></td>
+                <td><code>0</code></td>
+                <td>✔</td>
+                <td>The horizontal coordinate of the emitter origin.</td>
+              </tr>
+              <tr>
+                <td><code>y</code></td>
+                <td><code>number</code></td>
+                <td><code>0</code></td>
+                <td>✔</td>
+                <td>The vertical coordinate of the emitter origin.</td>
+              </tr>
+              <tr>
+                <td><code>source</code></td>
+                <td><code>Source</code></td>
+                <td><code>Source.VOLUME</code></td>
+                <td>✔</td>
+                <td>The source of particles within the emitter's geometry.</td>
+              </tr>
+              <tr>
+                <td><code>particleBlueprint</code></td>
+                <td><code>object</code></td>
+                <td><code>{}</code></td>
+                <td></td>
+                <td>The blueprint used to define the initial properties of emitted particles.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>The <code>source</code> property</h4>
+
+          <p>The <code>source</code> property of the configuration object is used to control the geometric distribution and default direction of the emission. The latter depends on both the emitter's shape and the source mode and can be overridden by specifying <code>particleBlueprint.direction</code>. How each of these modes behaves on different emitter types is explained in the <i>Emission Modes</i> section.</p>
+
+          <p>The available modes are properties of the <code>Source</code> constant object:</p>
+
+          <ul>
+            <li><code>EDGE_OUT</code><span> — Emit from the shape's boundary, directing particles outward.</span></li>
+            <li><code>EDGE_IN</code><span> — Emit from the shape's boundary, directing particles inward.</span></li>
+            <li><code>EDGE_BOTH</code><span> — Emit from the shape's boundary, directing particles randomly inward or outward.</span></li>
+            <li><code>VOLUME</code><span> — Emit uniformly from the shape's entire area.</span></li>
+          </ul>
+
+          <h4>Particle Blueprint</h4>
+
+          <p>The <code>particleBlueprint</code> property holds a simple object used by emitters to initialize particles at emission. This is not the runtime particle state. Apart from <code>color</code>, values can be specified either as a single value or as a <code>[min, max]</code> range array.</p>
+
+          <p>Properties of the <code>particleBlueprint</code> sub-object:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Default value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>rotation</code></td>
+                <td><code>number</code></td>
+                <td><code>0</code></td>
+                <td>Orientation angle (in radians).</td>
+              </tr>
+              <tr>
+                <td><code>angularVelocity</code></td>
+                <td><code>number</code></td>
+                <td><code>0</code></td>
+                <td>Angular rotation speed (in radians per second).</td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td><code>number</code></td>
+                <td><code>1</code></td>
+                <td>The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.</td>
+              </tr>
+              <tr>
+                <td><code>color</code></td>
+                <td><code>object</code></td>
+                <td><code>{ r: 255, g: 255, b: 255 }</code></td>
+                <td>The particle color, defined by individual RGB channels.</td>
+              </tr>
+              <tr>
+                <td><code>opacity</code></td>
+                <td><code>number</code></td>
+                <td><code>1</code></td>
+                <td>The visual opacity, from 0.0 (fully transparent) to 1.0 (fully opaque).</td>
+              </tr>
+              <tr>
+                <td><code>lifespan</code></td>
+                <td><code>number</code></td>
+                <td><code>1</code></td>
+                <td>The maximum allowed lifespan (in seconds).</td>
+              </tr>
+              <tr>
+                <td><code>speed</code></td>
+                <td><code>number</code></td>
+                <td><code>1</code></td>
+                <td>Speed (in pixels per second), used to derive the particle's initial horizontal and vertical velocity.</td>
+              </tr>
+              <tr>
+                <td><code>direction</code></td>
+                <td><code>number</code></td>
+                <td><code>0</code></td>
+                <td>Movement direction angle (in radians), used to derive the particle's initial horizontal and vertical velocity.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Example</h4>
+
+          <p>The example below demonstrates the core configuration options shared by all emitter types (the <code>PointEmitter</code> used here is the only type without any specialized properties of its own).</p>
+
+<pre><code>const emitter = new PointEmitter({
+    id: "Some unique identifier",
+    enabled: true,
+    particlesPerSecond: 500,
+    duration: Infinity,
+    x: 100,
+    y: 200,
+    source: Source.VOLUME,  // Included for completeness; this option has no effect on a PointEmitter
+    particleBlueprint: {
+        rotation: 0.1,
+        angularVelocity: 0.1,
+        size: [1, 10],
+        color: { r: 255, g: 0, b: 0 },
+        opacity: [0.5, 1],
+        lifespan: [1, 5],
+        speed: [15, 150],
+        direction: [0, Math.PI * 2]
+    }
+});
+</code></pre>
+
+          <h3>Modifier Scope vs. Force Scope</h3>
+
+          <p>While Gnist supports both global and emitter-local forces, modifiers are strictly emitter-scoped. You can still register the same modifier instance with multiple emitters, but there is no concept of a "global modifier". This is because forces contribute to a particle's velocity additively, allowing multiple forces to be combined predictably. Modifiers, on the other hand, overwrite particle properties directly, so allowing both global and emitter-scoped modifiers would introduce conflicts and unpredictable results.</p>
+
+          <h3>Applying Modifiers</h3>
+
+          <p>To apply a modifier, first you need to create an instance of it. Upon instantiating, the modifier is automatically assigned a unique <code>id</code> value if one is not specified. Modifiers are not applied to particles directly; instead, you register them with an emitter using the emitter's <code>addModifier()</code> method passing the modifier instance as an argument. You may register any number of modifiers with an emitter. Once registered, Gnist automatically applies the modifier to all particles emitted by that emitter.</p>
+
+          <p>Modifiers cannot be toggled after registration; they can only be removed from the emitter using the emitter's <code>removeModifier()</code> method passing the modifier's <code>id</code> as an argument. Removing a modifier only affects particles emitted after the removal.</p>
+
+          <p>Example:</p>
+
+          <pre><code>const enlarge = new ScaleTween({
+    startScale: 1,
+    endScale: 5,
+});
+
+const fadeOut = new OpacityFade({
+    startOpacity: 1.0,
+    endOpacity: 0.0,
+});
+
+const emitter = new PointEmitter({
+    ...
+});
+
+emitter.addModifier(enlarge);
+emitter.addModifier(fadeOut);
+</code></pre>
+
+          <h3>Applying Scoped Forces</h3>
+
+          <p>To apply a scoped force, first you need to create an instance of it. Upon instantiating, the force is automatically assigned a unique <code>id</code> value if one is not specified. Forces tied to a given emitter must first be registered using the emitter's <code>addScopedForce()</code> method passing the force instance as an argument. You may register any number of scoped forces with an emitter. Every particle emitted by that emitter is automatically affected by its registered scoped forces.</p>
+
+          <p>Scoped forces cannot be toggled after registration; they can only be removed from the emitter using the emitter's <code>removeScopedForce()</code> method passing the force's <code>id</code> as an argument. Removing a scoped force only affects particles emitted after the removal.</p>
+
+          <p>Example:</p>
+
+          <pre><code>   const gravity = new DirectionalForce({ax:0, ay: 200});
+    const friction = new LinearDrag({drag: 0.4});
+
+    const emitter = new PointEmitter({
+        ...
+    });
+
+    emitter.addScopedForce(gravity);
+    emitter.addScopedForce(friction);
+</code></pre>
+
+          <h3>Applying Global Forces</h3>
+
+          <p>Global forces are applied to every particle in the simulation, regardless of which emitter emitted it. To apply a global force, first you need to create an instance of it. Upon instantiating, the force is automatically assigned a unique <code>id</code> value if one is not specified. Global forces must be registered with the main <code>Gnist</code> class using its <code>addGlobalForce()</code> method passing the force instance as an argument. You may register any number of global forces.</p>
+
+          <p>Global forces cannot be toggled after registration; they can only be removed from the simulation using the <code>removeGlobalForce()</code> method of the main <code>Gnist</code> class passing the force's <code>id</code> as an argument. <strong>Note that, in contrast to scoped forces, removing a global force affects every particle in the simulation, even those already emitted before the removal.</strong></p>
+
+          <h3>Registering and Removing Emitters</h3>
+
+          <p>Emitters must be registered with the main <code>Gnist</code> class using its <code>addEmitter()</code> method passing the emitter instance as an argument. Once registered, the next time <code>Gnist.update()</code> is called in your main loop, the new emitter will start emitting particles.</p>
+
+          <p>Emitters cannot be toggled or disabled, but they can be removed from the simulation using the <code>removeEmitter()</code> of the main <code>Gnist</code> class passing the emitter's <code>id</code> as an argument. Particles already emitted by the removed emitter will complete their lifetimes, but no new particles will be emitted.</p>
+
+          <h2>Playback Controls</h2>
+
+          <p>You can control emitter playback using the following methods, regardless of whether the emitter has a finite or infinite duration:</p>
+
+          <table>
+            <thead>
+            <tr>
+              <th>Method</th>
+              <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><code>.start()</code></td>
+              <td>Starts or forcefully restarts particle emission from the beginning. Resets internal tracking and sets the emitter to an active state.</td>
+            </tr>
+            <tr>
+              <td><code>.pause()</code></td>
+              <td>Temporarily halts particle emission and locks internal tracking.</td>
+            </tr>
+            <tr>
+              <td><code>.resume()</code></td>
+              <td>Resumes particle emission and internal tracking from where they were paused.</td>
+            </tr>
+            <tr>
+              <td><code>.stop()</code></td>
+              <td>Halts particle emission and resets internal tracking. The emitter is deactivated but remains ready to be started again.</td>
+            </tr>
+            </tbody>
+          </table>
+
+          <p>To check whether an emitter is currently enabled, you can query its <code>enabled</code> property. However, this is a native getter, and the value cannot be directly modified on the instance.</p>
+
+          <h2>Emitter Types</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Emitter Type</th>
+                <th>Important Properties</th>
+                <th>Typical Uses</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>PointEmitter</code></td>
+                <td>None</td>
+                <td>Muzzle flash, sparks, explosions, engine exhaust, torches, campfires</td>
+              </tr>
+              <tr>
+                <td><code>LineEmitter</code></td>
+                <td><code>x1</code>, <code>y1</code>, <code>x2</code>, <code>y2</code></td>
+                <td>Rain, beams, trails, directional effects</td>
+              </tr>
+              <tr>
+                <td><code>RectEmitter</code></td>
+                <td><code>x</code>, <code>y</code>, <code>width</code>, <code>height</code></td>
+                <td>Smoke, clouds, fog, rain areas, star field</td>
+              </tr>
+              <tr>
+                <td><code>EllipseEmitter</code></td>
+                <td><code>x</code>, <code>y</code>, <code>radiusX</code>, <code>radiusY</code></td>
+                <td>Portals, shockwaves, black holes, vortexes</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>Emission Modes</h2>
+
+          <h3>Source Modes</h3>
+
+          <p>The <code>source</code> property of an emitter configuration object determines where particles originate within the emitter's shape and what their default direction is. The table below illustrates how each source mode behaves for the different emitter types. Note that <code>PointEmitter</code> is not included, as the <code>source</code> property has no effect on it.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th><code>EDGE_OUT</code></th>
+                <th><code>EDGE_IN</code></th>
+                <th><code>EDGE_BOTH</code></th>
+                <th><code>VOLUME</code></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><img alt="Line emitter with 'edge out' source mode." src="img/emitters/source_mode/line_edge_out.webp" height="156" width="206"/></td>
+                <td><img alt="Line emitter with 'edge in' source mode." src="img/emitters/source_mode/line_edge_in.webp" height="156" width="206"/></td>
+                <td><img alt="Line emitter with 'edge both' source mode." src="img/emitters/source_mode/line_edge_both.webp" height="156" width="206"/></td>
+                <td class="not-applicable">N/A</td>
+              </tr>
+              <tr>
+                <td><img alt="Rectangle emitter with 'edge out' source mode." src="img/emitters/source_mode/rect_edge_out.webp" height="156" width="206"/></td>
+                <td><img alt="Rectangle emitter with 'edge in' source mode." src="img/emitters/source_mode/rect_edge_in.webp" height="156" width="206"/></td>
+                <td><img alt="Rectangle emitter with 'edge both' source mode." src="img/emitters/source_mode/rect_edge_both.webp" height="156" width="206"/></td>
+                <td><img alt="Rectangle emitter with 'volume' source mode." src="img/emitters/source_mode/rect_volume.webp" height="156" width="206"/></td>
+              </tr>
+              <tr>
+                <td><img alt="Ellipse emitter with 'edge out' source mode." src="img/emitters/source_mode/ellipse_edge_out.webp" height="156" width="206"/></td>
+                <td><img alt="Ellipse emitter with 'edge in' source mode." src="img/emitters/source_mode/ellipse_edge_in.webp" height="156" width="206"/></td>
+                <td><img alt="Ellipse emitter with 'edge both' source mode." src="img/emitters/source_mode/ellipse_edge_both.webp" height="156" width="206"/></td>
+                <td><img alt="Ellipse emitter with 'volume' source mode." src="img/emitters/source_mode/ellipse_volume.webp" height="156" width="206"/></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Directed Emission</h3>
+
+          <p>The <code>particleBlueprint.direction</code> property of an emitter configuration object overrides the default emission direction determined by the emitter type (shape) and the selected source mode.</p>
+
+          <p>Note that <code>direction</code> can be specified either as a single value or as a <code>[min, max]</code> range, allowing particles to be emitted in a range of directions rather than a single one. This can produce less uniform and more natural-looking movement. Below are some examples that illustrate the difference.</p>
+
+          <table>
+            <caption>A <code>PointEmitter</code> with different direction range settings.</caption>
+            <thead>
+            <tr>
+              <th>No explicit <code>direction</code></th>
+              <th><code>[0, Math.PI * 0.5]</code></th>
+              <th><code>[0, Math.PI * 2]</code></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><img alt="Point emitter without explicit direction." src="img/emitters/direction/point.webp" height="156" width="206"/></td>
+              <td><img alt="Point emitter with direction range from 0 to PI/2." src="img/emitters/direction/point_dir_0_to_05pi.webp" height="156" width="206"/></td>
+              <td><img alt="Point emitter with direction range from 0 to 2 PI." src="img/emitters/direction/point_dir_0_to_2pi.webp" height="156" width="206"/></td>
+            </tr>
+            </tbody>
+          </table>
+
+          <table>
+            <caption>A <code>LineEmitter</code> using a single-value and a range-value <code>direction</code>.</caption>
+            <thead>
+            <tr>
+              <th><code>Math.PI</code></th>
+              <th><code>[0, Math.PI * 2]</code></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><img alt="Line emitter with a direction of PI." src="img/emitters/direction/line_dir_pi.webp" height="156" width="206"/></td>
+              <td><img alt="Line emitter with direction range from 0 to 2 PI." src="img/emitters/direction/line_dir_0_to_2pi.webp" height="156" width="206"/></td>
+            </tr>
+            </tbody>
+          </table>
+
+          <table>
+            <caption>A <code>RectEmitter</code> using a single-value and a range-value <code>direction</code>.</caption>
+            <thead>
+            <tr>
+              <th><code>Math.PI * 0.3</code></th>
+              <th><code>[0, Math.PI * 2]</code></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td><img alt="Rectangle emitter with a direction of 0.3 PI." src="img/emitters/direction/rect_dir_03pi.webp" height="156" width="206"/></td>
+              <td><img alt="Rectangle emitter with direction range from 0 to 2 PI." src="img/emitters/direction/rect_dir_0_to_2pi.webp" height="156" width="206"/></td>
+            </tr>
+            </tbody>
+          </table>
+
         </section>
 
         <section id="forces" class="guide-section">
