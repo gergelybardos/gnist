@@ -13,8 +13,12 @@ export { RadialForce } from './forces/RadialForce.js';
 export { Vortex } from './forces/Vortex.js';
 
 export { Modifier } from './modifiers/Modifier.js';
+export { SineWave } from './modifiers/path/SineWave.js';
+export { Turbulence } from './modifiers/path/Turbulence.js';
 export { ColorRamp } from './modifiers/visual/ColorRamp.js';
 export { OpacityFade } from './modifiers/visual/OpacityFade.js';
+export { RotationTween } from './modifiers/visual/RotationTween.js';
 export { ScaleTween } from './modifiers/visual/ScaleTween.js';
+export { Spin } from './modifiers/visual/Spin.js';
 
 export { Source } from './shared/Constants.js';

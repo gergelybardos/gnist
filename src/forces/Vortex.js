@@ -73,7 +73,7 @@ export class Vortex extends Force {
     cullingRadiusSquared;
 
     /**
-     * Initializes a Vortex force with a center point, rotation speed, and suction speed.
+     * Initializes a vortex force with a center point, rotation speed, and suction speed.
      * @constructor
      * @param {VortexConfig} [config={}] Vortex configuration options.
      */
