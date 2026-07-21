@@ -71,11 +71,12 @@ export default [
     },
     {
         ignores: [
-            'node_modules/',
-            'dist/',
             'build/',
             'coverage/',
+            'dist/',
             'docs/',
+            'node_modules/',
+            'sandbox/',
         ],
     },
 ];
