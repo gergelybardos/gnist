@@ -37,6 +37,9 @@ export class Sandbox {
     /** @type {DOMHighResTimeStamp} */
     #previousTime;
 
+    /** @type {boolean} */
+    #useCullingBounds;
+
     /** @type {PointEmitter|null} */
     #pointEmitter;
 
@@ -105,11 +108,14 @@ export class Sandbox {
     /**
      * @constructor
      * @param {string} [mode='canvas']
+     * @param {boolean} [useCullingBounds=true]
      */
-    constructor(mode = Sandbox.#MODE_CANVAS_2D) {
+    constructor(mode = Sandbox.#MODE_CANVAS_2D, useCullingBounds = true) {
         this.#gnistEngine = null;
         this.#pointEmitter = null;
         this.#previousTime = 0;
+        this.#useCullingBounds = useCullingBounds;
+        this.#pointEmitter = null;
 
         this.#renderMode = mode;
         this.#simulationCanvas = null;
@@ -434,7 +440,47 @@ export class Sandbox {
                 break;
         }
 
+        this.#overlayCtx.clearRect(0, 0, this.#overlayCanvas.width, this.#overlayCanvas.height);
+
         this.#renderPerformanceMetricsHud(particleCount);
+        // this.#renderGrid();
+    }
+
+    /**
+     * @param {number} [cellWidth=210]
+     * @param {number} [cellHeight=160]
+     * @param {boolean} [showCoordinates=true]
+     * @returns {void}
+     */
+    #renderGrid(cellWidth = 210, cellHeight = 160, showCoordinates = true) {
+        if (!this.#overlayCanvas || !this.#overlayCtx) {
+            return;
+        }
+
+        this.#overlayCtx.font = '12px monospace';
+        this.#overlayCtx.fillStyle = '#9AA0A6';
+        this.#overlayCtx.strokeStyle = '#2A2F3A';
+        this.#overlayCtx.lineWidth = 1;
+
+        for (let x = 0; x <= this.#overlayCanvas.width; x += cellWidth) {
+            this.#overlayCtx.beginPath();
+            this.#overlayCtx.moveTo(x, 0);
+            this.#overlayCtx.lineTo(x, this.#overlayCanvas.height);
+            this.#overlayCtx.stroke();
+
+            if (showCoordinates) {
+                for (let y = 0; y <= this.#overlayCanvas.height; y += cellHeight) {
+                    this.#overlayCtx.fillText(`(${x}, ${y})`, x + 4, y + 14);
+                }
+            }
+        }
+
+        for (let y = 0; y <= this.#overlayCanvas.height; y += cellHeight) {
+            this.#overlayCtx.beginPath();
+            this.#overlayCtx.moveTo(0, y);
+            this.#overlayCtx.lineTo(this.#overlayCanvas.width, y);
+            this.#overlayCtx.stroke();
+        }
     }
 
     /**
@@ -457,15 +503,22 @@ export class Sandbox {
             const particle = particles[i];
             const { r, g, b } = particle.color;
             const a = particle.opacity;
-
-            this.#canvas2dCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
             const size = particle.size ?? 2;
+            const rotation = particle.rotation ?? 0;
 
             const halfSize = size / 2;
-            const drawX = particle.x - halfSize;
-            const drawY = particle.y - halfSize;
 
-            this.#canvas2dCtx.fillRect(drawX, drawY, size, size);
+            this.#canvas2dCtx.save();
+            this.#canvas2dCtx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+
+            this.#canvas2dCtx.translate(particle.x, particle.y);
+
+            if (rotation !== 0) {
+                this.#canvas2dCtx.rotate(rotation);
+            }
+
+            this.#canvas2dCtx.fillRect(-halfSize, -halfSize, size, size);
+            this.#canvas2dCtx.restore();
         }
     }
 
@@ -573,11 +626,10 @@ export class Sandbox {
      * @returns {void}
      */
     #renderPerformanceMetricsHud(particleCount) {
-        if (!this.#overlayCtx) {
+        if (!this.#overlayCanvas || !this.#overlayCtx) {
             return;
         }
 
-        this.#overlayCtx.clearRect(0, 0, this.#overlayCanvas.width, this.#overlayCanvas.height);
         this.#overlayCtx.fillStyle = '#9AA0A6';
         this.#overlayCtx.strokeStyle = '#2A2F3A';
         this.#overlayCtx.lineWidth = 1;
@@ -703,7 +755,7 @@ export class Sandbox {
      * @returns {void}
      */
     #updateGnistCullingBounds() {
-        if (!this.#gnistEngine || !this.#simulationCanvas) {
+        if (!this.#gnistEngine || !this.#simulationCanvas || !this.#useCullingBounds) {
             return;
         }
 
