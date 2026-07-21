@@ -1,11 +1,14 @@
 import {
-    Gnist,
-    PointEmitter,
-    DirectionalForce,
-    LinearDrag,
-    ScaleTween,
     ColorRamp,
+    DirectionalForce,
+    Gnist,
+    LinearDrag,
     OpacityFade,
+    PointEmitter,
+    ScaleTween,
+    SineWave,
+    Spin,
+    Turbulence,
 } from 'gnist';
 
 /**
@@ -41,7 +44,10 @@ export class Sandbox {
     #useCullingBounds;
 
     /** @type {PointEmitter|null} */
-    #pointEmitter;
+    #mainEmitter;
+
+    /** @type {PointEmitter|null} */
+    #sparkEmitter;
 
     // =========================================================================
     // RENDERING
@@ -112,10 +118,10 @@ export class Sandbox {
      */
     constructor(mode = Sandbox.#MODE_CANVAS_2D, useCullingBounds = true) {
         this.#gnistEngine = null;
-        this.#pointEmitter = null;
         this.#previousTime = 0;
         this.#useCullingBounds = useCullingBounds;
-        this.#pointEmitter = null;
+        this.#mainEmitter = null;
+        this.#sparkEmitter = null;
 
         this.#renderMode = mode;
         this.#simulationCanvas = null;
@@ -341,18 +347,30 @@ export class Sandbox {
      * @returns {void}
      */
     #initSimulation() {
-        const gravity = new DirectionalForce({ax:0, ay: 200});
-        const friction = new LinearDrag({drag: 0.4});
+        // Global forces
 
-        const enlarge = new ScaleTween({
-            startScale: 1,
-            endScale: 5,
+        const buoyancy = new DirectionalForce({
+            ax: 0,
+            ay: -200,
         });
 
-        const fadeOut = new OpacityFade({
-            startOpacity: 1.0,
-            endOpacity: 0.0,
+        const friction = new LinearDrag({
+            drag: 0.4,
         });
+
+        // Path modifiers
+
+        const wave = new SineWave({
+            amplitude: [1, 50],
+            frequency: 1,
+        });
+
+        const noise = new Turbulence({
+            strength: [100, 750],
+            scale: 1
+        });
+
+        // Visual modifiers
 
         const gnistColorRamp = new ColorRamp({
             colors: [
@@ -363,11 +381,24 @@ export class Sandbox {
             ],
         });
 
-        this.#pointEmitter = new PointEmitter({
+        const fadeOut = new OpacityFade({
+            startOpacity: 1.0,
+            endOpacity: 0.0,
+        });
+
+        const enlarge = new ScaleTween({
+            startScale: 1,
+            endScale: 5,
+        });
+
+        const spin = new Spin({});
+
+        this.#mainEmitter = new PointEmitter({
             x: this.#simulationCanvas.width / 2,
             y: this.#simulationCanvas.height / 2,
             particlesPerSecond: 500,
             particleBlueprint: {
+                angularVelocity: [1, 6],
                 size: [1, 5],
                 lifespan: [1, 3],
                 speed: [15, 150],
@@ -375,13 +406,32 @@ export class Sandbox {
             }
         });
 
-        this.#pointEmitter.addModifier(enlarge);
-        this.#pointEmitter.addModifier(fadeOut);
-        this.#pointEmitter.addModifier(gnistColorRamp);
+        this.#sparkEmitter = new PointEmitter({
+            x: this.#simulationCanvas.width / 2,
+            y: this.#simulationCanvas.height / 2,
+            particlesPerSecond: 20,
+            particleBlueprint: {
+                size: [1, 4],
+                lifespan: [1, 3],
+                speed: [100, 300],
+                direction: [0, Math.PI * 2],
+            }
+        });
 
-        this.#gnistEngine.addGlobalForce(gravity);
+        this.#mainEmitter.addModifier(wave);
+        this.#mainEmitter.addModifier(noise);
+
+        this.#mainEmitter.addModifier(gnistColorRamp);
+        this.#mainEmitter.addModifier(fadeOut);
+        this.#mainEmitter.addModifier(enlarge);
+        this.#mainEmitter.addModifier(spin);
+
+        this.#sparkEmitter.addModifier(gnistColorRamp);
+        this.#gnistEngine.addGlobalForce(buoyancy);
         this.#gnistEngine.addGlobalForce(friction);
-        this.#gnistEngine.addEmitter(this.#pointEmitter);
+
+        this.#gnistEngine.addEmitter(this.#sparkEmitter);
+        this.#gnistEngine.addEmitter(this.#mainEmitter);
     }
 
     /**
@@ -708,14 +758,17 @@ export class Sandbox {
      * @returns {void}
      */
     #handleMouseMove(event) {
-        if (!this.#pointEmitter || !this.#simulationCanvas) {
+        if (!this.#mainEmitter || !this.#sparkEmitter || !this.#simulationCanvas) {
             return;
         }
 
         const bounds = this.#simulationCanvas.getBoundingClientRect();
 
-        this.#pointEmitter.x = event.clientX - bounds.left;
-        this.#pointEmitter.y = event.clientY - bounds.top;
+        this.#mainEmitter.x = event.clientX - bounds.left;
+        this.#mainEmitter.y = event.clientY - bounds.top;
+
+        this.#sparkEmitter.x = event.clientX - bounds.left;
+        this.#sparkEmitter.y = event.clientY - bounds.top;
     }
 
     /**
