@@ -35,7 +35,7 @@ export class LinearDrag extends Force {
     }
 
     /**
-     * Reduces a particle's velocity over time using linear damping.
+     * Reduces the velocity of particles over time using linear damping.
      * @override
      * @param {object} particle Particle instance to affect.
      * @param {number} dt Time elapsed since the last frame (in seconds).

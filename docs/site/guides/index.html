@@ -18,13 +18,17 @@
     <div class="app-layout">
       <!-- Header -->
       <header class="app-header">
-        <!-- Brand Link -->
         <a href="../index.html" class="brand-box">
           <img src="../assets/img/gnist-logo-40x40.png" width="40" height="40" alt="Gnist Logo">
           <span>Gnist</span>
         </a>
 
-        <!-- Theme Toggle -->
+        <ul>
+          <li><a href="../api/index.html">API Reference</a></li>
+          <li><a href="https://github.com/gergelybardos/gnist">GitHub</a></li>
+          <li><a href="https://www.npmjs.com/package/@gergelybardos/gnist">npm</a></li>
+        </ul>
+
         <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle Theme">
           <svg id="theme-icon" viewBox="0 0 24 24">
             <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 4.97 0 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4C12.92 3.04 12.46 3 12 3z"/>
@@ -39,10 +43,9 @@
           <ul>
             <li><a href="#overview">Overview</a></li>
             <li><a href="#your-first-particle-system">Your First Particle System</a></li>
-            <li><a href="#rendering-with-canvas-2d">Rendering with Canvas 2D</a></li>
             <li><a href="#rendering-with-canvas-webgl">Rendering with WebGL</a></li>
           </ul>
-          <h3>Components</h3>
+          <h3>Building Blocks</h3>
           <ul>
             <li><a href="#emitters">Emitters</a></li>
             <li><a href="#forces">Forces</a></li>
@@ -50,8 +53,8 @@
           </ul>
           <h3>Examples</h3>
           <ul>
-            <li><a href="">Rain</a></li>
-            <li><a href="">Explosion</a></li>
+            <li><a href="">Fireplace</a></li>
+            <li><a href="">Portal</a></li>
           </ul>
         </nav>
       </aside>
@@ -109,12 +112,6 @@
         <article id="page-your-first-particle-system" class="page">
           <section>
             <h1 id="your-first-particle-system">Your First Particle System</h1>
-          </section>
-        </article>
-
-        <article id="page-rendering-with-canvas-2d" class="page">
-          <section>
-            <h1 id="rendering-with-canvas-2d">Rendering with Canvas 2D</h1>
           </section>
         </article>
 
@@ -685,7 +682,7 @@
 
             <p>A <code>RadialForce</code> applies acceleration toward or away from a central point. The magnitude of the acceleration decreases as the distance from the center increases.</p>
 
-            <p><strong>Typical use cases:</strong> explosions, particle attraction and repulsion effects.</p>
+            <p><strong>Typical use cases:</strong> explosion, particle attraction and repulsion effects.</p>
 
             <p>Properties of a configuration object and its corresponding <code>RadialForce</code> instance properties:</p>
 
@@ -771,7 +768,7 @@
 
             <p>A <code>Vortex</code> applies a combination of inward suction and tangential rotation to create a swirling motion around a central point. The suction component pulls particles toward the center, while the rotational component causes them to orbit around it.</p>
 
-            <p><strong>Typical use cases:</strong> whirlpools, tornadoes, black holes, and portals.</p>
+            <p><strong>Typical use cases:</strong> whirlpool, tornado, black hole, and portal.</p>
 
             <p>Properties of a configuration object and its corresponding <code>Vortex</code> instance properties:</p>
 
@@ -904,22 +901,369 @@
 
             <h3 id="modifiers-sine-wave">Sine Wave</h3>
 
+            <p>A <code>SineWave</code> applies a perpendicular sine-wave displacement relative to the particle's current movement direction. The modifier can be configured with either <strong>fixed</strong> or <strong>interpolated</strong> <code>amplitude</code> and <code>frequency</code> over the lifespan of the particles.</p>
+
+            <p><strong>Typical use cases:</strong> smoke trail, energy beam, magic effects, floating particles, and organic movement patterns.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>SineWave</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>amplitude</code></td>
+                  <td><code>number | number[]</code></td>
+                  <td><code>10</code></td>
+                  <td>Wave amplitude (in pixels), or a <code>[start, end]</code> range array interpolated over particle lifespan. Within a <code>SineWave</code> instance, amplitude is stored and exposed as <code>startAmplitude</code> and <code>endAmiplitude</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>frequency</code></td>
+                  <td><code>number | number[]</code></td>
+                  <td><code>2</code></td>
+                  <td>Cycles per second (Hz), or a <code>[start, end]</code> range array interpolated over particle lifespan. Within a <code>SineWave</code> instance, frequency is stored and exposed as <code>startFrequency</code> and <code>endFrequency</code>.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Below is an example of a sine wave modifier.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="kw">const</span> <span class="name">wave</span> = <span class="kw">new</span> <span class="name">SineWave</span>({
+    <span class="name">amplitude</span>: [<span class="lit">10</span>, <span class="lit">20</span>],
+    <span class="name">frequency</span>: [<span class="lit">0.1</span>, <span class="lit">1</span>],
+});
+
+<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">wave</span>);</code></pre>
+            </div>
+
+            <img alt="Sine wave modifier demo." src="img/modifiers/sine_wave.webp" height="150" width="400"/>
+
             <h3 id="modifiers-turbulence">Turbulence</h3>
+
+            <p>A <code>Turbulence</code> applies pseudo-random, continuous displacement to particles over their lifespan. The modifier can be configured with either <strong>fixed</strong> or <strong>interpolated</strong> <code>strength</code> over the lifespan of the particles.</p>
+
+            <p><strong>Typical use cases:</strong> smoke, fire, cloud, and wind.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>Turbulence</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>strength</code></td>
+                  <td><code>number | number[]</code></td>
+                  <td><code>20</code></td>
+                  <td>Magnitude of displacement in pixels per second or a <code>[start, end]</code> range array interpolated over particle lifespan. Within a <code>Turbulence</code> instance, strength is stored and exposed as <code>startStrength</code> and <code>endStrength</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>scale</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0.01</code></td>
+                  <td>Noise scale factor controlling the size of turbulence patterns. Smaller values produce smooth, sweeping currents; larger values produce tight, chaotic jitter.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Below is an example of a turbulence modifier.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="kw">const</span> <span class="name">noise</span> = <span class="kw">new</span> <span class="name">Turbulence</span>({
+    <span class="name">strength</span>: [<span class="lit">50</span>, <span class="lit">150</span>],
+    <span class="name">scale</span>: <span class="lit">1</span>,
+});
+
+<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">noise</span>);</code></pre>
+            </div>
+
+            <img alt="Turbulence modifier demo." src="img/modifiers/turbulence.webp" height="150" width="400"/>
 
             <h2 id="modifiers-visual-modifiers">Visual Modifiers</h2>
 
             <h3 id="modifiers-color-ramp">Color Ramp</h3>
 
+            <p>A <code>ColorRamp</code> blends the color of particles over their lifespan by interpolating through an arbitrary number of colors.</p>
+
+            <p><strong>Typical use cases:</strong> fire, magic effect, and explosion.</p>
+
+            <p>Properties of a configuration object for <code>ColorRamp</code> instances:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>colors</code></td>
+                  <td><code>Array&lt;Array&lt;number&gt;&gt;</code></td>
+                  <td><code>[[255, 255, 255], [0, 0, 0]]</code></td>
+                  <td>Array of RGB color stops. Colors are distributed evenly across particle lifespan. Note that these <strong>color stops are not exposed</strong> on <code>ColorRamp</code> instances.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Below is an example of a color ramp modifier.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="kw">const</span> <span class="name">gnistColorRamp</span> = <span class="kw">new</span> <span class="name">ColorRamp</span>({
+    <span class="name">colors</span>: [
+        [<span class="lit">0</span>, <span class="lit">242</span>, <span class="lit">254</span>],
+        [<span class="lit">143</span>, <span class="lit">0</span>, <span class="lit">255</span>],
+        [<span class="lit">255</span>, <span class="lit">0</span>, <span class="lit">127</span>],
+        [<span class="lit">255</span>, <span class="lit">102</span>, <span class="lit">0</span>],
+    ],
+});
+
+<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">gnistColorRamp</span>);</code></pre>
+            </div>
+
+            <img alt="Color ramp modifier demo." src="img/modifiers/color_ramp.webp" height="150" width="400"/>
+
             <h3 id="modifiers-opacity-fade">Opacity Fade</h3>
+
+            <p>A <code>OpacityFade</code> blends the opacity of particles over their lifespan by interpolating between two target levels.</p>
+
+            <p><strong>Typical use cases:</strong> fading smoke, dissolving particles.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>OpacityFade</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>startOpacity</code></td>
+                  <td><code>number</code></td>
+                  <td><code>1.0</code></td>
+                  <td>Opacity at particle emission. Values range from <code>0.0</code> (fully transparent) to <code>1.0</code> (fully opaque).</td>
+                </tr>
+                <tr>
+                  <td><code>endOpacity</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0.0</code></td>
+                  <td>Opacity at particle death. Values range from <code>0.0</code> (fully transparent) to <code>1.0</code> (fully opaque).</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Below is an example of an opacity fade modifier.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="kw">const</span> <span class="name">fadeOut</span> = <span class="kw">new</span> <span class="name">OpacityFade</span>({
+    <span class="name">startOpacity</span>: <span class="lit">1.0</span>,
+    <span class="name">endOpacity</span>: <span class="lit">0.0</span>,
+});
+
+<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">fadeOut</span>);</code></pre>
+            </div>
+
+            <img alt="Opacity fade modifier demo." src="img/modifiers/opacity_fade.webp" height="150" width="400"/>
 
             <h3 id="modifiers-rotation-tween">Rotation Tween</h3>
 
+            <p>A <code>RotationTween</code> interpolates the rotation angle of particles over their lifespan between two target values.</p>
+
+            <p><strong>Typical use cases:</strong> debris, spinning leaves.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>RotationTween</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>startRotation</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Rotation angle in radians at particle emission.</td>
+                </tr>
+                <tr>
+                  <td><code>endRotation</code></td>
+                  <td><code>number</code></td>
+                  <td><code>Math.PI * 2</code></td>
+                  <td>Rotation angle in radians at particle death.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Below is an example of a rotation tween modifier.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="kw">const</span> <span class="name">rotation</span> = <span class="kw">new</span> <span class="name">RotationTween</span>({
+    <span class="name">startRotation</span>: <span class="lit">0</span>,
+    <span class="name">endRotation</span>: <span class="name">Math</span>.<span class="name">PI</span>,
+});
+
+<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">rotation</span>);</code></pre>
+            </div>
+
+            <img alt="Rotation tween modifier demo." src="img/modifiers/rotation_tween.webp" height="150" width="400"/>
+
             <h3 id="modifiers-scale-tween">Scale Tween</h3>
 
+            <p>A <code>ScaleTween</code> interpolates the size of particles over their lifespan, scaling them relative to their base size between two target scale multipliers.</p>
+
+            <p><strong>Typical use cases:</strong> expanding explosions, fading particles, and shrinking debris.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>ScaleTween</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>startScale</code></td>
+                  <td><code>number</code></td>
+                  <td><code>1.0</code></td>
+                  <td>Scale multiplier at particle emission.</td>
+                </tr>
+                <tr>
+                  <td><code>endScale</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0.1</code></td>
+                  <td>Scale multiplier at particle death.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Below is an example of a scale tween modifier.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="kw">const</span> <span class="name">enlarge</span> = <span class="kw">new</span> <span class="name">ScaleTween</span>({
+    <span class="name">startScale</span>: <span class="lit">1</span>,
+    <span class="name">endScale</span>: <span class="lit">12</span>,
+});
+
+<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">enlarge</span>);</code></pre>
+            </div>
+
+            <img alt="Scale tween modifier demo." src="img/modifiers/scale_tween.webp" height="150" width="400"/>
+
             <h3 id="modifiers-spin">Spin</h3>
+
+            <p>A <code>Spin</code> continuously updates the orientation of the particles based on their <code>angularVelocity</code>.</p>
+
+            <p><strong>Typical use cases:</strong> debris, spinning leaves.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>Spin</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>angularVelocity</code></td>
+                  <td><code>number</code></td>
+                  <td><code>null</code></td>
+                  <td>Override spin rate in radians per second. If omitted, the particle's own <code>angularVelocity</code> value is used.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Below is an example of a spin modifier.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="kw">const</span> <span class="name">spin</span> = <span class="kw">new</span> <span class="name">Spin</span>({
+    <span class="name">angularVelocity</span>: <span class="lit">2</span>
+});
+
+<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">spin</span>);</code></pre>
+            </div>
+
+            <img alt="Spin modifier demo." src="img/modifiers/spin.webp" height="150" width="400"/>
           </section>
         </article>
-
       </main>
 
       <!-- Sub-TOC -->

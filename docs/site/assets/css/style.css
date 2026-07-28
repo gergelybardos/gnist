@@ -39,7 +39,7 @@
 }
 
 /* ==========================================================================
-   Reset & Base Typography
+   Reset & Base Rules
    ========================================================================== */
 
 * {
@@ -189,6 +189,33 @@ var {
   border-bottom: 1px solid var(--border-color);
   background: var(--bg-color);
   transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-header ul {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-header ul a {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--highlighted-color);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-header ul a:hover,
+.app-header ul a:active {
+  color: var(--bg-color);
+  background: var(--highlighted-color);
+  border-color: var(--highlighted-color);
 }
 
 .main-toc { grid-column: 1; grid-row: 2; }
@@ -389,7 +416,7 @@ var {
 .sub-toc-group.active { display: block; }
 
 /* ==========================================================================
-   Intra-Page Typography
+   Intra-Page Rules
    ========================================================================== */
 
 .page h1,
@@ -431,6 +458,10 @@ var {
 .page li > p {
   margin-top: 0.35rem;
   margin-bottom: 0.5rem;
+}
+
+.page img {
+  border-radius: var(--border-radius);
 }
 
 /* ==========================================================================

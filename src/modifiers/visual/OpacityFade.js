@@ -11,12 +11,12 @@ import { Modifier } from '../Modifier.js';
  * OpacityFade configuration options.
  * Includes all properties from {@link ModifierConfig}.
  * @typedef {object} OpacityFadeConfig
- * @property {number} [startOpacity=1.0] Opacity at particle emission.
- * @property {number} [endOpacity=0.0] Opacity at particle death.
+ * @property {number} [startOpacity=1.0] Opacity at particle emission. Values range from 0.0 (fully transparent) to 1.0 (fully opaque).
+ * @property {number} [endOpacity=0.0] Opacity at particle death. Values range from 0.0 (fully transparent) to 1.0 (fully opaque).
  */
 
 /**
- * Particle modifier that blends a particle's opacity over time between two target levels.
+ * Particle modifier that blends the opacity of particles over their lifespan by interpolating between two target levels.
  * @class
  * @extends Modifier
  */

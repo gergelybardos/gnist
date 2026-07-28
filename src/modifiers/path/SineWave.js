@@ -11,7 +11,7 @@ import { Modifier } from '../Modifier.js';
  * SineWave configuration options.
  * Includes all properties from {@link ModifierConfig}.
  * @typedef {object} SineWaveConfig
- * @property {number|number[]} [amplitude=10] Wave height in pixels, or a [start, end] range array interpolated over lifespan.
+ * @property {number|number[]} [amplitude=10] Wave amplitude (in pixels), or a [start, end] range array interpolated over lifespan.
  * @property {number|number[]} [frequency=2] Cycles per second (Hz), or a [start, end] range array interpolated over lifespan.
  */
 

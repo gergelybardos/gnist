@@ -11,11 +11,11 @@ import { Modifier } from '../Modifier.js';
  * Spin configuration options.
  * Includes all properties from {@link ModifierConfig}.
  * @typedef {object} SpinConfig
- * @property {number} [angularVelocity] Optional spin rate in radians per second. If omitted, uses particle.angularVelocity.
+ * @property {number} [angularVelocity] Optional spin rate in radians per second. If omitted, the particle's own angularVelocity value is used.
  */
 
 /**
- * Particle modifier that continuously updates a particle's orientation based on angular velocity.
+ * Particle modifier that continuously updates the orientation of the particles based on their angular velocity.
  * @class
  * @extends Modifier
  */

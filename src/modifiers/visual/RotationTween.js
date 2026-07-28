@@ -16,7 +16,7 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Particle modifier that interpolates a particle's rotation angle over time between two target values.
+ * Particle modifier that interpolates the rotation angle of particles over their lifespan between two target values.
  * @class
  * @extends Modifier
  */

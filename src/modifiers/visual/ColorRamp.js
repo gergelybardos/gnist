@@ -15,8 +15,8 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Particle modifier that blends a particle's color over time by interpolating through an arbitrary number of colors.
- * Colors are distributed evenly along the timeline.
+ * Particle modifier that blends the color of particles over their lifespan by interpolating through an arbitrary number of colors.
+ * Colors are distributed evenly across particle lifespan.
  * @class
  * @extends Modifier
  */

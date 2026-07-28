@@ -16,7 +16,7 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Particle modifier that interpolates a particle's size over time, scaling it relative to its base size between two target scale multipliers.
+ * Particle modifier that interpolates the size of particles over their lifespan, scaling them relative to their base size between two target scale multipliers.
  * @class
  * @extends Modifier
  */

@@ -16,7 +16,7 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Path modifier that applies pseudo-random, continuous turbulence to displace particles over time.
+ * Path modifier that applies pseudo-random, continuous displacement to particles over their lifespan.
  * @class
  * @extends Modifier
  */
@@ -45,7 +45,7 @@ export class Turbulence extends Modifier {
     endStrength;
 
     /**
-     * Noise scale factor. Smaller values produce smooth, sweeping currents; larger values produce tight, chaotic jitter.
+     * Noise scale factor controlling the size of turbulence patterns. Smaller values produce smooth, sweeping currents; larger values produce tight, chaotic jitter.
      * @type {number}
      */
     scale;
