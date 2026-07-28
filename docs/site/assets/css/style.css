@@ -172,8 +172,9 @@ var {
   grid-template-columns: var(--toc-width) minmax(0, 1fr) var(--toc-width);
   gap: 1.25rem;
   max-width: 1500px;
+  min-height: 100vh;
   margin: 0 auto;
-  padding: 0 3rem 9rem;
+  padding: 0 3rem 2rem;
 }
 
 .app-header {
@@ -234,6 +235,48 @@ var {
   border-radius: var(--border-radius);
   background: var(--surface-color);
   transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.app-footer {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.app-footer p {
+  margin-bottom: 0.75rem;
+}
+
+.app-footer a {
+  color: var(--highlighted-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.app-footer a:hover {
+  color: var(--accent-color);
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li:not(:last-child)::after {
+  content: "•";
+  margin-left: 1rem;
+  color: var(--border-color);
 }
 
 .sticky-box {
@@ -473,8 +516,8 @@ var {
 
 body.start-page {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   min-height: 100vh;
 }
 
@@ -482,26 +525,33 @@ body.start-page main {
   max-width: 600px;
   padding: 2rem;
   text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
-body.start-page h1 {
+body.start-page main .logo {
+  width: 145px;
+  height: 145px;
+}
+
+body.start-page main h1 {
   color: var(--highlighted-color);
 }
 
-body.start-page p {
+body.start-page main p {
   margin-top: 1.5rem;
   margin-bottom: 2.5rem;
   font-size: 1.6rem;
 }
 
-body.start-page .links {
+body.start-page main .links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
 }
 
-body.start-page a {
+body.start-page main a {
   padding: 0.6rem 1rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -511,10 +561,14 @@ body.start-page a {
   transition: 0.2s;
 }
 
-body.start-page a:hover,
-body.start-page a:active {
+body.start-page main a:hover,
+body.start-page main a:active {
   color: var(--bg-color);
   background: var(--highlighted-color);
+}
+
+body.start-page .app-footer {
+  border: none;
 }
 
 /* ==========================================================================
@@ -548,4 +602,9 @@ body.start-page a:active {
   .main-toc { grid-column: 1; grid-row: 2; }
   .content  { grid-column: 1; grid-row: 3; }
   .sub-toc  { display: none; }
+
+  .app-footer {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
 }
