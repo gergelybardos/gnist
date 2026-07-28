@@ -10,8 +10,8 @@ import { Force } from './Force.js';
  * DirectionalForce configuration options.
  * Includes all properties from {@link ForceConfig}.
  * @typedef {object} DirectionalForceConfig
- * @property {number} [ax=0] Horizontal acceleration component (in pixels per second).
- * @property {number} [ay=0] Vertical acceleration component (in pixels per second).
+ * @property {number} [ax=0] Horizontal acceleration component (in pixels per second²). Positive values accelerate particles to the right, negative values to the left.
+ * @property {number} [ay=0] Vertical acceleration component (in pixels per second²). Positive values accelerate particles downward, negative values upward.
  */
 
 /**
@@ -21,13 +21,13 @@ import { Force } from './Force.js';
  */
 export class DirectionalForce extends Force {
     /**
-     * Current horizontal acceleration component (in pixels per second).
+     * Current horizontal acceleration component (in pixels per second²).
      * @type {number}
      */
     ax;
 
     /**
-     * Current vertical acceleration component (in pixels per second).
+     * Current vertical acceleration component (in pixels per second²).
      * @type {number}
      */
     ay;

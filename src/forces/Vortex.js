@@ -22,7 +22,7 @@ import { Force } from './Force.js';
  */
 
 /**
- * Environmental force that applies a swirling combination of centripetal (suction) and tangential (orbital) forces to particles.
+ * Environmental force that applies a swirling combination of radial attraction/repulsion and tangential (orbital) forces to particles.
  * @class
  * @extends Force
  */
@@ -40,13 +40,13 @@ export class Vortex extends Force {
     y;
 
     /**
-     * Rotation speed. Positive values for clockwise, negative values for counter-clockwise rotation.
+     * Strength of the rotational force. Positive values rotate clockwise, negative values rotate counter-clockwise.
      * @type {number}
      */
     rotationSpeed;
 
     /**
-     * Inward suction speed. Positive values pull inward, negative values push outward.
+     * Strength of the radial attraction/repulsion. Positive values pull inward, negative values push outward.
      * @type {number}
      */
     suctionSpeed;

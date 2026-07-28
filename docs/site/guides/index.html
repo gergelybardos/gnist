@@ -76,34 +76,33 @@
           <section>
             <h2 id="overview-architecture-concepts">Architecture Concepts</h2>
 
-            <p>The simulation pipeline revolves around four primary building blocks:</p>
+            <p>The simulation pipeline revolves around four primary building blocks.</p>
 
-            <ol>
+            <h4>The Engine</h4>
+
+            <p>The central simulation manager. It owns the shared particle pool, updates particle lifecycles, applies forces and modifiers, and advances the simulation frame by frame using a time delta (<var>dt</var>).</p>
+
+            <h4>Emitters</h4>
+
+            <p>Particle generators that spawn particles into the particle pool. Emitters are defined by 2D primitives such as points, lines, rectangles, and ellipses, which determine where particles are born. Configurations and blueprints provide fine-grained control over emission behavior and initial particle properties, with randomized ranges available to create natural variation.</p>
+
+            <h4>Forces</h4>
+
+            <p>Environmental influences that directly modify particle velocity over time. Forces can be <strong>global</strong>, affecting every particle in the simulation (such as gravity or wind) or <strong>scoped</strong> to particles emitted by a specific emitter.</p>
+
+            <h4>Modifiers</h4>
+
+            <p>Rules that update particle properties over their lifetime based on their normalized age.</p>
+
+            <ul>
               <li>
-                <strong>The Engine</strong>
-                <p>The central simulation manager. It owns the shared particle pool, updates particle lifecycles, applies forces and modifiers, and advances the simulation frame by frame using a time delta (<var>dt</var>).</p>
+                <strong>Path Modifiers</strong><span> alter particle trajectories independently of environmental forces.</span>
               </li>
               <li>
-                <strong>Emitters</strong>
-                <p>Particle generators that spawn particles into the particle pool. Emitters are defined by 2D primitives such as points, lines, rectangles, and ellipses, which determine where particles are born. Configurations and blueprints provide fine-grained control over emission behavior and initial particle properties, with randomized ranges available to create natural variation.</p>
+                <strong>Visual Modifiers</strong><span> alter visual properties such as scale, opacity, and color over a particle's lifetime.</span>
               </li>
-              <li>
-                <strong>Forces</strong>
-                <p>Environmental influences that directly modify particle velocity over time. Forces can be <strong>global</strong>, affecting every particle in the simulation (such as gravity or wind) or <strong>scoped</strong> to particles emitted by a specific emitter.</p>
-              </li>
-              <li>
-                <strong>Modifiers</strong>
-                <p>Rules that update particle properties over their lifetime based on their normalized age.</p>
-                <ul>
-                  <li>
-                    <strong>Path Modifiers</strong><span> alter particle trajectories independently of environmental forces.</span>
-                  </li>
-                  <li>
-                    <strong>Visual Modifiers</strong><span> alter visual properties such as scale, opacity, and color over a particle's lifetime.</span>
-                  </li>
-                </ul>
-              </li>
-            </ol>
+            </ul>
+
           </section>
         </article>
 
@@ -147,7 +146,7 @@
                 <tr>
                   <th>Property</th>
                   <th>Type</th>
-                  <th>Default value</th>
+                  <th>Default</th>
                   <th>Public property</th>
                   <th>Description</th>
                 </tr>
@@ -240,7 +239,7 @@
                 <tr>
                   <th>Property</th>
                   <th>Type</th>
-                  <th>Default value</th>
+                  <th>Default</th>
                   <th>Description</th>
                 </tr>
                 </thead>
@@ -337,7 +336,7 @@
 
             <p>Modifiers cannot be toggled after registration; they can only be removed from the emitter using the emitter's <code>removeModifier()</code> method passing the modifier's <code>id</code> as an argument. Removing a modifier only affects particles emitted after the removal.</p>
 
-            <p>Example:</p>
+            <h4>Example</h4>
 
             <div class="code-snippet">
               <button class="copy-button" aria-label="Copy code" title="Copy code"></button>
@@ -365,7 +364,7 @@
 
             <p>Scoped forces cannot be toggled after registration; they can only be removed from the emitter using the emitter's <code>removeScopedForce()</code> method passing the force's <code>id</code> as an argument. Removing a scoped force only affects particles emitted after the removal.</p>
 
-            <p>Example:</p>
+            <h4>Example</h4>
 
             <div class="code-snippet">
               <button class="copy-button" aria-label="Copy code" title="Copy code"></button>
@@ -442,7 +441,7 @@
                 <thead>
                 <tr>
                   <th>Emitter Type</th>
-                  <th>Important Properties</th>
+                  <th>Specific Properties</th>
                   <th>Typical Uses</th>
                 </tr>
                 </thead>
@@ -580,9 +579,320 @@
 
             <h2 id="forces-directional-force">Directional Force</h2>
 
+            <p>A <code>DirectionalForce</code> applies a constant directional acceleration to affected particles. Unlike an initial velocity, which is only set when a particle spawns, a directional force continuously modifies a particle's velocity over time.</p>
+
+            <p><strong>Typical use cases:</strong> gravity, wind, and buoyancy.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>DirectionalForce</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>ax</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Horizontal acceleration component (pixels per second²). Positive values accelerate particles to the right, negative values to the left.</td>
+                </tr>
+                <tr>
+                  <td><code>ay</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Vertical acceleration component (pixels per second²). Positive values accelerate particles downward, negative values upward.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>The example below demonstrates a <code>DirectionalForce</code> applying horizontal acceleration to a <code>LineEmitter</code> that would otherwise emit particles straight down.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">wind</span> = <span class="kw">new</span> <span class="name">DirectionalForce</span>({
+    <span class="name">ax</span>: <span class="lit">100</span>
+});
+
+<span class="kw">const</span> <span class="name">lineEmitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="name">lineEmitter</span>.<span class="name">addScopedForce</span>(<span class="name">wind</span>);</code></pre>
+            </div>
+
+            <img alt="Directional force demo." src="img/forces/directional_force.webp" height="340" width="495"/>
+
             <h2 id="forces-linear-drag">Linear Drag</h2>
 
+            <p>A <code>LinearDrag</code> gradually reduces a particle's velocity over time,
+              simulating friction or resistance. Unlike a directional force, which adds acceleration
+              in a specific direction, linear drag opposes the particle's current movement and slows it down.</p>
+
+            <p><strong>Typical use cases:</strong> air resistance, friction, smoke, and fire damping.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>LinearDrag</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>drag</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0.99</code></td>
+                  <td>Friction coefficient where <code>0</code> means no drag and higher values slow particles down faster.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>The example below demonstrates the effect of linear drag by comparing particles with drag enabled against particles without drag.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">friction</span> = <span class="kw">new</span> <span class="name">LinearDrag</span>({
+    <span class="name">drag</span>: <span class="lit">0.7</span>,
+});
+
+<span class="kw">const</span> <span class="name">emitterWithDrag</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="name">emitterWithDrag</span>.<span class="name">addScopedForce</span>(<span class="name">friction</span>);</code></pre>
+            </div>
+
+            <img alt="Linear drag force demo." src="img/forces/linear_drag.webp" height="340" width="495"/>
+
             <h2 id="forces-radial-force">Radial Force</h2>
+
+            <p>A <code>RadialForce</code> applies acceleration toward or away from a central point. The magnitude of the acceleration decreases as the distance from the center increases.</p>
+
+            <p><strong>Typical use cases:</strong> explosions, particle attraction and repulsion effects.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>RadialForce</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>x</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Horizontal coordinate of the force center.</td>
+                </tr>
+                <tr>
+                  <td><code>y</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Vertical coordinate of the force center.</td>
+                </tr>
+                <tr>
+                  <td><code>strength</code></td>
+                  <td><code>number</code></td>
+                  <td><code>100</code></td>
+                  <td>Magnitude of the force. Positive values create attraction, negative values create repulsion.</td>
+                </tr>
+                <tr>
+                  <td><code>epsilon</code></td>
+                  <td><code>number</code></td>
+                  <td><code>100</code></td>
+                  <td>Smoothing factor that prevents extreme acceleration values when particles are close to the force center.</td>
+                </tr>
+                <tr>
+                  <td><code>cullingRadius</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Distance from the force center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Only the squared radius is stored internally and exposed as <code>cullingRadiusSquared</code>.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <blockquote class="callout note">
+              <div class="callout-title">
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+                <span>Note</span>
+              </div>
+              <p>Because the simulation is updated in discrete time steps, particles may overshoot the force center and continue on the opposite side before being pulled back. If particles should disappear upon reaching the center, use the <code>cullingRadius</code> property.</p>
+            </blockquote>
+
+            <p>Below is an example of a radial force with and without culling. While some particles escape, most are absorbed. Without culling, however, particles continue orbiting the force until they reach the end of their lifespan. The only difference between the two examples is whether <code>cullingRadius</code>cullingRadius is set.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">lineEmitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
+    <span class="comm">...</span>
+});
+
+<span class="kw">const</span> <span class="name">radialForce</span> = <span class="kw">new</span> <span class="name">RadialForce</span>({
+    <span class="name">x</span>: <span class="lit">250</span>,
+    <span class="name">y</span>: <span class="lit">190</span>,
+    <span class="name">strength</span>: <span class="lit">50000</span>,
+    <span class="name">radius</span>: <span class="lit">100</span>,
+    <span class="name">epsilon</span>: <span class="lit">100</span>,
+    <span class="name">cullingRadius</span>: <span class="lit">60</span>,
+});
+
+<span class="name">lineEmitter</span>.<span class="name">addScopedForce</span>(<span class="name">radialForce</span>);</code></pre>
+            </div>
+
+            <div class="image-gallery">
+              <img alt="Radial force demo with culling." src="img/forces/radial_force_with_culling.webp"/>
+              <img alt="Radial force demo without culling." src="img/forces/radial_force_without_culling.webp"/>
+            </div>
+
+            <h2 id="forces-vortex">Vortex</h2>
+
+            <p>A <code>Vortex</code> applies a combination of inward suction and tangential rotation to create a swirling motion around a central point. The suction component pulls particles toward the center, while the rotational component causes them to orbit around it.</p>
+
+            <p><strong>Typical use cases:</strong> whirlpools, tornadoes, black holes, and portals.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>Vortex</code> instance properties:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>x</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Horizontal coordinate of the vortex center.</td>
+                </tr>
+                <tr>
+                  <td><code>y</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Vertical coordinate of the vortex center.</td>
+                </tr>
+                <tr>
+                  <td><code>rotationSpeed</code></td>
+                  <td><code>number</code></td>
+                  <td><code>100</code></td>
+                  <td>Strength of the rotational force. Positive values rotate clockwise, negative values rotate counter-clockwise.</td>
+                </tr>
+                <tr>
+                  <td><code>suctionSpeed</code></td>
+                  <td><code>number</code></td>
+                  <td><code>50</code></td>
+                  <td>Strength of the radial attraction/repulsion. Positive values pull inward, negative values push outward.</td>
+                </tr>
+                <tr>
+                  <td><code>radius</code></td>
+                  <td><code>number</code></td>
+                  <td><code>Infinity</code></td>
+                  <td>Radius of influence. Particles outside this distance are unaffected.</td>
+                </tr>
+                <tr>
+                  <td><code>cullingRadius</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Distance from the vortex center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Only the squared radius is stored internally and exposed as <code>cullingRadiusSquared</code>.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <blockquote class="callout note">
+              <div class="callout-title">
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+                <span>Note</span>
+              </div>
+              <p>Because the simulation is updated in discrete time steps, particles may overshoot the vortex center and continue on the opposite side before being pulled back. If particles should disappear upon reaching the center, use the <code>cullingRadius</code> property.</p>
+            </blockquote>
+
+            <p>Below is an example of a vortex with culling. While some particles escape, most are absorbed. Without culling, particles would continue orbiting the force until they reach the end of their lifespan.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">gnistEngine</span> = <span class="kw">new</span> <span class="name">Gnist</span>();
+
+<span class="kw">const</span> <span class="name">blueEmitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
+    <span class="name">x1</span>: <span class="lit">25</span>,
+    <span class="name">y1</span>: <span class="lit">25</span>,
+    <span class="name">x2</span>: <span class="lit">475</span>,
+    <span class="name">y2</span>: <span class="lit">25</span>,
+    <span class="name">particlesPerSecond</span>: <span class="lit">200</span>,
+    <span class="name">source</span>: <span class="name">Source</span>.<span class="name">EDGE_OUT</span>,
+    <span class="name">particleBlueprint</span>: {
+        <span class="name">angularVelocity</span>: [<span class="lit">1</span>, <span class="lit">6</span>],
+        <span class="name">size</span>: [<span class="lit">1</span>, <span class="lit">5</span>],
+        <span class="name">lifespan</span>: <span class="lit">3</span>,
+        <span class="name">speed</span>: [<span class="lit">15</span>, <span class="lit">150</span>],
+        <span class="name">color</span>: {<span class="name">r</span>: <span class="lit">76</span>, <span class="name">g</span>: <span class="lit">122</span>, <span class="name">b</span>: <span class="lit">238</span>},
+    }
+});
+
+<span class="kw">const</span> <span class="name">pinkEmitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
+    <span class="name">x1</span>: <span class="lit">25</span>,
+    <span class="name">y1</span>: <span class="lit">355</span>,
+    <span class="name">x2</span>: <span class="lit">475</span>,
+    <span class="name">y2</span>: <span class="lit">355</span>,
+    <span class="name">particlesPerSecond</span>: <span class="lit">200</span>,
+    <span class="name">source</span>: <span class="name">Source</span>.<span class="name">EDGE_IN</span>,
+    <span class="name">particleBlueprint</span>: {
+        <span class="name">angularVelocity</span>: [<span class="lit">1</span>, <span class="lit">6</span>],
+        <span class="name">size</span>: [<span class="lit">1</span>, <span class="lit">5</span>],
+        <span class="name">lifespan</span>: <span class="lit">3</span>,
+        <span class="name">speed</span>: [<span class="lit">15</span>, <span class="lit">150</span>],
+        <span class="name">color</span>: {<span class="name">r</span>: <span class="lit">224</span>, <span class="name">g</span>: <span class="lit">23</span>, <span class="name">b</span>: <span class="lit">122</span>},
+    }
+});
+
+<span class="kw">const</span> <span class="name">friction</span> = <span class="kw">new</span> <span class="name">LinearDrag</span>({
+    <span class="name">drag</span>: <span class="lit">0.9</span>,
+});
+
+<span class="kw">const</span> <span class="name">vortex</span> = <span class="kw">new</span> <span class="name">Vortex</span>({
+    <span class="name">x</span>: <span class="lit">250</span>,
+    <span class="name">y</span>: <span class="lit">190</span>,
+    <span class="name">rotationSpeed</span>: <span class="lit">275</span>,
+    <span class="name">suctionSpeed</span>: <span class="lit">200</span>,
+    <span class="name">radius</span>: <span class="lit">140</span>,
+    <span class="name">cullingRadius</span>: <span class="lit">75</span>,
+});
+
+<span class="name">gnistEngine</span>.<span class="name">addEmitter</span>(<span class="name">blueEmitter</span>);
+<span class="name">gnistEngine</span>.<span class="name">addEmitter</span>(<span class="name">pinkEmitter</span>);
+
+<span class="name">gnistEngine</span>.<span class="name">addGlobalForce</span>(<span class="name">friction</span>);
+<span class="name">gnistEngine</span>.<span class="name">addGlobalForce</span>(<span class="name">vortex</span>);</code></pre>
+            </div>
+
+            <img alt="Vortex force demo." src="img/forces/vortex.webp" height="340" width="494"/>
           </section>
         </article>
 
@@ -591,13 +901,21 @@
             <h1 id="modifiers">Modifiers</h1>
 
             <h2 id="modifiers-path-modifiers">Path Modifiers</h2>
+
             <h3 id="modifiers-sine-wave">Sine Wave</h3>
+
             <h3 id="modifiers-turbulence">Turbulence</h3>
+
             <h2 id="modifiers-visual-modifiers">Visual Modifiers</h2>
+
             <h3 id="modifiers-color-ramp">Color Ramp</h3>
+
             <h3 id="modifiers-opacity-fade">Opacity Fade</h3>
+
             <h3 id="modifiers-rotation-tween">Rotation Tween</h3>
+
             <h3 id="modifiers-scale-tween">Scale Tween</h3>
+
             <h3 id="modifiers-spin">Spin</h3>
           </section>
         </article>
@@ -643,6 +961,7 @@
             <li><a href="#forces-directional-force">Directional Force</a></li>
             <li><a href="#forces-linear-drag">Linear Drag</a></li>
             <li><a href="#forces-radial-force">Radial Force</a></li>
+            <li><a href="#forces-vortex">Vortex</a></li>
           </ul>
         </nav>
 
