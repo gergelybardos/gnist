@@ -167,7 +167,7 @@ var {
    Layout
    ========================================================================== */
 
-.app-layout {
+.site-layout {
   display: grid;
   grid-template-columns: var(--toc-width) minmax(0, 1fr) var(--toc-width);
   gap: 1.25rem;
@@ -177,7 +177,7 @@ var {
   padding: 0 3rem 2rem;
 }
 
-.app-header {
+.site-header {
   position: sticky;
   top: 0;
   z-index: 100;
@@ -192,7 +192,7 @@ var {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.app-header ul {
+.site-header ul {
   display: flex;
   align-items: center;
   position: absolute;
@@ -204,7 +204,7 @@ var {
   list-style: none;
 }
 
-.app-header ul a {
+.site-header ul a {
   padding: 0.4rem 0.85rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -215,8 +215,8 @@ var {
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.app-header ul a:hover,
-.app-header ul a:active {
+.site-header ul a:hover,
+.site-header ul a:active {
   color: var(--bg-color);
   background: var(--highlighted-color);
   border-color: var(--highlighted-color);
@@ -237,7 +237,7 @@ var {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.app-footer {
+.site-footer {
   grid-column: 1 / -1;
   grid-row: 3;
   margin-top: 4rem;
@@ -249,17 +249,17 @@ var {
   text-align: center;
 }
 
-.app-footer p {
+.site-footer p {
   margin-bottom: 0.75rem;
 }
 
-.app-footer a {
+.site-footer a {
   color: var(--highlighted-color);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.app-footer a:hover {
+.site-footer a:hover {
   color: var(--accent-color);
 }
 
@@ -567,7 +567,7 @@ body.start-page main a:active {
   background: var(--highlighted-color);
 }
 
-body.start-page .app-footer {
+body.start-page .site-footer {
   border: none;
 }
 
@@ -582,13 +582,13 @@ body.start-page .app-footer {
 }
 
 @media (max-width: 1010px) {
-  .app-layout {
+  .site-layout {
     grid-template-columns: 1fr;
     gap: 1rem;
     padding: 0 1rem 1rem;
   }
 
-  .app-header ul {
+  .site-header ul {
     position: inherit;
     left: inherit;
     transform: none;
@@ -603,7 +603,7 @@ body.start-page .app-footer {
   .content  { grid-column: 1; grid-row: 3; }
   .sub-toc  { display: none; }
 
-  .app-footer {
+  .site-footer {
     grid-column: 1 / -1;
     grid-row: 4;
   }
