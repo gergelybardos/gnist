@@ -51,9 +51,9 @@ npm i @gergelybardos/gnist
 
 ## Basic Example <a name="basic-example"></a>
 
-Gnist is renderer-agnostic; the client is responsible for implementing the main update loop and rendering using their chosen rendering system. The example below shows the minimal setup required to run Gnist with Canvas 2D rendering.
+Gnist is renderer-agnostic; the client is responsible for implementing the main update loop and rendering using their chosen rendering system. The example below shows the minimal code required to run Gnist with Canvas 2D rendering.
 
-*Note: This example assumes an existing project setup. If you are starting from scratch, check out the [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) first.*
+> **⚠️ Important:** This example assumes an existing project with module resolution provided by a build tool. If you are starting from scratch, check out the [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) first.
 
 ```html
 <!-- index.html -->
@@ -83,9 +83,6 @@ function loop(currentTime) {
     const dt = (currentTime - lastTime) / 1000;
     lastTime = currentTime;
 
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
     // TODO: Update Gnist and render particles
 }
 requestAnimationFrame(loop);
@@ -124,13 +121,14 @@ function loop(currentTime) {
     const dt = (currentTime - lastTime) / 1000;
     lastTime = currentTime;
 
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
     // 3. Update Gnist
     engine.update(dt);
 
     // 4. Render particles
+
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
     const particles = engine.particles;
     for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
@@ -177,7 +175,7 @@ All values represent the average simulation update time measured over 100 frames
 - **RAM:** 16 GB
 - **Browser:** Chrome 150
 - **OS:** Windows 10
-- **Gnist version:** v0.2.0
+- **Gnist version:** 0.2.0
 
 ### Scaling
 

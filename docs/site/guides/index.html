@@ -52,7 +52,6 @@
           </ul>
           <h3>Examples</h3>
           <ul>
-            <li><a href="#campfire">Campfire</a></li>
             <li><a href="#rendering-with-webgl">Rendering with WebGL</a></li>
           </ul>
         </nav>
@@ -111,6 +110,534 @@
         <article id="page-your-first-particle-system" class="page">
           <section>
             <h1 id="your-first-particle-system">Your First Particle System</h1>
+
+            <h2 id="yfpe-what-youll-create">What You'll Create</h2>
+
+            <p>In this guide, you will build a simple campfire particle effect using Gnist from scratch. The example uses multiple emitters, modifiers, a global force, and Canvas 2D rendering to demonstrate how the different parts of Gnist work together. The focus is on learning how to use Gnist, not on building a production-ready application.</p>
+
+            <p>The final result will look like this:</p>
+
+            <img alt="Fire particle effect created with Gnist." src="img/tutorials/your-first-particle-system-result.webp" height="290" width="390"/>
+
+            <h2 id="yfpe-prerequisites">Prerequisites</h2>
+
+            <p>Before getting started, make sure your development environment meets the following requirements:</p>
+
+            <ul>
+              <li><a href="https://nodejs.org/" target="_blank">Node.js</a> ≥ 20.0.0</li>
+              <li><a href="https://www.npmjs.com/" target="_blank">npm</a> ≥ 9.6.4</li>
+            </ul>
+
+            <p>This guide assumes basic familiarity with JavaScript and HTML.</p>
+
+            <h2 id="yfpe-project-setup">Project Setup</h2>
+
+            <h3 id="yfpe-initialize-a-new-project">Initialize a New Project</h3>
+
+            <p>Create a project directory and initialize it with NPM:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+<pre><code><span class="name">mkdir</span> <span class="attr">example-simulation</span>
+<span class="name">cd</span> <span class="attr">example-simulation</span>
+<span class="name">npm</span> <span class="kw">init</span></code></pre>
+            </div>
+
+            <p>When prompted, set the package type to <code>module</code>. CommonJS projects are not supported.</p>
+
+            <p>Note that this project does not use the entry point setting. You can leave it unchanged or remove it entirely.</p>
+
+            <h3 id="yfpe-install-vite">Install Vite</h3>
+
+            <p>Next, we will install <a href="https://vite.dev/" target="_blank">Vite</a> as a dev dependency to provide a development server and handle module resolution for the project. This allows us to import directly from the installed npm package. Vite is used only to simplify the development setup; it is not a requirement for using Gnist.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="name">npm</span> <span class="kw">i</span> <span class="attr">--save-dev</span> <span class="str">vite</span></code></pre>
+            </div>
+
+            <p>Then add the start script to <code>package.json</code>:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="punct">{</span>
+  <span class="name">"scripts"</span><span class="punct">:</span> <span class="punct">{</span>
+    <span class="name">"dev"</span><span class="punct">:</span> <span class="str">"vite"</span>
+  <span class="punct">}</span>
+<span class="punct">}</span></code></pre>
+            </div>
+
+            <h3 id="yfpe-install-gnist">Install Gnist</h3>
+
+            <p>Install Gnist as a dependency using npm:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="name">npm</span> <span class="kw">i</span> <span class="attr">@gergelybardos/gnist</span></code></pre>
+            </div>
+
+            <h2 id="yfpe-creating-the-application-skeleton">Creating the Application Skeleton</h2>
+
+            <h3 id="yfpe-html-setup">HTML Setup</h3>
+
+            <p>Create an <code>index.html</code> file in the project root. The page only needs a <code>&lt;canvas&gt;</code> element, which will be used for rendering the particle system, and a <code>&lt;script&gt;</code> tag that loads the application's entry point.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="punct">&lt;!</span><span class="kw">DOCTYPE</span> <span class="attr">html</span><span class="punct">&gt;</span>
+<span class="punct">&lt;</span><span class="tag">html</span> <span class="attr">lang</span><span class="punct">=</span><span class="str">"en"</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;</span><span class="tag">head</span><span class="punct">&gt;</span>
+    <span class="punct">&lt;</span><span class="tag">meta</span> <span class="attr">charset</span><span class="punct">=</span><span class="str">"UTF-8"</span><span class="punct">&gt;</span>
+    <span class="punct">&lt;</span><span class="tag">meta</span> <span class="attr">name</span><span class="punct">=</span><span class="str">"viewport"</span> <span class="attr">content</span><span class="punct">=</span><span class="str">"width=device-width, initial-scale=1.0"</span><span class="punct">&gt;</span>
+    <span class="punct">&lt;</span><span class="tag">title</span><span class="punct">&gt;</span>Example Simulation<span class="punct">&lt;/</span><span class="tag">title</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;/</span><span class="tag">head</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;</span><span class="tag">body</span><span class="punct">&gt;</span>
+    <span class="punct">&lt;</span><span class="tag">canvas</span> <span class="attr">id</span><span class="punct">=</span><span class="str">"canvas"</span><span class="punct">&gt;&lt;/</span><span class="tag">canvas</span><span class="punct">&gt;</span>
+    <span class="punct">&lt;</span><span class="tag">script</span> <span class="attr">type</span><span class="punct">=</span><span class="str">"module"</span> <span class="attr">src</span><span class="punct">=</span><span class="str">"main.js"</span><span class="punct">&gt;&lt;/</span><span class="tag">script</span><span class="punct">&gt;</span>
+  <span class="punct">&lt;/</span><span class="tag">body</span><span class="punct">&gt;</span>
+<span class="punct">&lt;/</span><span class="tag">html</span><span class="punct">&gt;</span></code></pre>
+            </div>
+
+            <h3 id="yfpe-canvas-setup">Canvas Setup</h3>
+
+            <p>Next, create <code>main.js</code> and initialize the canvas. Gnist performs only the simulation, so the application is responsible for rendering the particles.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">canvas</span> <span class="punct">=</span> <span class="name">document</span><span class="punct">.</span><span class="name">getElementById</span><span class="punct">(</span><span class="str">'canvas'</span><span class="punct">);</span>
+<span class="kw">const</span> <span class="name">ctx</span> <span class="punct">=</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">getContext</span><span class="punct">(</span><span class="str">'2d'</span><span class="punct">);</span>
+
+<span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">=</span> <span class="lit">800</span><span class="punct">;</span>
+<span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">=</span> <span class="lit">600</span><span class="punct">;</span></code></pre>
+            </div>
+
+            <h3 id="yfpe-main-loop">Main Loop</h3>
+
+            <p>Next, create the application's main loop. Each frame, it advances the simulation and renders the updated particle state.</p>
+
+            <p><code>dt</code> represents the time elapsed since the previous frame, measured in seconds. We will pass it to Gnist, ensuring that the simulation runs at a consistent speed regardless of the frame rate.</p>
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">let</span> <span class="name">lastTime</span> <span class="punct">=</span> <span class="name">performance</span><span class="punct">.</span><span class="name">now</span><span class="punct">();</span>
+
+<span class="kw">function</span> <span class="name">loop</span><span class="punct">(</span><span class="name">currentTime</span><span class="punct">)</span> <span class="punct">{</span>
+  <span class="name">requestAnimationFrame</span><span class="punct">(</span><span class="name">loop</span><span class="punct">);</span>
+
+  <span class="kw">const</span> <span class="name">dt</span> <span class="punct">=</span> <span class="punct">(</span><span class="name">currentTime</span> <span class="punct">-</span> <span class="name">lastTime</span><span class="punct">)</span> <span class="punct">/</span> <span class="lit">1000</span><span class="punct">;</span>
+  <span class="name">lastTime</span> <span class="punct">=</span> <span class="name">currentTime</span><span class="punct">;</span>
+
+  <span class="name">engine</span><span class="punct">.</span><span class="title">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">);</span>
+
+  <span class="comm">// Render particles</span>
+<span class="punct">}</span>
+
+<span class="name">requestAnimationFrame</span><span class="punct">(</span><span class="name">loop</span><span class="punct">);</span></code></pre>
+            </div>
+
+            <h2 id="yfpe-setting-up-gnist">Setting up Gnist</h2>
+
+            <p>First, import the following classes from the Gnist package at the top of <code>main.js</code></p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kwd">import</span> <span class="punct">{</span>
+    <span class="name">Gnist</span><span class="punct">,</span>
+    <span class="name">LineEmitter</span><span class="punct">,</span>
+    <span class="name">EllipseEmitter</span><span class="punct">,</span>
+    <span class="name">ColorRamp</span><span class="punct">,</span>
+    <span class="name">OpacityFade</span><span class="punct">,</span>
+    <span class="name">Turbulence</span><span class="punct">,</span>
+    <span class="name">ScaleTween</span><span class="punct">,</span>
+    <span class="name">DirectionalForce</span><span class="punct">,</span>
+<span class="punct">}</span> <span class="kwd">from</span> <span class="str">'@gergelybardos/gnist'</span><span class="punct">;</span></code></pre>
+            </div>
+
+            <p>Next, create a <code>Gnist</code> instance and configure its culling bounds. Culling bounds specify the area outside of which particles are automatically removed regardless of their age. Setting culling bounds is optional but recommended for most applications. Since Gnist is renderer-agnostic and has no knowledge of the rendering context, the application may define these bounds if automatic particle cleanup is desired.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">engine</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Gnist</span><span class="punct">({</span>
+  <span class="name">cullingBounds</span><span class="punct">:</span> <span class="punct">{</span>
+    <span class="name">xMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
+    <span class="name">yMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
+    <span class="name">xMax</span><span class="punct">:</span> <span class="lit">800</span><span class="punct">,</span>
+    <span class="name">yMax</span><span class="punct">:</span> <span class="lit">600</span>
+  <span class="punct">}</span>
+<span class="punct">});</span></code></pre>
+            </div>
+
+            <h2 id="yfpe-rendering-the-particles">Rendering the Particles</h2>
+
+            <p>Gnist does not render particles directly. Instead, it exposes the current simulation state through the <code>engine.particles</code> array, which can be rendered using any rendering system. In this example, we use the Canvas 2D API to draw each particle as a small colored rectangle. It is up to the application to interpret the particle data; the same state can be used to create simple shapes, sprites, textures, or custom visual effects. The rendering code in this example is intentionally simple.</p>
+
+            <p>Add the following code inside your main loop:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="name">ctx</span><span class="punct">.</span><span class="name">fillStyle</span> <span class="punct">=</span> <span class="str">'#171228'</span><span class="punct">;</span>
+<span class="name">ctx</span><span class="punct">.</span><span class="title">fillRect</span><span class="punct">(</span><span class="num">0</span><span class="punct">,</span> <span class="num">0</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span><span class="punct">);</span>
+
+<span class="kwd">const</span> <span class="name">particles</span> <span class="punct">=</span> <span class="name">engine</span><span class="punct">.</span><span class="name">particles</span><span class="punct">;</span>
+<span class="kwd">for</span> <span class="punct">(</span><span class="kwd">let</span> <span class="name">i</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">;</span> <span class="name">i</span> <span class="punct">&lt;</span> <span class="name">particles</span><span class="punct">.</span><span class="name">length</span><span class="punct">;</span> <span class="name">i</span><span class="punct">++) {</span>
+    <span class="kwd">const</span> <span class="name">p</span> <span class="punct">=</span> <span class="name">particles</span><span class="punct">[</span><span class="name">i</span><span class="punct">];</span>
+    <span class="kwd">const</span> <span class="punct">{</span> <span class="name">r</span><span class="punct">,</span> <span class="name">g</span><span class="punct">,</span> <span class="name">b</span> <span class="punct">}</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">;</span>
+    <span class="kwd">const</span> <span class="name">a</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">opacity</span><span class="punct">;</span>
+    <span class="kwd">const</span> <span class="name">size</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">size</span><span class="punct">;</span>
+    <span class="kwd">const</span> <span class="name">halfSize</span> <span class="punct">=</span> <span class="name">size</span> <span class="punct">/</span> <span class="num">2</span><span class="punct">;</span>
+
+    <span class="name">ctx</span><span class="punct">.</span><span class="title">save</span><span class="punct">();</span>
+
+    <span class="name">ctx</span><span class="punct">.</span><span class="title">translate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">x</span><span class="punct">,</span> <span class="name">p</span><span class="punct">.</span><span class="name">y</span><span class="punct">);</span>
+    <span class="name">ctx</span><span class="punct">.</span><span class="title">rotate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">rotation</span><span class="punct">);</span>
+
+    <span class="name">ctx</span><span class="punct">.</span><span class="name">fillStyle</span> <span class="punct">=</span> <span class="str">`rgba(${</span><span class="name">r</span><span class="str">}, ${</span><span class="name">g</span><span class="str">}, ${</span><span class="name">b</span><span class="str">}, ${</span><span class="name">a</span><span class="str">})`</span><span class="punct">;</span>
+    <span class="name">ctx</span><span class="punct">.</span><span class="title">fillRect</span><span class="punct">(-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="punct">-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="name">size</span><span class="punct">,</span> <span class="name">size</span><span class="punct">);</span>
+
+    <span class="name">ctx</span><span class="punct">.</span><span class="title">restore</span><span class="punct">();</span>
+<span class="punct">}</span></code></pre>
+            </div>
+
+            <h2 id="yfpe-building-the-campfire">Building the Campfire</h2>
+
+            <h3 id="yfpe-flames">Flames</h3>
+
+            <p>With the main engine initialized, let's add the flame effect to the simulation:</p>
+
+            <ul>
+              <li>Instantiate <code>EllipseEmitter</code>.</li>
+              <li>Add a <code>ColorRamp</code> visual modifier to transition flame colors over time.</li>
+              <li>Add an <code>OpacityFade</code> visual modifier to smoothly fade particles out before death.</li>
+              <li>Apply a <code>Turbulence</code> path modifier to emulate chaotic flame movement.</li>
+              <li>Attach all modifiers to the flame emitter.</li>
+            </ul>
+
+            <p>Add the following code right after instantiating the main <code>Gnist</code> class:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">flames</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">EllipseEmitter</span><span class="punct">({</span>
+    <span class="name">x</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">y</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">-</span> <span class="lit">50</span><span class="punct">,</span>
+    <span class="name">radiusX</span><span class="punct">:</span> <span class="lit">60</span><span class="punct">,</span>
+    <span class="name">radiusY</span><span class="punct">:</span> <span class="lit">40</span><span class="punct">,</span>
+    <span class="name">particlesPerSecond</span><span class="punct">:</span> <span class="lit">200</span><span class="punct">,</span>
+    <span class="name">particleBlueprint</span><span class="punct">: {</span>
+        <span class="name">lifespan</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">2</span><span class="punct">],</span>
+        <span class="name">speed</span><span class="punct">: [</span><span class="lit">50</span><span class="punct">,</span> <span class="lit">75</span><span class="punct">],</span>
+        <span class="name">direction</span><span class="punct">: [</span><span class="lit">0</span><span class="punct">,</span> <span class="punct">-</span><span class="name">Math</span><span class="punct">.</span><span class="name">PI</span><span class="punct">],</span>
+        <span class="name">size</span><span class="punct">: [</span><span class="lit">7</span><span class="punct">,</span> <span class="lit">14</span><span class="punct">],</span>
+    <span class="punct">}</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">flameColors</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ColorRamp</span><span class="punct">({</span>
+    <span class="name">colors</span><span class="punct">: [</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">255</span><span class="punct">,</span> <span class="lit">230</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">245</span><span class="punct">,</span> <span class="lit">160</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">220</span><span class="punct">,</span> <span class="lit">90</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">170</span><span class="punct">,</span> <span class="lit">40</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">110</span><span class="punct">,</span> <span class="lit">20</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">220</span><span class="punct">,</span> <span class="lit">60</span><span class="punct">,</span> <span class="lit">10</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">140</span><span class="punct">,</span> <span class="lit">25</span><span class="punct">,</span> <span class="lit">5</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">60</span><span class="punct">,</span> <span class="lit">10</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">],</span>
+    <span class="punct">]</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">flameFade</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">OpacityFade</span><span class="punct">();</span>
+
+<span class="kw">const</span> <span class="name">noise</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Turbulence</span><span class="punct">({</span>
+    <span class="name">strength</span><span class="punct">: [</span><span class="lit">200</span><span class="punct">,</span> <span class="lit">750</span><span class="punct">],</span>
+    <span class="name">scale</span><span class="punct">:</span> <span class="lit">1</span>
+<span class="punct">});</span>
+
+<span class="name">flames</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">flameColors</span><span class="punct">);</span>
+<span class="name">flames</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">flameFade</span><span class="punct">);</span>
+<span class="name">flames</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">noise</span><span class="punct">);</span></code></pre>
+            </div>
+
+            <h3 id="yfpe-smoke">Smoke</h3>
+
+            <p>Next, we will add some smoke to our campfire simulation:</p>
+
+            <ul>
+              <li>Instantiate <code>LineEmitter</code>.</li>
+              <li>Add an <code>OpacityFade</code> visual modifier to smoothly fade particles out before death.</li>
+              <li>Apply a <code>ScaleTween</code> visual modifier to emulate rising smoke effect.</li>
+              <li>Attach all modifiers to the smoke emitter.</li>
+            </ul>
+
+            <p>Add the following code right after configuring the flames:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">smoke</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span>
+    <span class="name">x1</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span> <span class="punct">-</span> <span class="lit">50</span><span class="punct">,</span>
+    <span class="name">y1</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">-</span> <span class="lit">25</span><span class="punct">,</span>
+    <span class="name">x2</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span> <span class="punct">+</span> <span class="lit">50</span><span class="punct">,</span>
+    <span class="name">y2</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">-</span> <span class="lit">25</span><span class="punct">,</span>
+    <span class="name">particlesPerSecond</span><span class="punct">:</span> <span class="lit">100</span><span class="punct">,</span>
+    <span class="name">particleBlueprint</span><span class="punct">: {</span>
+        <span class="name">angularVelocity</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">3</span><span class="punct">],</span>
+        <span class="name">lifespan</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">7</span><span class="punct">],</span>
+        <span class="name">speed</span><span class="punct">: [</span><span class="lit">20</span><span class="punct">,</span> <span class="lit">60</span><span class="punct">],</span>
+        <span class="name">direction</span><span class="punct">: [</span>
+            <span class="punct">-</span><span class="lit">7</span> <span class="punct">*</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">/</span> <span class="lit">12</span><span class="punct">,</span>
+            <span class="punct">-</span><span class="lit">5</span> <span class="punct">*</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">/</span> <span class="lit">12</span><span class="punct">,</span>
+        <span class="punct">],</span>
+        <span class="name">size</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">2</span><span class="punct">],</span>
+        <span class="name">color</span><span class="punct">: [</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">255</span><span class="punct">,</span> <span class="lit">255</span><span class="punct">],</span>
+    <span class="punct">}</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">smokeFade</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">OpacityFade</span><span class="punct">({</span>
+    <span class="name">startOpacity</span><span class="punct">:</span> <span class="lit">0.1</span><span class="punct">,</span>
+    <span class="name">endOpacity</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">smokeScaling</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ScaleTween</span><span class="punct">({</span>
+    <span class="name">startScale</span><span class="punct">:</span> <span class="lit">0.5</span><span class="punct">,</span>
+    <span class="name">endScale</span><span class="punct">:</span> <span class="lit">40</span><span class="punct">,</span>
+<span class="punct">});</span>
+
+<span class="name">smoke</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">smokeFade</span><span class="punct">);</span>
+<span class="name">smoke</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">smokeScaling</span><span class="punct">);</span></code></pre>
+            </div>
+
+            <h3 id="yfpe-embers">Embers</h3>
+
+            <p>To make our scene a bit more detailed, we will add some floating embers to the campfire:</p>
+
+             <ul>
+              <li>Instantiate <code>EllipseEmitter</code>.</li>
+               <li>Add the same <code>ColorRamp</code> instance (<code>flameColors</code>) used by the flame emitter.</li>
+            </ul>
+
+            <p>Add the following code right after configuring the smoke:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">embers</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">EllipseEmitter</span><span class="punct">({</span>
+    <span class="name">x</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">y</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">-</span> <span class="lit">50</span><span class="punct">,</span>
+    <span class="name">radiusX</span><span class="punct">:</span> <span class="lit">60</span><span class="punct">,</span>
+    <span class="name">radiusY</span><span class="punct">:</span> <span class="lit">40</span><span class="punct">,</span>
+    <span class="name">particlesPerSecond</span><span class="punct">:</span> <span class="lit">10</span><span class="punct">,</span>
+    <span class="name">particleBlueprint</span><span class="punct">: {</span>
+        <span class="name">lifespan</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">2</span><span class="punct">],</span>
+        <span class="name">speed</span><span class="punct">: [</span><span class="lit">100</span><span class="punct">,</span> <span class="lit">300</span><span class="punct">],</span>
+        <span class="name">direction</span><span class="punct">: [</span>
+            <span class="punct">-</span><span class="lit">7</span> <span class="punct">*</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">/</span> <span class="lit">12</span><span class="punct">,</span>
+            <span class="punct">-</span><span class="lit">5</span> <span class="punct">*</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">/</span> <span class="lit">12</span>
+        <span class="punct">],</span>
+        <span class="name">size</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">3</span><span class="punct">],</span>
+    <span class="punct">}</span>
+<span class="punct">});</span>
+
+<span class="name">embers</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">flameColors</span><span class="punct">);</span></code></pre>
+            </div>
+
+            <h3 id="yfpe-wind">Wind</h3>
+
+            <p>Let's add some wind to our simulation!</p>
+
+            <ul>
+              <li>Instantiate <code>DirectionalForce</code>.</li>
+              <li>Add the instance to the simulation as a global force to affect particles from all three emitters.</li>
+            </ul>
+
+            <p>Add the following code right after configuring the embers:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">wind</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">DirectionalForce</span><span class="punct">({</span>
+    <span class="name">ax</span><span class="punct">:</span> <span class="lit">15</span><span class="punct">,</span>
+    <span class="name">ay</span><span class="punct">:</span> <span class="punct">-</span><span class="lit">10</span><span class="punct">,</span>
+<span class="punct">});</span>
+
+<span class="name">engine</span><span class="punct">.</span><span class="name">addGlobalForce</span><span class="punct">(</span><span class="name">wind</span><span class="punct">);</span></code></pre>
+            </div>
+
+            <h2 id="yfpe-the-final-result">The Final Result</h2>
+
+            <p>One final thing to do is to register the emitters with the simulation. Add the following code right after configuring the global wind:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="name">engine</span><span class="punct">.</span><span class="name">addEmitter</span><span class="punct">(</span><span class="name">flames</span><span class="punct">);</span>
+<span class="name">engine</span><span class="punct">.</span><span class="name">addEmitter</span><span class="punct">(</span><span class="name">smoke</span><span class="punct">);</span>
+<span class="name">engine</span><span class="punct">.</span><span class="name">addEmitter</span><span class="punct">(</span><span class="name">embers</span><span class="punct">);</span></code></pre>
+            </div>
+
+            <p>After that, the final code of <code>main.js</code> should look like something like this:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">import</span> <span class="punct">{</span>
+    <span class="name">Gnist</span><span class="punct">,</span>
+    <span class="name">LineEmitter</span><span class="punct">,</span>
+    <span class="name">EllipseEmitter</span><span class="punct">,</span>
+    <span class="name">ColorRamp</span><span class="punct">,</span>
+    <span class="name">OpacityFade</span><span class="punct">,</span>
+    <span class="name">Turbulence</span><span class="punct">,</span>
+    <span class="name">ScaleTween</span><span class="punct">,</span>
+    <span class="name">DirectionalForce</span><span class="punct">,</span>
+<span class="punct">}</span> <span class="kw">from</span> <span class="str">'@gergelybardos/gnist'</span><span class="punct">;</span>
+
+<span class="kw">const</span> <span class="name">canvas</span> <span class="punct">=</span> <span class="name">document</span><span class="punct">.</span><span class="name">getElementById</span><span class="punct">(</span><span class="str">'canvas'</span><span class="punct">);</span>
+<span class="kw">const</span> <span class="name">ctx</span> <span class="punct">=</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">getContext</span><span class="punct">(</span><span class="str">'2d'</span><span class="punct">);</span>
+
+<span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">=</span> <span class="lit">800</span><span class="punct">;</span>
+<span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">=</span> <span class="lit">600</span><span class="punct">;</span>
+
+<span class="kw">let</span> <span class="name">lastTime</span> <span class="punct">=</span> <span class="name">performance</span><span class="punct">.</span><span class="name">now</span><span class="punct">();</span>
+
+<span class="kw">const</span> <span class="name">engine</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Gnist</span><span class="punct">({</span>
+    <span class="name">cullingBounds</span><span class="punct">: {</span>
+        <span class="name">xMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
+        <span class="name">yMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
+        <span class="name">xMax</span><span class="punct">:</span> <span class="lit">800</span><span class="punct">,</span>
+        <span class="name">yMax</span><span class="punct">:</span> <span class="lit">600</span>
+    <span class="punct">}</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">flames</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">EllipseEmitter</span><span class="punct">({</span>
+    <span class="name">x</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">y</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">-</span> <span class="lit">50</span><span class="punct">,</span>
+    <span class="name">radiusX</span><span class="punct">:</span> <span class="lit">60</span><span class="punct">,</span>
+    <span class="name">radiusY</span><span class="punct">:</span> <span class="lit">40</span><span class="punct">,</span>
+    <span class="name">particlesPerSecond</span><span class="punct">:</span> <span class="lit">200</span><span class="punct">,</span>
+    <span class="name">particleBlueprint</span><span class="punct">: {</span>
+        <span class="name">lifespan</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">2</span><span class="punct">],</span>
+        <span class="name">speed</span><span class="punct">: [</span><span class="lit">50</span><span class="punct">,</span> <span class="lit">75</span><span class="punct">],</span>
+        <span class="name">direction</span><span class="punct">: [</span><span class="lit">0</span><span class="punct">,</span> <span class="punct">-</span><span class="name">Math</span><span class="punct">.</span><span class="name">PI</span><span class="punct">],</span>
+        <span class="name">size</span><span class="punct">: [</span><span class="lit">7</span><span class="punct">,</span> <span class="lit">14</span><span class="punct">],</span>
+    <span class="punct">}</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">flameColors</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ColorRamp</span><span class="punct">({</span>
+    <span class="name">colors</span><span class="punct">: [</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">255</span><span class="punct">,</span> <span class="lit">230</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">245</span><span class="punct">,</span> <span class="lit">160</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">220</span><span class="punct">,</span> <span class="lit">90</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">170</span><span class="punct">,</span> <span class="lit">40</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">110</span><span class="punct">,</span> <span class="lit">20</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">220</span><span class="punct">,</span> <span class="lit">60</span><span class="punct">,</span> <span class="lit">10</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">140</span><span class="punct">,</span> <span class="lit">25</span><span class="punct">,</span> <span class="lit">5</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">60</span><span class="punct">,</span> <span class="lit">10</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">],</span>
+    <span class="punct">]</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">flameFade</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">OpacityFade</span><span class="punct">();</span>
+
+<span class="kw">const</span> <span class="name">noise</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Turbulence</span><span class="punct">({</span>
+    <span class="name">strength</span><span class="punct">: [</span><span class="lit">200</span><span class="punct">,</span> <span class="lit">750</span><span class="punct">],</span>
+    <span class="name">scale</span><span class="punct">:</span> <span class="lit">1</span>
+<span class="punct">});</span>
+
+<span class="name">flames</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">flameColors</span><span class="punct">);</span>
+<span class="name">flames</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">flameFade</span><span class="punct">);</span>
+<span class="name">flames</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">noise</span><span class="punct">);</span>
+
+<span class="kw">const</span> <span class="name">smoke</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span>
+    <span class="name">x1</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span> <span class="punct">-</span> <span class="lit">50</span><span class="punct">,</span>
+    <span class="name">y1</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">-</span> <span class="lit">25</span><span class="punct">,</span>
+    <span class="name">x2</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span> <span class="punct">+</span> <span class="lit">50</span><span class="punct">,</span>
+    <span class="name">y2</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">-</span> <span class="lit">25</span><span class="punct">,</span>
+    <span class="name">particlesPerSecond</span><span class="punct">:</span> <span class="lit">100</span><span class="punct">,</span>
+    <span class="name">particleBlueprint</span><span class="punct">: {</span>
+        <span class="name">angularVelocity</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">3</span><span class="punct">],</span>
+        <span class="name">lifespan</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">7</span><span class="punct">],</span>
+        <span class="name">speed</span><span class="punct">: [</span><span class="lit">20</span><span class="punct">,</span> <span class="lit">60</span><span class="punct">],</span>
+        <span class="name">direction</span><span class="punct">: [</span>
+            <span class="punct">-</span><span class="lit">7</span> <span class="punct">*</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">/</span> <span class="lit">12</span><span class="punct">,</span>
+            <span class="punct">-</span><span class="lit">5</span> <span class="punct">*</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">/</span> <span class="lit">12</span><span class="punct">,</span>
+        <span class="punct">],</span>
+        <span class="name">size</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">2</span><span class="punct">],</span>
+        <span class="name">color</span><span class="punct">: [</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">255</span><span class="punct">,</span> <span class="lit">255</span><span class="punct">],</span>
+    <span class="punct">}</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">smokeFade</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">OpacityFade</span><span class="punct">({</span>
+    <span class="name">startOpacity</span><span class="punct">:</span> <span class="lit">0.1</span><span class="punct">,</span>
+    <span class="name">endOpacity</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">smokeScaling</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ScaleTween</span><span class="punct">({</span>
+    <span class="name">startScale</span><span class="punct">:</span> <span class="lit">0.5</span><span class="punct">,</span>
+    <span class="name">endScale</span><span class="punct">:</span> <span class="lit">40</span><span class="punct">,</span>
+<span class="punct">});</span>
+
+<span class="name">smoke</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">smokeFade</span><span class="punct">);</span>
+<span class="name">smoke</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">smokeScaling</span><span class="punct">);</span>
+
+<span class="kw">const</span> <span class="name">embers</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">EllipseEmitter</span><span class="punct">({</span>
+    <span class="name">x</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">y</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">-</span> <span class="lit">50</span><span class="punct">,</span>
+    <span class="name">radiusX</span><span class="punct">:</span> <span class="lit">60</span><span class="punct">,</span>
+    <span class="name">radiusY</span><span class="punct">:</span> <span class="lit">40</span><span class="punct">,</span>
+    <span class="name">particlesPerSecond</span><span class="punct">:</span> <span class="lit">10</span><span class="punct">,</span>
+    <span class="name">particleBlueprint</span><span class="punct">: {</span>
+        <span class="name">lifespan</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">2</span><span class="punct">],</span>
+        <span class="name">speed</span><span class="punct">: [</span><span class="lit">100</span><span class="punct">,</span> <span class="lit">300</span><span class="punct">],</span>
+        <span class="name">direction</span><span class="punct">: [</span>
+            <span class="punct">-</span><span class="lit">7</span> <span class="punct">*</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">/</span> <span class="lit">12</span><span class="punct">,</span>
+            <span class="punct">-</span><span class="lit">5</span> <span class="punct">*</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">/</span> <span class="lit">12</span>
+        <span class="punct">],</span>
+        <span class="name">size</span><span class="punct">: [</span><span class="lit">1</span><span class="punct">,</span> <span class="lit">3</span><span class="punct">],</span>
+    <span class="punct">}</span>
+<span class="punct">});</span>
+
+<span class="name">embers</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">flameColors</span><span class="punct">);</span>
+
+<span class="kw">const</span> <span class="name">wind</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">DirectionalForce</span><span class="punct">({</span>
+    <span class="name">ax</span><span class="punct">:</span> <span class="lit">15</span><span class="punct">,</span>
+    <span class="name">ay</span><span class="punct">:</span> <span class="punct">-</span><span class="lit">10</span><span class="punct">,</span>
+<span class="punct">});</span>
+
+<span class="name">engine</span><span class="punct">.</span><span class="name">addGlobalForce</span><span class="punct">(</span><span class="name">wind</span><span class="punct">);</span>
+
+<span class="name">engine</span><span class="punct">.</span><span class="name">addEmitter</span><span class="punct">(</span><span class="name">flames</span><span class="punct">);</span>
+<span class="name">engine</span><span class="punct">.</span><span class="name">addEmitter</span><span class="punct">(</span><span class="name">smoke</span><span class="punct">);</span>
+<span class="name">engine</span><span class="punct">.</span><span class="name">addEmitter</span><span class="punct">(</span><span class="name">embers</span><span class="punct">);</span>
+
+<span class="kw">function</span> <span class="name">loop</span><span class="punct">(</span><span class="name">currentTime</span><span class="punct">) {</span>
+    <span class="name">requestAnimationFrame</span><span class="punct">(</span><span class="name">loop</span><span class="punct">);</span>
+
+    <span class="kw">const</span> <span class="name">dt</span> <span class="punct">= (</span><span class="name">currentTime</span> <span class="punct">-</span> <span class="name">lastTime</span><span class="punct">) /</span> <span class="lit">1000</span><span class="punct">;</span>
+    <span class="name">lastTime</span> <span class="punct">=</span> <span class="name">currentTime</span><span class="punct">;</span>
+
+    <span class="name">engine</span><span class="punct">.</span><span class="name">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">);</span>
+
+    <span class="name">ctx</span><span class="punct">.</span><span class="name">fillStyle</span> <span class="punct">=</span> <span class="str">'#171228'</span><span class="punct">;</span>
+    <span class="name">ctx</span><span class="punct">.</span><span class="name">fillRect</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span><span class="punct">);</span>
+
+    <span class="kw">const</span> <span class="name">particles</span> <span class="punct">=</span> <span class="name">engine</span><span class="punct">.</span><span class="name">particles</span><span class="punct">;</span>
+    <span class="kw">for</span> <span class="punct">(</span><span class="kw">let</span> <span class="name">i</span> <span class="punct">=</span> <span class="lit">0</span><span class="punct">;</span> <span class="name">i</span> <span class="punct">&lt;</span> <span class="name">particles</span><span class="punct">.</span><span class="name">length</span><span class="punct">;</span> <span class="name">i</span><span class="punct">++) {</span>
+        <span class="kw">const</span> <span class="name">p</span> <span class="punct">=</span> <span class="name">particles</span><span class="punct">[</span><span class="name">i</span><span class="punct">];</span>
+        <span class="kw">const</span> <span class="punct">{</span> <span class="name">r</span><span class="punct">,</span> <span class="name">g</span><span class="punct">,</span> <span class="name">b</span> <span class="punct">}</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">;</span>
+        <span class="kw">const</span> <span class="name">a</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">opacity</span><span class="punct">;</span>
+        <span class="kw">const</span> <span class="name">size</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">size</span><span class="punct">;</span>
+        <span class="kw">const</span> <span class="name">halfSize</span> <span class="punct">=</span> <span class="name">size</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">;</span>
+
+        <span class="name">ctx</span><span class="punct">.</span><span class="name">save</span><span class="punct">();</span>
+
+        <span class="name">ctx</span><span class="punct">.</span><span class="name">translate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">x</span><span class="punct">,</span> <span class="name">p</span><span class="punct">.</span><span class="name">y</span><span class="punct">);</span>
+        <span class="name">ctx</span><span class="punct">.</span><span class="name">rotate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">rotation</span><span class="punct">);</span>
+
+        <span class="name">ctx</span><span class="punct">.</span><span class="name">fillStyle</span> <span class="punct">=</span> <span class="str">`rgba(${</span><span class="name">r</span><span class="str">}, ${</span><span class="name">g</span><span class="str">}, ${</span><span class="name">b</span><span class="str">}, ${</span><span class="name">a</span><span class="str">})`</span><span class="punct">;</span>
+        <span class="name">ctx</span><span class="punct">.</span><span class="name">fillRect</span><span class="punct">(-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="punct">-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="name">size</span><span class="punct">,</span> <span class="name">size</span><span class="punct">);</span>
+
+        <span class="name">ctx</span><span class="punct">.</span><span class="name">restore</span><span class="punct">();</span>
+    <span class="punct">}</span>
+<span class="punct">}</span>
+<span class="name">requestAnimationFrame</span><span class="punct">(</span><span class="name">loop</span><span class="punct">);</span></code></pre>
+            </div>
+
+            <p>To verify that everything is working correctly, run the following:</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="name">npm</span> <span class="kw">run</span> <span class="str">dev</span></code></pre>
+            </div>
           </section>
         </article>
 
@@ -732,7 +1259,7 @@
               <p>Because the simulation is updated in discrete time steps, particles may overshoot the force center and continue on the opposite side before being pulled back. If particles should disappear upon reaching the center, use the <code>cullingRadius</code> property.</p>
             </blockquote>
 
-            <p>Below is an example of a radial force with and without culling. While some particles escape, most are absorbed. Without culling, however, particles continue orbiting the force until they reach the end of their lifespan. The only difference between the two examples is whether <code>cullingRadius</code>cullingRadius is set.</p>
+            <p>Below is an example of a radial force with and without culling. While some particles escape, most are absorbed. Without culling, however, particles continue orbiting the force until they reach the end of their lifespan. The only difference between the two examples is whether <code>cullingRadius</code> is set.</p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
@@ -915,7 +1442,7 @@
                   <td><code>amplitude</code></td>
                   <td><code>number | number[]</code></td>
                   <td><code>10</code></td>
-                  <td>Wave amplitude (in pixels), or a <code>[start, end]</code> range array interpolated over particle lifespan. Within a <code>SineWave</code> instance, amplitude is stored and exposed as <code>startAmplitude</code> and <code>endAmiplitude</code>.</td>
+                  <td>Wave amplitude (in pixels), or a <code>[start, end]</code> range array interpolated over particle lifespan. Within a <code>SineWave</code> instance, amplitude is stored and exposed as <code>startAmplitude</code> and <code>endAmplitude</code>.</td>
                 </tr>
                 <tr>
                   <td><code>frequency</code></td>
@@ -1258,12 +1785,6 @@
           </section>
         </article>
 
-        <article id="page-campfire" class="page">
-          <section>
-            <h1 id="campfire">Campfire</h1>
-          </section>
-        </article>
-
         <article id="page-rendering-with-webgl" class="page">
           <section>
             <h1 id="rendering-with-webgl">Rendering with WebGL</h1>
@@ -1279,6 +1800,41 @@
           <ul>
             <li><a href="#overview-what-is-gnist">What is Gnist?</a></li>
             <li><a href="#overview-architecture-concepts">Architecture Concepts</a></li>
+          </ul>
+        </nav>
+
+        <nav id="sub-your-first-particle-system" class="sub-toc-group">
+          <ul>
+            <li><a href="#yfpe-what-youll-create">What You'll Create</a></li>
+            <li><a href="#yfpe-prerequisites">Prerequisites</a></li>
+            <li>
+              <a href="#yfpe-project-setup">Project Setup</a>
+              <ul>
+                <li><a href="#yfpe-initialize-a-new-project">Initialize a New Project</a></li>
+                <li><a href="#yfpe-install-vite">Install Vite</a></li>
+                <li><a href="#yfpe-install-gnist">Install Gnist</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#yfpe-creating-the-application-skeleton">Creating the Application Skeleton</a>
+              <ul>
+                <li><a href="#yfpe-html-setup">HTML Setup</a></li>
+                <li><a href="#yfpe-canvas-setup">Canvas Setup</a></li>
+                <li><a href="#yfpe-main-loop">Main Loop</a></li>
+              </ul>
+            </li>
+            <li><a href="#yfpe-setting-up-gnist">Setting up Gnist</a></li>
+            <li><a href="#yfpe-rendering-the-particles">Rendering the Particles</a></li>
+            <li>
+              <a href="#yfpe-building-the-campfire">Building the Campfire</a>
+              <ul>
+                <li><a href="#yfpe-flames">Flames</a></li>
+                <li><a href="#yfpe-smoke">Smoke</a></li>
+                <li><a href="#yfpe-embers">Embers</a></li>
+                <li><a href="#yfpe-wind">Wind</a></li>
+              </ul>
+            </li>
+            <li><a href="#yfpe-the-final-result">The Final Result</a></li>
           </ul>
         </nav>
 
