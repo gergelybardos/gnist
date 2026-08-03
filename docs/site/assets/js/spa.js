@@ -1,4 +1,5 @@
 const DEFAULT_PAGE = 'overview';
+const DEFAULT_TITLE = 'Gnist Guide';
 
 function getActivePageFromHash() {
     const hash = window.location.hash.replace('#', '');
@@ -40,6 +41,11 @@ function renderView() {
         link.classList.toggle('active', link.dataset.pageLink === activePageId);
     });
 
+    const activePage = document.getElementById(`page-${activePageId}`);
+    const pageHeading = activePage?.querySelector('h1');
+
+    document.title = pageHeading ? `${pageHeading.textContent} - ${DEFAULT_TITLE}` : DEFAULT_TITLE;
+
     if (targetHash && targetHash !== activePageId) {
         const targetSection = document.getElementById(targetHash);
 
@@ -53,3 +59,4 @@ function renderView() {
 
 window.addEventListener('hashchange', renderView);
 window.addEventListener('DOMContentLoaded', renderView);
+
