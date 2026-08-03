@@ -16,6 +16,7 @@ export class Modifier {
     /**
      * Gets the architectural category of the modifier.
      * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
+     * @ignore
      * @abstract
      * @type {string}
      * @returns {string}
@@ -56,6 +57,7 @@ export class Modifier {
 
     /**
      * Applies visual or lifecycle changes to a particle based on its normalized age.
+     * @ignore
      * @abstract
      * @param {Particle} _particle Particle instance to affect.
      * @param {number} _normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).

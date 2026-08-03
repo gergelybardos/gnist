@@ -9,6 +9,7 @@
 /**
  * Architectural categories for particle modifiers.
  * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
+ * @ignore
  * @typedef {object} ModifierCategoryValues
  * @property {string} VISUAL Modifiers that manipulate visual appearance (e.g., color, opacity, scale).
  * @property {string} PATH Modifiers that manipulate trajectories (e.g., zig-zag, orbit).

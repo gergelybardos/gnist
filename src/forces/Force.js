@@ -43,6 +43,7 @@ export class Force {
 
     /**
      * Applies acceleration to a particle's velocity.
+     * @ignore
      * @abstract
      * @param {Particle} _particle Particle instance to affect.
      * @param {number} _dt Time elapsed since the last frame (in seconds).

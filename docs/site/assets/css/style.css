@@ -374,7 +374,7 @@ var {
 /* Callout Boxes */
 
 .callout {
-  margin: 1.5rem 0;
+  margin: 3rem 0;
   padding: 0.85rem 1.15rem;
   border-left: 4px solid var(--callout-color);
   border-radius: 0 var(--border-radius) var(--border-radius) 0;

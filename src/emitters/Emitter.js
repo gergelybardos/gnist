@@ -40,7 +40,6 @@ import { ModifierCategory, Source } from '../shared/Constants.js';
 
 /**
  * Abstract base class for particle emitters.
- * @ignore
  * @abstract
  * @class
  */

@@ -24,6 +24,7 @@ export class Spin extends Modifier {
     /**
      * Gets the architectural category of the modifier.
      * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
+     * @ignore
      * @type {string}
      * @returns {string}
      */

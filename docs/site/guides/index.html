@@ -73,9 +73,7 @@
             <p>Gnist is renderer-agnostic. It decouples simulation from timing and rendering, exposing raw state data that can be rendered with Canvas 2D, WebGL, or any custom JavaScript runtime.</p>
 
             <p>While running the simulation on the GPU could improve raw performance, it would also significantly increase API complexity. Gnist instead performs simulation on the CPU, prioritizing a simple and intuitive programming model. The engine is designed around an object-oriented, configuration-driven API, while keeping rendering separate from simulation. For custom rendering pipelines, particle data can still be exported as flat typed arrays for efficient GPU-based rendering.</p>
-          </section>
 
-          <section>
             <h2 id="overview-architecture-concepts">Architecture Concepts</h2>
 
             <p>The simulation pipeline revolves around four primary building blocks.</p>
@@ -105,6 +103,13 @@
               </li>
             </ul>
 
+            <blockquote class="callout note">
+              <div class="callout-title">
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+                <span>Note</span>
+              </div>
+              <p>Gnist is designed around composing its provided building blocks rather than extending the engine itself. Internal implementation details are not intended as extension points.</p>
+            </blockquote>
           </section>
         </article>
 

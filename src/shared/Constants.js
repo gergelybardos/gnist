@@ -4,6 +4,7 @@
 
 /**
  * Runtime constant mapping for modifier categories. For the list of available categories, see {@link ModifierCategoryValues}.
+ * @ignore
  * @type {ModifierCategoryValues}
  */
 export const ModifierCategory = Object.freeze({
