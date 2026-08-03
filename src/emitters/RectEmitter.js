@@ -99,12 +99,12 @@ export class RectEmitter extends Emitter {
     }
 
     /**
-     * Calculates the default emission direction angle radially outward or inward from the rectangle's center.
+     * Calculates the default emission direction angle based on the emitter geometry and source mode.
      * @override
-     * @param {Particle} particle Particle instance properties may be necessary for the calculation.
-     * @returns {number} The fallback direction angle (in radians).
+     * @param {Particle} particle Particle instance used to calculate the direction from its spawn position.
+     * @returns {number} The default direction angle (in radians).
      */
-    getDefaultDirection(particle) {
+    _getDefaultDirection(particle) {
         const centerX = this.x + this.width / 2;
         const centerY = this.y + this.height / 2;
         const outwardAngle = Math.atan2(particle.y - centerY, particle.x - centerX);

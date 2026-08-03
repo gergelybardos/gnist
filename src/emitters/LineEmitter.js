@@ -78,11 +78,11 @@ export class LineEmitter extends Emitter {
     }
 
     /**
-     * Calculates the default emission direction angle perpendicular to the line segment.
+     * Calculates the default emission direction angle based on the emitter geometry and source mode.
      * @override
-     * @returns {number} The fallback emission direction angle (in radians).
+     * @returns {number} The default emission direction angle (in radians).
      */
-    getDefaultDirection() {
+    _getDefaultDirection() {
         const dx = this.x2 - this.x1;
         const dy = this.y2 - this.y1;
         const lineAngle = Math.atan2(dy, dx);

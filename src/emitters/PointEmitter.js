@@ -20,4 +20,13 @@ export class PointEmitter extends Emitter {
         particle.x = this.x;
         particle.y = this.y;
     }
+
+    /**
+     * Calculates the default emission direction angle based on the emitter geometry and source mode.
+     * @override
+     * @returns {number} The default emission direction angle (in radians).
+     */
+    _getDefaultDirection() {
+        return 0;
+    }
 }

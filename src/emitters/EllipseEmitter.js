@@ -82,12 +82,12 @@ export class EllipseEmitter extends Emitter {
     }
 
     /**
-     * Calculates the default emission direction angle.
+     * Calculates the default emission direction angle based on the emitter geometry and source mode.
      * @override
-     * @param {Particle} particle Particle instance properties may be necessary for the calculation.
-     * @returns {number} The fallback emission direction angle (in radians).
+     * @param {Particle} particle Particle instance used to calculate the direction from its spawn position.
+     * @returns {number} The default emission direction angle (in radians).
      */
-    getDefaultDirection(particle) {
+    _getDefaultDirection(particle) {
         const dy = particle.y - this.y;
         const dx = particle.x - this.x;
 

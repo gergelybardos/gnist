@@ -358,11 +358,13 @@ export class Emitter {
     }
 
     /**
-     * Calculates the default emission direction angle based on the emitter's geometry and source mode.
+     * Calculates the default emission direction angle based on the emitter geometry and source mode.
      * This is a fallback value when no explicit `direction` was specified in the emitter config's `particleBlueprint`.
-     * @returns {number} The fallback emission direction angle (in radians).
+     * @ignore
+     * @param {Particle} [_particle] Particle instance. Subclasses may use this when calculating the direction.
+     * @returns {number} The default emission direction angle (in radians).
      */
-    getDefaultDirection() {
+    _getDefaultDirection(_particle) {
         return 0;
     }
 
@@ -377,7 +379,7 @@ export class Emitter {
         const blueprint = this.#particleBlueprint;
 
         const speed = this.#resolveNumber(blueprint.speed, 50);
-        const direction = this.#resolveNumber(blueprint.direction, this.getDefaultDirection(particle));
+        const direction = this.#resolveNumber(blueprint.direction, this._getDefaultDirection(particle));
 
         particle.vx = Math.cos(direction) * speed;
         particle.vy = Math.sin(direction) * speed;
