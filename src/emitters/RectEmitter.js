@@ -68,7 +68,7 @@ export class RectEmitter extends Emitter {
      * @param {Particle} particle Particle instance to initialize.
      * @returns {void}
      */
-    initParticle(particle) {
+    _initParticle(particle) {
         if (this.source === Source.VOLUME) {
             particle.x = this.x + Math.random() * this.width;
             particle.y = this.y + Math.random() * this.height;
@@ -95,7 +95,7 @@ export class RectEmitter extends Emitter {
             }
         }
 
-        super.initParticle(particle);
+        super._initParticle(particle);
     }
 
     /**

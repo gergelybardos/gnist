@@ -68,7 +68,7 @@ export class EllipseEmitter extends Emitter {
      * @param {Particle} particle Particle instance to initialize.
      * @returns {void}
      */
-    initParticle(particle) {
+    _initParticle(particle) {
         const angle = Math.random() * Math.PI * 2;
 
         const factor = this.source === Source.VOLUME
@@ -78,7 +78,7 @@ export class EllipseEmitter extends Emitter {
         particle.x = this.x + Math.cos(angle) * this.radiusX * factor;
         particle.y = this.y + Math.sin(angle) * this.radiusY * factor;
 
-        super.initParticle(particle);
+        super._initParticle(particle);
     }
 
     /**

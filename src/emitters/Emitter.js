@@ -315,7 +315,7 @@ export class Emitter {
         for (let i = 0; i < spawnCount; i++) {
             const particle = new Particle();
 
-            this.initParticle(particle);
+            this._initParticle(particle);
 
             particle.visualModifiers = this.#visualModifiers;
             particle.pathModifiers = this.#pathModifiers;
@@ -327,10 +327,11 @@ export class Emitter {
 
     /**
      * Sets up a particle's movement, visuals, and lifecycle state.
+     * @ignore
      * @param {Particle} particle Particle instance to initialize.
      * @returns {void}
      */
-    initParticle(particle) {
+    _initParticle(particle) {
         // Blueprint values may be specified either as an explicit value or as a range.
         // Ranges are resolved to a single random value via this.#resolveNumber().
 

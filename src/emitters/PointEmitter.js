@@ -14,8 +14,8 @@ export class PointEmitter extends Emitter {
      * @param {Particle} particle Particle instance to initialize.
      * @returns {void}
      */
-    initParticle(particle) {
-        super.initParticle(particle);
+    _initParticle(particle) {
+        super._initParticle(particle);
 
         particle.x = this.x;
         particle.y = this.y;

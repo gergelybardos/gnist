@@ -68,8 +68,8 @@ export class LineEmitter extends Emitter {
      * @param {Particle} particle Particle instance to initialize.
      * @returns {void}
      */
-    initParticle(particle) {
-        super.initParticle(particle);
+    _initParticle(particle) {
+        super._initParticle(particle);
 
         const t = Math.random();
 
