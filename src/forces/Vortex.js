@@ -18,7 +18,8 @@ import { Force } from './Force.js';
  * @property {number} [cullingRadius=0] Distance threshold from the center below which particles are marked dead, surrounded
  * by a frame-rate independent soft-aging buffer zone to prevent visual popping. Note that high velocities or long lifespans
  * may cause particles to mathematically bypass the center and slingshot outward. In such cases, increase this radius to
- * intercept particles before they reach their escape brink. Omit or set to 0 to disable.
+ * intercept particles before they reach their escape brink. Omit or set to 0 to disable. Stored internally as
+ * {@link Vortex#cullingRadius} and as a squared value in {@link Vortex#cullingRadiusSquared}.
  */
 
 /**
