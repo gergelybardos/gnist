@@ -1,0 +1,44 @@
+/**
+ * @import { ModifierConfig } from './Modifier.js';
+ */
+/**
+ * ColorRamp configuration options.
+ * Includes all properties from {@link ModifierConfig}.
+ * @typedef {object} ColorRampConfig
+ * @property {Array<Array<number>>} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
+ */
+/**
+ * Particle modifier that blends the color of particles over their lifespan by interpolating through an arbitrary number of colors.
+ * Colors are distributed evenly across particle lifespan.
+ * @class
+ * @extends Modifier
+ */
+export class ColorRamp extends Modifier {
+    /**
+     * Initializes a color ramp modifier with evenly distributed color stops.
+     * @constructor
+     * @param {ColorRampConfig} [config={}] ColorRamp configuration options.
+     */
+    constructor(config?: ColorRampConfig);
+    /**
+     * Blends a particle's color channels based on its normalized age.
+     * @override
+     * @param {Particle} particle Particle instance to affect.
+     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @returns {void}
+     */
+    override update(particle: Particle, normalizedAge: number): void;
+    #private;
+}
+/**
+ * ColorRamp configuration options.
+ * Includes all properties from {@link ModifierConfig}.
+ */
+export type ColorRampConfig = {
+    /**
+     * Array of RGB color arrays.
+     */
+    colors?: number[][] | undefined;
+};
+import { Modifier } from '../Modifier.js';
+import { Particle } from '../../core/Particle.js';
