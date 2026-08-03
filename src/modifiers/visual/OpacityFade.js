@@ -52,8 +52,8 @@ export class OpacityFade extends Modifier {
     constructor(config = {}) {
         super(config);
 
-        this.startOpacity = config.startOpacity ?? 1.0;
-        this.endOpacity = config.endOpacity ?? 0.0;
+        this.startOpacity = Math.max(0, Math.min(1, config.startOpacity ?? 1.0));
+        this.endOpacity = Math.max(0, Math.min(1, config.endOpacity ?? 0.0));
     }
 
     /**

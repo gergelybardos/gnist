@@ -346,11 +346,11 @@ export class Emitter {
 
         const pColor = particle.color;
         const bColor = blueprint.color;
-        pColor.r = bColor?.r ?? 255;
-        pColor.g = bColor?.g ?? 255;
-        pColor.b = bColor?.b ?? 255;
+        pColor.r = Math.max(0, Math.min(255, bColor?.r ?? 255));
+        pColor.g = Math.max(0, Math.min(255, bColor?.g ?? 255));
+        pColor.b = Math.max(0, Math.min(255, bColor?.b ?? 255));
 
-        particle.opacity = this.#resolveNumber(blueprint.opacity, particle.opacity);
+        particle.opacity = Math.max(0, Math.min(1, this.#resolveNumber(blueprint.opacity, particle.opacity)));
 
         particle.age = 0;
         particle.lifespan = this.#resolveNumber(blueprint.lifespan, particle.lifespan);
