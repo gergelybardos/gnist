@@ -4,6 +4,7 @@ import {
     Gnist,
     LinearDrag,
     OpacityFade,
+    ParticleFormat,
     PointEmitter,
     ScaleTween,
     SineWave,
@@ -340,7 +341,7 @@ export class Sandbox {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.#glQuadBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, quadVertices, gl.STATIC_DRAW);
 
-        this.#glBufferData = new Float32Array(50000 * 8);
+        this.#glBufferData = new Float32Array(50000 * ParticleFormat.FLOATS_PER_PARTICLE);
     }
 
     /**
@@ -613,9 +614,6 @@ export class Sandbox {
             return;
         }
 
-        const floatsPerParticle = 8;
-        const totalFloatsWritten = activeCount * floatsPerParticle;
-
         // Bind the standard quad vertices (vertex attributes)
         gl.bindBuffer(gl.ARRAY_BUFFER, this.#glQuadBuffer);
         const quadVertLoc = gl.getAttribLocation(this.#glProgram, 'a_quadVertex');
@@ -625,10 +623,10 @@ export class Sandbox {
 
         // Bind dynamic particle data (instance attributes)
         gl.bindBuffer(gl.ARRAY_BUFFER, this.#glBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this.#glBufferData.subarray(0, totalFloatsWritten), gl.DYNAMIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, this.#glBufferData.subarray(0, activeCount * ParticleFormat.FLOATS_PER_PARTICLE), gl.DYNAMIC_DRAW);
 
         // Stride is permanently 32 bytes (8 floats * 4 bytes per float)
-        const stride = 32;
+        const stride = ParticleFormat.FLOATS_PER_PARTICLE * Float32Array.BYTES_PER_ELEMENT;
 
         // Position (Offset: 0)
         const posLoc = gl.getAttribLocation(this.#glProgram, 'a_position');

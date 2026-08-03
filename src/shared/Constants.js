@@ -21,3 +21,11 @@ export const Source = Object.freeze({
     EDGE_BOTH: 'edge-both',
     VOLUME: 'volume',
 });
+
+/**
+ * Runtime constants describing the flat particle data format exported by {@link Gnist#fillFlatArray}.
+ * @type {ParticleFormatConstants}
+ */
+export const ParticleFormat = Object.freeze({
+    FLOATS_PER_PARTICLE: 8
+});

@@ -21,4 +21,7 @@ export { RotationTween } from './modifiers/visual/RotationTween.js';
 export { ScaleTween } from './modifiers/visual/ScaleTween.js';
 export { Spin } from './modifiers/visual/Spin.js';
 
-export { Source } from './shared/Constants.js';
+export {
+    ParticleFormat,
+    Source,
+} from './shared/Constants.js';

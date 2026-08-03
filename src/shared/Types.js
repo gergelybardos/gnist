@@ -26,4 +26,9 @@
  * @property {string} VOLUME Emit uniformly from the shape's entire area.
  */
 
+/**
+ * @typedef {object} ParticleFormatConstants
+ * @property {number} FLOATS_PER_PARTICLE Number of consecutive entries used to represent a single particle in a flat `Float32Array`.
+ */
+
 export {};
