@@ -661,16 +661,16 @@
 
             <p>Emitters are configured by a single configuration object passed at instantiation. While most emitter types have their own specialized parameters, they all share a set of core configuration options. Many of the corresponding emitter instance properties are public and can be dynamically updated in real-time within your update loop, while others remain static or are accessed through dedicated API methods.</p>
 
-            <p>The common properties of an emitter configuration object and their corresponding emitter instance properties:</p>
+            <p>The common properties of an emitter configuration object and their corresponding emitter instance public properties:</p>
 
             <div class="table-container">
               <table>
                 <thead>
                 <tr>
-                  <th>Property</th>
+                  <th>Configuration Property</th>
                   <th>Type</th>
                   <th>Default</th>
-                  <th>Public property</th>
+                  <th>Instance Property</th>
                   <th>Description</th>
                 </tr>
                 </thead>
@@ -679,14 +679,14 @@
                   <td><code>id</code></td>
                   <td><code>string</code></td>
                   <td>Auto-generated UUID</td>
-                  <td>Native getter</td>
+                  <td>readonly</td>
                   <td>A unique identifier for the emitter.</td>
                 </tr>
                 <tr>
                   <td><code>enabled</code></td>
                   <td><code>boolean</code></td>
                   <td><code>true</code></td>
-                  <td>Native getter</td>
+                  <td>readonly</td>
                   <td>Whether the emitter is currently active.</td>
                 </tr>
                 <tr>
@@ -700,7 +700,7 @@
                   <td><code>duration</code></td>
                   <td><code>number</code></td>
                   <td><code>Infinity</code></td>
-                  <td></td>
+                  <td>-</td>
                   <td>The duration of the emitter's emission in seconds, or <code>Infinity</code> for infinite emission.</td>
                 </tr>
                 <tr>
@@ -728,7 +728,7 @@
                   <td><code>particleBlueprint</code></td>
                   <td><code>object</code></td>
                   <td><code>{}</code></td>
-                  <td></td>
+                  <td>-</td>
                   <td>The blueprint used to define the initial properties of emitted particles.</td>
                 </tr>
                 </tbody>
@@ -818,6 +818,14 @@
                 </tbody>
               </table>
             </div>
+
+            <blockquote class="callout note">
+              <div class="callout-title">
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+                <span>Note</span>
+              </div>
+              <p>Note that these do not map one-to-one to the public or readonly properties of <code>Particle</code> instances. For example, <code>speed</code> and <code>direction</code> are not stored directly; they are used to initialize the particle's <code>vx</code> and <code>vy</code> properties.</p>
+            </blockquote>
 
             <h4>Example</h4>
 
@@ -1106,7 +1114,7 @@
 
             <p><strong>Typical use cases:</strong> gravity, wind, and buoyancy.</p>
 
-            <p>Properties of a configuration object and its corresponding <code>DirectionalForce</code> instance properties:</p>
+            <p>Properties of a configuration object and its corresponding <code>DirectionalForce</code> instance public properties:</p>
 
             <div class="table-container">
               <table>
@@ -1160,7 +1168,7 @@
 
             <p><strong>Typical use cases:</strong> air resistance, friction, smoke, and fire damping.</p>
 
-            <p>Properties of a configuration object and its corresponding <code>LinearDrag</code> instance properties:</p>
+            <p>Properties of a configuration object and its corresponding <code>LinearDrag</code> instance public properties:</p>
 
             <div class="table-container">
               <table>
@@ -1210,7 +1218,7 @@
 
             <p><strong>Typical use cases:</strong> explosion, particle attraction and repulsion effects.</p>
 
-            <p>Properties of a configuration object and its corresponding <code>RadialForce</code> instance properties:</p>
+            <p>Properties of a configuration object and its corresponding <code>RadialForce</code> instance public properties:</p>
 
             <div class="table-container">
               <table>
@@ -1296,7 +1304,7 @@
 
             <p><strong>Typical use cases:</strong> whirlpool, tornado, black hole, and portal.</p>
 
-            <p>Properties of a configuration object and its corresponding <code>Vortex</code> instance properties:</p>
+            <p>Properties of a configuration object and its corresponding <code>Vortex</code> instance public properties:</p>
 
             <div class="table-container">
               <table>
@@ -1431,7 +1439,7 @@
 
             <p><strong>Typical use cases:</strong> smoke trail, energy beam, magic effects, floating particles, and organic movement patterns.</p>
 
-            <p>Properties of a configuration object and its corresponding <code>SineWave</code> instance properties:</p>
+            <p>Properties of a configuration object and its corresponding <code>SineWave</code> instance public properties:</p>
 
             <div class="table-container">
               <table>
@@ -1484,7 +1492,7 @@
 
             <p><strong>Typical use cases:</strong> smoke, fire, cloud, and wind.</p>
 
-            <p>Properties of a configuration object and its corresponding <code>Turbulence</code> instance properties:</p>
+            <p>Properties of a configuration object and its corresponding <code>Turbulence</code> instance public properties:</p>
 
             <div class="table-container">
               <table>
@@ -1590,7 +1598,7 @@
 
             <p><strong>Typical use cases:</strong> fading smoke, dissolving particles.</p>
 
-            <p>Properties of a configuration object and its corresponding <code>OpacityFade</code> instance properties:</p>
+            <p>Properties of a configuration object and its corresponding <code>OpacityFade</code> instance public properties:</p>
 
             <div class="table-container">
               <table>
@@ -1643,7 +1651,7 @@
 
             <p><strong>Typical use cases:</strong> debris, spinning leaves.</p>
 
-            <p>Properties of a configuration object and its corresponding <code>RotationTween</code> instance properties:</p>
+            <p>Properties of a configuration object and its corresponding <code>RotationTween</code> instance public properties:</p>
 
             <div class="table-container">
               <table>
@@ -1696,7 +1704,7 @@
 
             <p><strong>Typical use cases:</strong> expanding explosions, fading particles, and shrinking debris.</p>
 
-            <p>Properties of a configuration object and its corresponding <code>ScaleTween</code> instance properties:</p>
+            <p>Properties of a configuration object and its corresponding <code>ScaleTween</code> instance public properties:</p>
 
             <div class="table-container">
               <table>
