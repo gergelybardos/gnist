@@ -865,7 +865,15 @@
 
             <p>To apply a modifier, first you need to create an instance of it. Upon instantiating, the modifier is automatically assigned a unique <code>id</code> value if one is not specified. Modifiers are not applied to particles directly; instead, you register them with an emitter using the emitter's <code>addModifier()</code> method passing the modifier instance as an argument. You may register any number of modifiers with an emitter. Once registered, Gnist automatically applies the modifier to all particles emitted by that emitter.</p>
 
-            <p>Modifiers cannot be toggled after registration; they can only be removed from the emitter using the emitter's <code>removeModifier()</code> method passing the modifier's <code>id</code> as an argument. Removing a modifier only affects particles emitted after the removal.</p>
+            <p>Modifiers cannot be toggled after registration; they can only be removed from the emitter using the emitter's <code>removeModifier()</code> method passing the modifier's <code>id</code> as an argument.</p>
+
+            <blockquote class="callout note">
+              <div class="callout-title">
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+                <span>Note</span>
+              </div>
+              <p>Removing a modifier only affects particles emitted after the removal. Particles that were already emitted retain the effect of the modifier that was applied to them before removal.</p>
+            </blockquote>
 
             <h4>Example</h4>
 
@@ -893,7 +901,15 @@
 
             <p>To apply a scoped force, first you need to create an instance of it. Upon instantiating, the force is automatically assigned a unique <code>id</code> value if one is not specified. Forces tied to a given emitter must first be registered using the emitter's <code>addScopedForce()</code> method passing the force instance as an argument. You may register any number of scoped forces with an emitter. Every particle emitted by that emitter is automatically affected by its registered scoped forces.</p>
 
-            <p>Scoped forces cannot be toggled after registration; they can only be removed from the emitter using the emitter's <code>removeScopedForce()</code> method passing the force's <code>id</code> as an argument. Removing a scoped force only affects particles emitted after the removal.</p>
+            <p>Scoped forces cannot be toggled after registration; they can only be removed from the emitter using the emitter's <code>removeScopedForce()</code> method passing the force's <code>id</code> as an argument.</p>
+
+            <blockquote class="callout note">
+              <div class="callout-title">
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+                <span>Note</span>
+              </div>
+              <p>Removing a scoped force only affects particles emitted after the removal. Particles that were already emitted retain the effect of the force that was applied to them before removal.</p>
+            </blockquote>
 
             <h4>Example</h4>
 
@@ -921,14 +937,14 @@
                 <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
                 <span>Note</span>
               </div>
-              <p>In contrast to scoped forces, removing a global force affects every particle in the simulation, even those already emitted before the removal.</p>
+              <p>In contrast to modifiers and scoped forces, removing a global force affects every particle in the simulation, including particles that were already emitted before the removal. Existing particles retain the velocity accumulated from the force up to that point; they simply no longer receive further acceleration from the removed force.</p>
             </blockquote>
 
             <h3 id="emitters-registering-and-removing-emitters">Registering and Removing Emitters</h3>
 
             <p>Emitters must be registered with the main <code>Gnist</code> class using its <code>addEmitter()</code> method passing the emitter instance as an argument. Once registered, the next time <code>Gnist.update()</code> is called in your main loop, the new emitter will start emitting particles.</p>
 
-            <p>Emitters cannot be toggled or disabled, but they can be removed from the simulation using the <code>removeEmitter()</code> of the main <code>Gnist</code> class passing the emitter's <code>id</code> as an argument. Particles already emitted by the removed emitter will complete their lifetimes, but no new particles will be emitted.</p>
+            <p>Emitters have <a href="#emitters-playback-controls">Playback Controls</a>, but they can also be removed from the simulation using the <code>removeEmitter()</code> of the main <code>Gnist</code> class passing the emitter's <code>id</code> as an argument. Particles already emitted by the removed emitter will complete their lifetimes, but no new particles will be emitted.</p>
 
             <h2 id="emitters-playback-controls">Playback Controls</h2>
 
