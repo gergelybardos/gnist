@@ -1,5 +1,5 @@
 /**
- * @import { ModifierCategoryValues, SourceValues } from './Types.js'
+ * @import { ModifierCategoryValues, ParticleFormatConstants, SourceValues } from './Types.js'
  */
 
 /**
