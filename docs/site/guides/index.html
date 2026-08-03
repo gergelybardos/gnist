@@ -49,6 +49,7 @@
             <li><a href="#emitters">Emitters</a></li>
             <li><a href="#forces">Forces</a></li>
             <li><a href="#modifiers">Modifiers</a></li>
+            <li><a href="#exporting-particle-data">Exporting Particle Data</a></li>
           </ul>
           <h3>Examples</h3>
           <ul>
@@ -71,7 +72,7 @@
 
             <p>Gnist is renderer-agnostic. It decouples simulation from timing and rendering, exposing raw state data that can be rendered with Canvas 2D, WebGL, or any custom JavaScript runtime.</p>
 
-            <p>While offloading simulation to the GPU could improve raw performance, it would also significantly increase API complexity. Gnist instead performs simulation on the CPU, prioritizing a simple, intuitive programming model and strong single-thread performance. Its architecture is straightforward, object-oriented, and configuration-driven rather than data-oriented. For rendering, however, simulation state can still be exported as flat typed arrays for efficient GPU-based rendering pipelines.</p>
+            <p>While running the simulation on the GPU could improve raw performance, it would also significantly increase API complexity. Gnist instead performs simulation on the CPU, prioritizing a simple and intuitive programming model. The engine is designed around an object-oriented, configuration-driven API, while keeping rendering separate from simulation. For custom rendering pipelines, particle data can still be exported as flat typed arrays for efficient GPU-based rendering.</p>
           </section>
 
           <section>
@@ -1785,6 +1786,110 @@
           </section>
         </article>
 
+        <article id="page-exporting-particle-data" class="page">
+          <section>
+            <h1 id="exporting-particle-data">Exporting Particle Data</h1>
+
+            <h2 id="edf-accessing-particle-state">Accessing Particle State</h2>
+
+            <p>The <code>particles</code> array provided by <code>Gnist</code> instances exposes particle data as objects, which is convenient for general-purpose usage. However, renderers that communicate directly with the GPU, such as WebGL renderers, typically require particle attributes in flat typed arrays that can be uploaded directly to GPU buffers.</p>
+
+            <p>For this purpose, <code>Gnist</code> instances provide the <code>fillFlatArray()</code> method. It writes the current particle state into a preallocated <code>Float32Array</code> using a fixed layout, removing the need for custom conversion code before uploading the data to the GPU.</p>
+
+            <p>This guide describes the data format of the array returned by <code>fillFlatArray()</code>.</p>
+
+            <h2 id="edf-flat-data-format">Flat Data Format</h2>
+
+            <p>Each particle is represented by eight consecutive entries in the <code>Float32Array</code> in the following order:</p>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                <tr>
+                  <th>Offset</th>
+                  <th>Attribute</th>
+                  <th>Storage Type</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>0</td>
+                  <td><code>x</code></td>
+                  <td><code>float32</code></td>
+                  <td>Particle X position</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td><code>y</code></td>
+                  <td><code>float32</code></td>
+                  <td>Particle Y position</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><code>size</code></td>
+                  <td><code>float32</code></td>
+                  <td>Particle size</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><code>rotation</code></td>
+                  <td><code>float32</code></td>
+                  <td>Particle rotation in radians</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><code>color.r</code></td>
+                  <td><code>float32</code></td>
+                  <td>Red channel, normalized from <code>0–255</code> to <code>0–1</code></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td><code>color.g</code></td>
+                  <td><code>float32</code></td>
+                  <td>Green channel, normalized from <code>0–255</code> to <code>0–1</code></td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td><code>color.b</code></td>
+                  <td><code>float32</code></td>
+                  <td>Blue channel, normalized from <code>0–255</code> to <code>0–1</code></td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td><code>opacity</code></td>
+                  <td><code>float32</code></td>
+                  <td>Particle opacity (already in the <code>0-1</code> range)</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="edf-example-layout">Example Layout</h2>
+
+            <p>For two particles, the resulting array layout is:</p>
+
+            <div class="code-snippet">
+              <pre><code>[
+  x1, y1, size1, rotation1, r1, g1, b1, opacity1,
+  x2, y2, size2, rotation2, r2, g2, b2, opacity2,
+]</code></pre>
+            </div>
+
+            <h2 id="edf-return-value">Return Value</h2>
+
+            <p>The method returns the number of particles written into the array.</p>
+
+            <p>The provided array must have enough space for all particles. The required size can be calculated as:</p>
+
+            <div class="code-snippet">
+              <pre><code><span class="name">particleCount</span> <span class="punct">*</span> <span class="name">ParticleFormat</span><span class="punct">.</span><span class="name">FLOATS_PER_PARTICLE</span></code></pre>
+            </div>
+
+            <p>where <code>ParticleFormat.FLOATS_PER_PARTICLE</code> is a Gnist-provided constant that defines the number of values stored per particle.</p>
+          </section>
+        </article>
+
         <article id="page-rendering-with-webgl" class="page">
           <section>
             <h1 id="rendering-with-webgl">Rendering with WebGL</h1>
@@ -1984,7 +2089,7 @@
 
             <h2 id="webgl-uploading-particle-data">Uploading Particle Data</h2>
 
-            <p>Before rendering, we need to convert particle data into a format that can be passed to WebGL. Each particle contributes its position, size, rotation, color, and opacity as vertex attributes.</p>
+            <p>Before rendering, we need particle data in a format that can be passed to WebGL. Each particle contributes its position, size, rotation, color, and opacity as vertex attributes.</p>
 
             <p>Create a buffer array that will hold the particle data. Add this after creating the WebGL buffers:</p>
 
@@ -1993,49 +2098,15 @@
               <pre><code><span class="kw">const</span> <span class="name">particleData</span> = <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> * <span class="lit">8</span><span class="punct">)</span><span class="punct">;</span></code></pre>
             </div>
 
-            <p>The following function copies the current particle state into the buffer array. Each particle uses eight values in the array:</p>
-
-            <ul>
-              <li><code>x</code> position</li>
-              <li><code>y</code> position</li>
-              <li>size</li>
-              <li>rotation</li>
-              <li>red color component</li>
-              <li>green color component</li>
-              <li>blue color component</li>
-              <li>opacity</li>
-            </ul>
+            <p>To fill this buffer, call Gnist's <code>fillFlatArray()</code> method after <code>engine.update(dt)</code> in the main loop. This will copy current particle state into the <code>particleData</code> buffer array as a contiguous <code>Float32Array</code> that can be uploaded directly to the WebGL buffer. The returned particle count will be used later.</p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">function</span> <span class="name">updateParticleBuffer</span><span class="punct">(</span><span class="punct">)</span> <span class="punct">{</span>
-    <span class="kw">const</span> <span class="name">particles</span> = <span class="name">engine</span><span class="punct">.</span><span class="name">particles</span><span class="punct">;</span>
-
-    <span class="kw">for</span> <span class="punct">(</span><span class="kw">let</span> <span class="name">i</span> = <span class="lit">0</span><span class="punct">;</span> <span class="name">i</span> &lt; <span class="name">particles</span><span class="punct">.</span><span class="name">length</span><span class="punct">;</span> <span class="name">i</span>++<span class="punct">)</span> <span class="punct">{</span>
-        <span class="kw">const</span> <span class="name">p</span> = <span class="name">particles</span><span class="punct">[</span><span class="name">i</span><span class="punct">]</span><span class="punct">;</span>
-        <span class="kw">const</span> <span class="name">offset</span> = <span class="name">i</span> * <span class="lit">8</span><span class="punct">;</span>
-
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span><span class="punct">]</span> = <span class="name">p</span><span class="punct">.</span><span class="name">x</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> + <span class="lit">1</span><span class="punct">]</span> = <span class="name">p</span><span class="punct">.</span><span class="name">y</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> + <span class="lit">2</span><span class="punct">]</span> = <span class="name">p</span><span class="punct">.</span><span class="name">size</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> + <span class="lit">3</span><span class="punct">]</span> = <span class="name">p</span><span class="punct">.</span><span class="name">rotation</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> + <span class="lit">4</span><span class="punct">]</span> = <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">.</span><span class="name">r</span> / <span class="lit">255</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> + <span class="lit">5</span><span class="punct">]</span> = <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">.</span><span class="name">g</span> / <span class="lit">255</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> + <span class="lit">6</span><span class="punct">]</span> = <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">.</span><span class="name">b</span> / <span class="lit">255</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> + <span class="lit">7</span><span class="punct">]</span> = <span class="name">p</span><span class="punct">.</span><span class="name">opacity</span><span class="punct">;</span>
-    <span class="punct">}</span>
-
-    <span class="kw">return</span> <span class="name">particles</span><span class="punct">.</span><span class="name">length</span><span class="punct">;</span>
-<span class="punct">}</span></code></pre>
+              <pre><code><span class="name">engine</span><span class="punct">.</span><span class="name">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">);</span>
+<span class="kw">const</span> <span class="name">particleCount</span> <span class="punct">=</span> <span class="name">engine</span><span class="punct">.</span><span class="name">fillFlatArray</span><span class="punct">(</span><span class="name">particleData</span><span class="punct">);</span></code></pre>
             </div>
 
-            <p>Call this function after <code>engine.update(dt)</code> in the main loop. The returned particle count will be used later.</p>
-
-            <div class="code-snippet">
-              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="name">engine</span><span class="punct">.</span><span class="name">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">)</span><span class="punct">;</span>
-<span class="kw">const</span> <span class="name">particleCount</span> = <span class="name">updateParticleBuffer</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span></code></pre>
-            </div>
+            <p>See <a href="#exporting-particle-data">Exporting Particle Data</a> for details about the structure of the filled flat particle array.</p>
 
             <h2 id="webgl-rendering">Rendering</h2>
 
@@ -2589,6 +2660,15 @@
                 <li><a href="#modifiers-spin">Spin</a></li>
               </ul>
             </li>
+          </ul>
+        </nav>
+
+        <nav id="sub-exporting-particle-data" class="sub-toc-group">
+          <ul>
+            <li><a href="#edf-accessing-particle-state">Accessing Particle State</a></li>
+            <li><a href="#edf-flat-data-format">Flat Data Format</a></li>
+            <li><a href="#edf-example-layout">Example Layout</a></li>
+            <li><a href="#edf-return-value">Return Value</a></li>
           </ul>
         </nav>
 
