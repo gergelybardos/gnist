@@ -237,20 +237,20 @@
 
             <h2 id="yfpe-setting-up-gnist">Setting up Gnist</h2>
 
-            <p>First, import the following classes from the Gnist package at the top of <code>main.js</code></p>
+            <p>First, import the following items from the Gnist package at the top of <code>main.js</code></p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kwd">import</span> <span class="punct">{</span>
-    <span class="name">Gnist</span><span class="punct">,</span>
-    <span class="name">LineEmitter</span><span class="punct">,</span>
-    <span class="name">EllipseEmitter</span><span class="punct">,</span>
-    <span class="name">ColorRamp</span><span class="punct">,</span>
-    <span class="name">OpacityFade</span><span class="punct">,</span>
-    <span class="name">Turbulence</span><span class="punct">,</span>
-    <span class="name">ScaleTween</span><span class="punct">,</span>
-    <span class="name">DirectionalForce</span><span class="punct">,</span>
-<span class="punct">}</span> <span class="kwd">from</span> <span class="str">'@gergelybardos/gnist'</span><span class="punct">;</span></code></pre>
+              <pre><code><span class="kw">import</span> <span class="punct">{</span>
+  <span class="name">ColorRamp</span><span class="punct">,</span>
+  <span class="name">DirectionalForce</span><span class="punct">,</span>
+  <span class="name">EllipseEmitter</span><span class="punct">,</span>
+  <span class="name">Gnist</span><span class="punct">,</span>
+  <span class="name">LineEmitter</span><span class="punct">,</span>
+  <span class="name">OpacityFade</span><span class="punct">,</span>
+  <span class="name">ScaleTween</span><span class="punct">,</span>
+  <span class="name">Turbulence</span><span class="punct">,</span>
+<span class="punct">}</span> <span class="kw">from</span> <span class="str">'@gergelybardos/gnist'</span><span class="punct">;</span></code></pre>
             </div>
 
             <p>Next, create a <code>Gnist</code> instance and configure its culling bounds. Culling bounds specify the area outside of which particles are automatically removed regardless of their age. Setting culling bounds is optional but recommended for most applications. Since Gnist is renderer-agnostic and has no knowledge of the rendering context, the application may define these bounds if automatic particle cleanup is desired.</p>
@@ -1924,6 +1924,23 @@
 <span class="punct">}</span></code></pre>
             </div>
 
+            <p>Add <code>ParticleFormat</code> to the imported items from Gnist. It provides constants describing the layout of the flat particle data export.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">import</span> <span class="punct">{</span>
+  <span class="name">ColorRamp</span><span class="punct">,</span>
+  <span class="name">DirectionalForce</span><span class="punct">,</span>
+  <span class="name">EllipseEmitter</span><span class="punct">,</span>
+  <span class="name">Gnist</span><span class="punct">,</span>
+  <span class="name">LineEmitter</span><span class="punct">,</span>
+  <span class="name">OpacityFade</span><span class="punct">,</span>
+  <span class="name">ParticleFormat</span><span class="punct">,</span>
+  <span class="name">ScaleTween</span><span class="punct">,</span>
+  <span class="name">Turbulence</span><span class="punct">,</span>
+<span class="punct">}</span> <span class="kw">from</span> <span class="str">'@gergelybardos/gnist'</span><span class="punct">;</span></code></pre>
+            </div>
+
             <h2 id="webgl-initializing-webgl">Initializing WebGL</h2>
 
             <p>First, create a WebGL2 rendering context. The rest of the WebGL setup will be added in the following sections.</p>
@@ -2095,7 +2112,7 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">particleData</span> = <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> * <span class="lit">8</span><span class="punct">)</span><span class="punct">;</span></code></pre>
+              <pre><code><span class="kw">const</span> <span class="name">particleData</span> = <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> * <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">;</span></code></pre>
             </div>
 
             <p>To fill this buffer, call Gnist's <code>fillFlatArray()</code> method after <code>engine.update(dt)</code> in the main loop. This will copy current particle state into the <code>particleData</code> buffer array as a contiguous <code>Float32Array</code> that can be uploaded directly to the WebGL buffer. The returned particle count will be used later.</p>
@@ -2162,10 +2179,10 @@
 
     <span class="comm">// Upload current particle data used by per-instance attributes.</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">bindBuffer</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleBuffer</span><span class="punct">)</span><span class="punct">;</span>
-    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> * <span class="lit">8</span><span class="punct">)</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">)</span><span class="punct">;</span>
+    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> * <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">)</span><span class="punct">;</span>
 
     <span class="comm">// Stride is permanently 32 bytes (8 floats * 4 bytes per float)</span>
-    <span class="kw">const</span> <span class="name">stride</span> = <span class="lit">8</span> * <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">stride</span> = <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span> * <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
 
     <span class="comm">// Position (Offset: 0)</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">enableVertexAttribArray</span><span class="punct">(</span><span class="name">positionLocation</span><span class="punct">)</span><span class="punct">;</span>
@@ -2203,11 +2220,9 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="name">engine</span><span class="punct">.</span><span class="name">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">)</span><span class="punct">;</span>
-
-<span class="kw">const</span> <span class="name">particleCount</span> = <span class="name">updateParticleBuffer</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span>
-
-<span class="name">renderParticles</span><span class="punct">(</span><span class="name">particleCount</span><span class="punct">)</span><span class="punct">;</span></code></pre>
+              <pre><code><span class="name">engine</span><span class="punct">.</span><span class="name">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">);</span>
+<span class="kw">const</span> <span class="name">particleCount</span> <span class="punct">=</span> <span class="name">engine</span><span class="punct">.</span><span class="name">fillFlatArray</span><span class="punct">(</span><span class="name">particleData</span><span class="punct">);</span>
+<span class="name">renderParticles</span><span class="punct">(</span><span class="name">particleCount</span><span class="punct">);</span></code></pre>
             </div>
 
             <h2 id="webgl-final-result">Final Result</h2>
@@ -2226,14 +2241,15 @@
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="kw">import</span> <span class="punct">{</span>
-    <span class="name">Gnist</span><span class="punct">,</span>
-    <span class="name">LineEmitter</span><span class="punct">,</span>
-    <span class="name">EllipseEmitter</span><span class="punct">,</span>
-    <span class="name">ColorRamp</span><span class="punct">,</span>
-    <span class="name">OpacityFade</span><span class="punct">,</span>
-    <span class="name">Turbulence</span><span class="punct">,</span>
-    <span class="name">ScaleTween</span><span class="punct">,</span>
-    <span class="name">DirectionalForce</span><span class="punct">,</span>
+  <span class="name">ColorRamp</span><span class="punct">,</span>
+  <span class="name">DirectionalForce</span><span class="punct">,</span>
+  <span class="name">EllipseEmitter</span><span class="punct">,</span>
+  <span class="name">Gnist</span><span class="punct">,</span>
+  <span class="name">LineEmitter</span><span class="punct">,</span>
+  <span class="name">OpacityFade</span><span class="punct">,</span>
+  <span class="name">ParticleFormat</span><span class="punct">,</span>
+  <span class="name">ScaleTween</span><span class="punct">,</span>
+  <span class="name">Turbulence</span><span class="punct">,</span>
 <span class="punct">}</span> <span class="kw">from</span> <span class="str">'@gergelybardos/gnist'</span><span class="punct">;</span>
 
 <span class="kw">const</span> <span class="name">canvas</span> <span class="punct">=</span> <span class="name">document</span><span class="punct">.</span><span class="name">getElementById</span><span class="punct">(</span><span class="str">'canvas'</span><span class="punct">);</span>
@@ -2333,7 +2349,7 @@
 
 <span class="kw">const</span> <span class="name">particleBuffer</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">createBuffer</span><span class="punct">();</span>
 
-<span class="kw">const</span> <span class="name">particleData</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> <span class="punct">*</span> <span class="lit">8</span><span class="punct">);</span>
+<span class="kw">const</span> <span class="name">particleData</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> <span class="punct">*</span> <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span><span class="punct">);</span>
 
 <span class="comm">// Retrieve shader attribute and uniform locations used during rendering.</span>
 
@@ -2463,8 +2479,7 @@
     <span class="name">lastTime</span> <span class="punct">=</span> <span class="name">currentTime</span><span class="punct">;</span>
 
     <span class="name">engine</span><span class="punct">.</span><span class="name">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">);</span>
-
-    <span class="kw">const</span> <span class="name">particleCount</span> <span class="punct">=</span> <span class="name">updateParticleBuffer</span><span class="punct">();</span>
+    <span class="kw">const</span> <span class="name">particleCount</span> <span class="punct">=</span> <span class="name">engine</span><span class="punct">.</span><span class="name">fillFlatArray</span><span class="punct">(</span><span class="name">particleData</span><span class="punct">);</span>
     <span class="name">renderParticles</span><span class="punct">(</span><span class="name">particleCount</span><span class="punct">);</span>
 <span class="punct">}</span>
 <span class="name">requestAnimationFrame</span><span class="punct">(</span><span class="name">loop</span><span class="punct">);</span>
@@ -2482,26 +2497,6 @@
     <span class="punct">}</span>
 
     <span class="kw">return</span> <span class="name">shader</span><span class="punct">;</span>
-<span class="punct">}</span>
-
-<span class="kw">function</span> <span class="name">updateParticleBuffer</span><span class="punct">()</span> <span class="punct">{</span>
-    <span class="kw">const</span> <span class="name">particles</span> <span class="punct">=</span> <span class="name">engine</span><span class="punct">.</span><span class="name">particles</span><span class="punct">;</span>
-
-    <span class="kw">for</span> <span class="punct">(</span><span class="kw">let</span> <span class="name">i</span> <span class="punct">=</span> <span class="lit">0</span><span class="punct">;</span> <span class="name">i</span> <span class="punct">&lt;</span> <span class="name">particles</span><span class="punct">.</span><span class="name">length</span><span class="punct">;</span> <span class="name">i</span><span class="punct">++)</span> <span class="punct">{</span>
-        <span class="kw">const</span> <span class="name">p</span> <span class="punct">=</span> <span class="name">particles</span><span class="punct">[</span><span class="name">i</span><span class="punct">];</span>
-        <span class="kw">const</span> <span class="name">offset</span> <span class="punct">=</span> <span class="name">i</span> <span class="punct">*</span> <span class="lit">8</span><span class="punct">;</span>
-
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span><span class="punct">]</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">x</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> <span class="punct">+</span> <span class="lit">1</span><span class="punct">]</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">y</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> <span class="punct">+</span> <span class="lit">2</span><span class="punct">]</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">size</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> <span class="punct">+</span> <span class="lit">3</span><span class="punct">]</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">rotation</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> <span class="punct">+</span> <span class="lit">4</span><span class="punct">]</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">.</span><span class="name">r</span> <span class="punct">/</span> <span class="lit">255</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> <span class="punct">+</span> <span class="lit">5</span><span class="punct">]</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">.</span><span class="name">g</span> <span class="punct">/</span> <span class="lit">255</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> <span class="punct">+</span> <span class="lit">6</span><span class="punct">]</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">.</span><span class="name">b</span> <span class="punct">/</span> <span class="lit">255</span><span class="punct">;</span>
-        <span class="name">particleData</span><span class="punct">[</span><span class="name">offset</span> <span class="punct">+</span> <span class="lit">7</span><span class="punct">]</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">opacity</span><span class="punct">;</span>
-    <span class="punct">}</span>
-
-    <span class="kw">return</span> <span class="name">particles</span><span class="punct">.</span><span class="name">length</span><span class="punct">;</span>
 <span class="punct">}</span>
 
 <span class="kw">function</span> <span class="name">renderParticles</span><span class="punct">(</span><span class="name">particleCount</span><span class="punct">)</span> <span class="punct">{</span>
@@ -2527,10 +2522,10 @@
 
     <span class="comm">// Upload current particle data used by per-instance attributes.</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">bindBuffer</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleBuffer</span><span class="punct">);</span>
-    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> <span class="punct">*</span> <span class="lit">8</span><span class="punct">),</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">);</span>
+    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> <span class="punct">*</span> <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span><span class="punct">),</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">);</span>
 
     <span class="comm">// Stride is permanently 32 bytes (8 floats * 4 bytes per float)</span>
-    <span class="kw">const</span> <span class="name">stride</span> <span class="punct">=</span> <span class="lit">8</span> <span class="punct">*</span> <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">stride</span> <span class="punct">=</span> <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span> <span class="punct">*</span> <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
 
     <span class="comm">// Position (Offset: 0)</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">enableVertexAttribArray</span><span class="punct">(</span><span class="name">positionLocation</span><span class="punct">);</span>
