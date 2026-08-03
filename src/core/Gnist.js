@@ -31,7 +31,7 @@ export class Gnist {
      * @returns {string}
      */
     static get VERSION() {
-        return '0.0.0';
+        return '0.2.0';
     }
 
     /**
