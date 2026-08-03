@@ -12,9 +12,9 @@ import { Force } from './Force.js';
  * @typedef {object} RadialForceConfig
  * @property {number} [x=0] Horizontal coordinate of the force center.
  * @property {number} [y=0] Vertical coordinate of the force center.
- * @property {number} [strength=100] Magnitude of the force. Positive values create attraction, negative values create repulsion.
- * @property {number} [epsilon=100] Smoothing factor to prevent divide-by-zero errors and infinite acceleration spikes near the center.
- * @property {number} [cullingRadius=0] Distance threshold from the center below which particles are marked dead. Set to 0 to disable.
+ * @property {number} [strength=50000] Magnitude of the force. Positive values create attraction, negative values create repulsion. Typical values range from several thousand to several hundred thousand, depending on scene size.
+ * @property {number} [epsilon=10] Smoothing factor to prevent divide-by-zero errors and infinite acceleration spikes near the center. Stored internally as a squared value in {@link RadialForce#epsilonSquared}.
+ * @property {number} [cullingRadius=0] Distance threshold from the center below which particles are marked dead. Set to 0 to disable. Stored internally as a squared value in {@link RadialForce#cullingRadiusSquared}.
  */
 
 /**
@@ -45,11 +45,10 @@ export class RadialForce extends Force {
      * Smoothing factor to prevent divide-by-zero errors and infinite acceleration spikes near the center.
      * @type {number}
      */
-    epsilon;
+    epsilonSquared;
 
     /**
      * Distance threshold from the center below which particles are marked dead.
-     * Stored internally as a squared value for high-performance comparisons.
      * @type {number}
      */
     cullingRadiusSquared;
@@ -64,8 +63,10 @@ export class RadialForce extends Force {
 
         this.x = config.x ?? 0;
         this.y = config.y ?? 0;
-        this.strength = config.strength ?? 100;
-        this.epsilon = config.epsilon ?? 100;
+        this.strength = config.strength ?? 50000;
+
+        const epsilon = config.epsilon ?? 10;
+        this.epsilonSquared = epsilon * epsilon;
 
         const cullingRadius = config.cullingRadius ?? 0;
         this.cullingRadiusSquared = cullingRadius * cullingRadius;
@@ -89,7 +90,7 @@ export class RadialForce extends Force {
             return;
         }
 
-        const accelerationMagnitude = (this.strength / (distanceSquared + this.epsilon)) * dt;
+        const accelerationMagnitude = (this.strength / (distanceSquared + this.epsilonSquared)) * dt;
 
         particle.vx += dx * accelerationMagnitude;
         particle.vy += dy * accelerationMagnitude;

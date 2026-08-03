@@ -1233,14 +1233,14 @@
                 <tr>
                   <td><code>strength</code></td>
                   <td><code>number</code></td>
-                  <td><code>100</code></td>
+                  <td><code>50000</code></td>
                   <td>Magnitude of the force. Positive values create attraction, negative values create repulsion.</td>
                 </tr>
                 <tr>
                   <td><code>epsilon</code></td>
                   <td><code>number</code></td>
-                  <td><code>100</code></td>
-                  <td>Smoothing factor that prevents extreme acceleration values when particles are close to the force center.</td>
+                  <td><code>10</code></td>
+                  <td>Smoothing factor that prevents extreme acceleration values when particles are close to the force center. Only the squared epsilon is stored internally and exposed as <code>epsilonSquared</code>.</td>
                 </tr>
                 <tr>
                   <td><code>cullingRadius</code></td>
@@ -1273,7 +1273,7 @@
     <span class="name">y</span>: <span class="lit">190</span>,
     <span class="name">strength</span>: <span class="lit">50000</span>,
     <span class="name">radius</span>: <span class="lit">100</span>,
-    <span class="name">epsilon</span>: <span class="lit">100</span>,
+    <span class="name">epsilon</span>: <span class="lit">10</span>,
     <span class="name">cullingRadius</span>: <span class="lit">60</span>,
 });
 
@@ -1338,7 +1338,7 @@
                   <td><code>cullingRadius</code></td>
                   <td><code>number</code></td>
                   <td><code>0</code></td>
-                  <td>Distance from the vortex center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Only the squared radius is stored internally and exposed as <code>cullingRadiusSquared</code>.</td>
+                  <td>Distance from the vortex center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling.</td>
                 </tr>
                 </tbody>
               </table>
