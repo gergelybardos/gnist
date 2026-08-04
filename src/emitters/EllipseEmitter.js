@@ -1,5 +1,5 @@
 import { Particle } from '../core/Particle.js';
-import { Source } from '../shared/Constants.js';
+import { EmissionSource } from '../shared/Constants.js';
 
 import { Emitter } from './Emitter.js';
 
@@ -71,7 +71,7 @@ export class EllipseEmitter extends Emitter {
     _initParticle(particle) {
         const angle = Math.random() * Math.PI * 2;
 
-        const factor = this.source === Source.VOLUME
+        const factor = this.emissionSource === EmissionSource.VOLUME
             ? Math.sqrt(Math.random())
             : 1;
 
@@ -82,7 +82,7 @@ export class EllipseEmitter extends Emitter {
     }
 
     /**
-     * Calculates the default emission direction angle based on the emitter geometry and source mode.
+     * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
      * @param {Particle} particle Particle instance used to calculate the direction from its spawn position.
      * @returns {number} The default emission direction angle (in radians).
@@ -96,14 +96,14 @@ export class EllipseEmitter extends Emitter {
             ? Math.random() * Math.PI * 2
             : Math.atan2(dy, dx);
 
-        switch (this.source) {
-            case Source.EDGE_OUT:
+        switch (this.emissionSource) {
+            case EmissionSource.EDGE_OUT:
                 return outwardAngle;
-            case Source.EDGE_IN:
+            case EmissionSource.EDGE_IN:
                 return outwardAngle + Math.PI;
-            case Source.EDGE_BOTH:
+            case EmissionSource.EDGE_BOTH:
                 return Math.random() > 0.5 ? outwardAngle : outwardAngle + Math.PI;
-            case Source.VOLUME:
+            case EmissionSource.VOLUME:
             default:
                 return outwardAngle;
         }

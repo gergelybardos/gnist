@@ -718,11 +718,11 @@
                   <td>The vertical coordinate of the emitter origin.</td>
                 </tr>
                 <tr>
-                  <td><code>source</code></td>
-                  <td><code>Source</code></td>
-                  <td><code>Source.VOLUME</code></td>
+                  <td><code>emissionSource</code></td>
+                  <td><code>EmissionSource</code></td>
+                  <td><code>EmissionSource.VOLUME</code></td>
                   <td>✔</td>
-                  <td>The source of particles within the emitter's geometry.</td>
+                  <td>The emission source mode of particles within the emitter's geometry.</td>
                 </tr>
                 <tr>
                   <td><code>particleBlueprint</code></td>
@@ -735,11 +735,11 @@
               </table>
             </div>
 
-            <h4>The <code>source</code> property</h4>
+            <h4>The <code>emissionSource</code> property</h4>
 
-            <p>The <code>source</code> property of the configuration object is used to control the geometric distribution and default direction of the emission. The latter depends on both the emitter's shape and the source mode and can be overridden by specifying <code>particleBlueprint.direction</code>.</p>
+            <p>The <code>emissionSource</code> property of the configuration object is used to control the geometric distribution and default direction of the emission. The latter depends on both the emitter's shape and the source mode and can be overridden by specifying <code>particleBlueprint.direction</code>.</p>
 
-            <p>The available modes are properties of the <code>Source</code> constant object:</p>
+            <p>The available modes are properties of the <code>EmissionSource</code> constant object:</p>
 
             <ul>
               <li><code>EDGE_OUT</code><span> — Emit from the shape's boundary, directing particles outward.</span></li>
@@ -842,7 +842,7 @@
     <span class="name">y</span>: <span class="lit">200</span>,
 
     <span class="comm">// Included for completeness; has no effect on a PointEmitter</span>
-    <span class="name">source</span>: <span class="name">Source</span>.<span class="name">VOLUME</span>,
+    <span class="name">emissionSource</span>: <span class="name">EmissionSource</span>.<span class="name">VOLUME</span>,
 
     <span class="name">particleBlueprint</span>: {
         <span class="name">rotation</span>: <span class="lit">0.1</span>,
@@ -1019,9 +1019,9 @@
 
             <h2 id="emitters-emission-modes">Emission Modes</h2>
 
-            <h3 id="emitters-source-modes">Source Modes</h3>
+            <h3 id="emitters-emission-source">Emission Source</h3>
 
-            <p>The <code>source</code> property of an emitter configuration object determines where particles originate within the emitter's shape and what their default direction is. The table below illustrates how each source mode behaves for the different emitter types. Note that <code>PointEmitter</code> is not included, as the <code>source</code> property has no effect on it.</p>
+            <p>The <code>emissionSource</code> property of an emitter configuration object determines where particles originate within the emitter's shape and what their default direction is. The table below illustrates how each source mode behaves for the different emitter types. Note that <code>PointEmitter</code> is not included, as the <code>source</code> property has no effect on it.</p>
 
             <div class="table-container">
               <table>
@@ -1035,22 +1035,22 @@
                 </thead>
                 <tbody>
                 <tr>
-                  <td><img alt="Line emitter with 'edge out' source mode." src="img/emitters/source_mode/line_edge_out.webp" height="156" width="206" loading="lazy"/></td>
-                  <td><img alt="Line emitter with 'edge in' source mode." src="img/emitters/source_mode/line_edge_in.webp" height="156" width="206" loading="lazy"/></td>
-                  <td><img alt="Line emitter with 'edge both' source mode." src="img/emitters/source_mode/line_edge_both.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Line emitter with 'edge out' emission source mode." src="img/emitters/source_mode/line_edge_out.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Line emitter with 'edge in' emission source mode." src="img/emitters/source_mode/line_edge_in.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Line emitter with 'edge both' emission source mode." src="img/emitters/source_mode/line_edge_both.webp" height="156" width="206" loading="lazy"/></td>
                   <td class="not-applicable">N/A</td>
                 </tr>
                 <tr>
-                  <td><img alt="Rectangle emitter with 'edge out' source mode." src="img/emitters/source_mode/rect_edge_out.webp" height="156" width="206" loading="lazy"/></td>
-                  <td><img alt="Rectangle emitter with 'edge in' source mode." src="img/emitters/source_mode/rect_edge_in.webp" height="156" width="206" loading="lazy"/></td>
-                  <td><img alt="Rectangle emitter with 'edge both' source mode." src="img/emitters/source_mode/rect_edge_both.webp" height="156" width="206" loading="lazy"/></td>
-                  <td><img alt="Rectangle emitter with 'volume' source mode." src="img/emitters/source_mode/rect_volume.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Rectangle emitter with 'edge out' emission source mode." src="img/emitters/source_mode/rect_edge_out.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Rectangle emitter with 'edge in' emission source mode." src="img/emitters/source_mode/rect_edge_in.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Rectangle emitter with 'edge both' emission source mode." src="img/emitters/source_mode/rect_edge_both.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Rectangle emitter with 'volume' emission source mode." src="img/emitters/source_mode/rect_volume.webp" height="156" width="206" loading="lazy"/></td>
                 </tr>
                 <tr>
-                  <td><img alt="Ellipse emitter with 'edge out' source mode." src="img/emitters/source_mode/ellipse_edge_out.webp" height="156" width="206" loading="lazy"/></td>
-                  <td><img alt="Ellipse emitter with 'edge in' source mode." src="img/emitters/source_mode/ellipse_edge_in.webp" height="156" width="206" loading="lazy"/></td>
-                  <td><img alt="Ellipse emitter with 'edge both' source mode." src="img/emitters/source_mode/ellipse_edge_both.webp" height="156" width="206" loading="lazy"/></td>
-                  <td><img alt="Ellipse emitter with 'volume' source mode." src="img/emitters/source_mode/ellipse_volume.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Ellipse emitter with 'edge out' emission source mode." src="img/emitters/source_mode/ellipse_edge_out.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Ellipse emitter with 'edge in' emission source mode." src="img/emitters/source_mode/ellipse_edge_in.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Ellipse emitter with 'edge both' emission source mode." src="img/emitters/source_mode/ellipse_edge_both.webp" height="156" width="206" loading="lazy"/></td>
+                  <td><img alt="Ellipse emitter with 'volume' emission source mode." src="img/emitters/source_mode/ellipse_volume.webp" height="156" width="206" loading="lazy"/></td>
                 </tr>
                 </tbody>
               </table>
@@ -1058,7 +1058,7 @@
 
             <h3 id="emitters-directed-emission">Directed Emission</h3>
 
-            <p>The <code>particleBlueprint.direction</code> property of an emitter configuration object overrides the default emission direction determined by the emitter type (shape) and the selected source mode.</p>
+            <p>The <code>particleBlueprint.direction</code> property of an emitter configuration object overrides the default emission direction determined by the emitter type (shape) and the selected emission source mode.</p>
 
             <p>Note that <code>direction</code> can be specified either as a single value or as a <code>[min, max]</code> range, allowing particles to be emitted in a range of directions rather than a single one. This can produce less uniform and more natural-looking movement. Below are some examples that illustrate the difference.</p>
 
@@ -1393,7 +1393,7 @@
     <span class="name">x2</span>: <span class="lit">475</span>,
     <span class="name">y2</span>: <span class="lit">25</span>,
     <span class="name">particlesPerSecond</span>: <span class="lit">200</span>,
-    <span class="name">source</span>: <span class="name">Source</span>.<span class="name">EDGE_OUT</span>,
+    <span class="name">source</span>: <span class="name">EmissionSource</span>.<span class="name">EDGE_OUT</span>,
     <span class="name">particleBlueprint</span>: {
         <span class="name">angularVelocity</span>: [<span class="lit">1</span>, <span class="lit">6</span>],
         <span class="name">size</span>: [<span class="lit">1</span>, <span class="lit">5</span>],
@@ -1409,7 +1409,7 @@
     <span class="name">x2</span>: <span class="lit">475</span>,
     <span class="name">y2</span>: <span class="lit">355</span>,
     <span class="name">particlesPerSecond</span>: <span class="lit">200</span>,
-    <span class="name">source</span>: <span class="name">Source</span>.<span class="name">EDGE_IN</span>,
+    <span class="name">source</span>: <span class="name">EmissionSource</span>.<span class="name">EDGE_IN</span>,
     <span class="name">particleBlueprint</span>: {
         <span class="name">angularVelocity</span>: [<span class="lit">1</span>, <span class="lit">6</span>],
         <span class="name">size</span>: [<span class="lit">1</span>, <span class="lit">5</span>],
@@ -2651,7 +2651,7 @@
             <li><a href="#emitters-emitter-types">Emitter Types</a></li>
             <li><a href="#emitters-emission-modes">Emission Modes</a>
               <ul>
-                <li><a href="#emitters-source-modes">Source Modes</a></li>
+                <li><a href="#emitters-emission-source">Emission Source</a></li>
                 <li><a href="#emitters-directed-emission">Directed Emission</a></li>
               </ul>
             </li>

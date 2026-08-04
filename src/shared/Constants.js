@@ -13,10 +13,10 @@ export const ModifierCategory = Object.freeze({
 });
 
 /**
- * Runtime constant mapping for emission source modes. For the list of available modes, see {@link SourceValues}.
- * @type {SourceValues}
+ * Runtime constant mapping for emission source modes. For the list of available modes, see {@link EmissionSourceValues}.
+ * @type {EmissionSourceValues}
  */
-export const Source = Object.freeze({
+export const EmissionSource = Object.freeze({
     EDGE_OUT: 'edge-out',
     EDGE_IN: 'edge-in',
     EDGE_BOTH: 'edge-both',

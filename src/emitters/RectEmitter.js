@@ -1,5 +1,5 @@
 import { Particle } from '../core/Particle.js';
-import {Source} from '../shared/Constants.js';
+import {EmissionSource} from '../shared/Constants.js';
 
 import { Emitter } from './Emitter.js';
 
@@ -69,7 +69,7 @@ export class RectEmitter extends Emitter {
      * @returns {void}
      */
     _initParticle(particle) {
-        if (this.source === Source.VOLUME) {
+        if (this.emissionSource === EmissionSource.VOLUME) {
             particle.x = this.x + Math.random() * this.width;
             particle.y = this.y + Math.random() * this.height;
         } else {
@@ -99,7 +99,7 @@ export class RectEmitter extends Emitter {
     }
 
     /**
-     * Calculates the default emission direction angle based on the emitter geometry and source mode.
+     * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
      * @param {Particle} particle Particle instance used to calculate the direction from its spawn position.
      * @returns {number} The default direction angle (in radians).
@@ -109,13 +109,13 @@ export class RectEmitter extends Emitter {
         const centerY = this.y + this.height / 2;
         const outwardAngle = Math.atan2(particle.y - centerY, particle.x - centerX);
 
-        switch (this.source) {
-            case Source.EDGE_OUT:
-            case Source.VOLUME:
+        switch (this.emissionSource) {
+            case EmissionSource.EDGE_OUT:
+            case EmissionSource.VOLUME:
                 return outwardAngle;
-            case Source.EDGE_IN:
+            case EmissionSource.EDGE_IN:
                 return outwardAngle + Math.PI;
-            case Source.EDGE_BOTH:
+            case EmissionSource.EDGE_BOTH:
                 return Math.random() > 0.5 ? outwardAngle : outwardAngle + Math.PI;
             default:
                 return outwardAngle;

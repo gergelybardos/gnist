@@ -23,5 +23,5 @@ export { Spin } from './modifiers/visual/Spin.js';
 
 export {
     ParticleFormat,
-    Source,
+    EmissionSource,
 } from './shared/Constants.js';

@@ -1,5 +1,5 @@
 import { Particle } from '../core/Particle.js';
-import { Source } from '../shared/Constants.js';
+import { EmissionSource } from '../shared/Constants.js';
 
 import { Emitter } from './Emitter.js';
 
@@ -78,7 +78,7 @@ export class LineEmitter extends Emitter {
     }
 
     /**
-     * Calculates the default emission direction angle based on the emitter geometry and source mode.
+     * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
      * @returns {number} The default emission direction angle (in radians).
      */
@@ -89,13 +89,13 @@ export class LineEmitter extends Emitter {
         const normalAngle = lineAngle + Math.PI / 2;
         const invertedNormalAngle = lineAngle - Math.PI / 2;
 
-        switch (this.source) {
-            case Source.EDGE_OUT:
+        switch (this.emissionSource) {
+            case EmissionSource.EDGE_OUT:
                 return normalAngle;
-            case Source.EDGE_IN:
+            case EmissionSource.EDGE_IN:
                 return invertedNormalAngle;
-            case Source.EDGE_BOTH:
-            case Source.VOLUME:
+            case EmissionSource.EDGE_BOTH:
+            case EmissionSource.VOLUME:
             default:
                 return Math.random() > 0.5 ? normalAngle : invertedNormalAngle;
         }

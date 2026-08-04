@@ -16,11 +16,11 @@
  */
 
 /**
- * Available emission source modes used in emitter configurations (specifically for `EmitterConfig.source`)
+ * Available emission source modes used in emitter configurations (specifically for `EmitterConfig.emissionSource`)
  * to define the geometric distribution and initial direction of emitted particles.
- * The default direction depends on both the source mode and the emitter type and can be overridden by specifying
+ * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying
  * `particleBlueprint.direction` in the emitter config.
- * @typedef {object} SourceValues
+ * @typedef {object} EmissionSourceValues
  * @property {string} EDGE_OUT Emit from the shape's boundary, directing particles outward.
  * @property {string} EDGE_IN Emit from the shape's boundary, directing particles inward.
  * @property {string} EDGE_BOTH Emit from the shape's boundary, directing particles randomly inward or outward.
