@@ -1,5 +1,5 @@
 /**
- * @import { Color, SourceValues } from '../shared/Types.js'
+ * @import { Color, EmissionSourceValues } from '../shared/Types.js'
  */
 /**
  * Emitter configuration options.
@@ -10,9 +10,9 @@
  * @property {number} [duration=Infinity] Duration of particle emission (in seconds) or JavaScript's native Infinity global object or a negative number for infinite emission.
  * @property {number} [x=0] Current horizontal coordinate of the emitter origin.
  * @property {number} [y=0] Current vertical coordinate of the emitter origin.
- * @property {string} [source=Source.VOLUME] Emission source mode, defining the geometric distribution and initial direction of emitted particles.
- * The default direction depends on both the source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
- * See {@link SourceValues} for available configuration constants.
+ * @property {string} [emissionSource=EmissionSource.VOLUME] Emission source mode, defining the geometric distribution and initial direction of emitted particles.
+ * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
+ * See {@link EmissionSourceValues} for available configuration constants.
  * @property {ParticleBlueprint} [particleBlueprint={}] Configuration for emitted particles.
  */
 /**
@@ -60,12 +60,12 @@ export class Emitter {
     y: number;
     /**
      * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
-     * The default direction depends on both the source mode and the emitter type and can be overridden by specifying
+     * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying
      * `particleBlueprint.direction` in the emitter config.
-     * @see {@link SourceValues} for available configuration constants.
+     * @see {@link EmissionSourceValues} for available configuration constants.
      * @type {string}
      */
-    source: string;
+    emissionSource: string;
     /**
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
@@ -152,7 +152,7 @@ export class Emitter {
      */
     _initParticle(particle: Particle): void;
     /**
-     * Calculates the default emission direction angle based on the emitter geometry and source mode.
+     * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * This is a fallback value when no explicit `direction` was specified in the emitter config's `particleBlueprint`.
      * @ignore
      * @param {Particle} [_particle] Particle instance. Subclasses may use this when calculating the direction.
@@ -191,10 +191,10 @@ export type EmitterConfig = {
     y?: number | undefined;
     /**
      * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
-     * The default direction depends on both the source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
-     * See {@link SourceValues} for available configuration constants.
+     * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
+     * See {@link EmissionSourceValues} for available configuration constants.
      */
-    source?: string | undefined;
+    emissionSource?: string | undefined;
     /**
      * Configuration for emitted particles.
      */

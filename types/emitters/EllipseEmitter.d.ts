@@ -34,7 +34,7 @@ export class EllipseEmitter extends Emitter {
      */
     radiusY: number;
     /**
-     * Calculates the default emission direction angle based on the emitter geometry and source mode.
+     * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
      * @param {Particle} particle Particle instance used to calculate the direction from its spawn position.
      * @returns {number} The default emission direction angle (in radians).

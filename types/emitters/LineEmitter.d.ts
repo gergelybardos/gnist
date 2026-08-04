@@ -44,7 +44,7 @@ export class LineEmitter extends Emitter {
      */
     y2: number;
     /**
-     * Calculates the default emission direction angle based on the emitter geometry and source mode.
+     * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
      * @returns {number} The default emission direction angle (in radians).
      */

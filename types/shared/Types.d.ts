@@ -30,12 +30,12 @@ export type ModifierCategoryValues = {
     PATH: string;
 };
 /**
- * Available emission source modes used in emitter configurations (specifically for `EmitterConfig.source`)
+ * Available emission source modes used in emitter configurations (specifically for `EmitterConfig.emissionSource`)
  * to define the geometric distribution and initial direction of emitted particles.
- * The default direction depends on both the source mode and the emitter type and can be overridden by specifying
+ * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying
  * `particleBlueprint.direction` in the emitter config.
  */
-export type SourceValues = {
+export type EmissionSourceValues = {
     /**
      * Emit from the shape's boundary, directing particles outward.
      */
@@ -53,7 +53,7 @@ export type SourceValues = {
      */
     VOLUME: string;
 };
-export type ParticleFormatConstants = {
+export type FlatParticleDataFormatConstants = {
     /**
      * Number of consecutive entries used to represent a single particle in a flat `Float32Array`.
      */
