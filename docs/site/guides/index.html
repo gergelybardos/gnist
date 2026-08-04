@@ -1912,10 +1912,10 @@
             <p>The provided array must have enough space for all particles. The required size can be calculated as:</p>
 
             <div class="code-snippet">
-              <pre><code><span class="name">particleCount</span> <span class="punct">*</span> <span class="name">ParticleFormat</span><span class="punct">.</span><span class="name">FLOATS_PER_PARTICLE</span></code></pre>
+              <pre><code><span class="name">particleCount</span> <span class="punct">*</span> <span class="name">FlatParticleDataFormat</span><span class="punct">.</span><span class="name">FLOATS_PER_PARTICLE</span></code></pre>
             </div>
 
-            <p>where <code>ParticleFormat.FLOATS_PER_PARTICLE</code> is a Gnist-provided constant that defines the number of values stored per particle.</p>
+            <p>where <code>FlatParticleDataFormat.FLOATS_PER_PARTICLE</code> is a Gnist-provided constant that defines the number of values stored per particle.</p>
           </section>
         </article>
 
@@ -1953,7 +1953,7 @@
 <span class="punct">}</span></code></pre>
             </div>
 
-            <p>Add <code>ParticleFormat</code> to the imported items from Gnist. It provides constants describing the layout of the flat particle data export.</p>
+            <p>Add <code>FlatParticleDataFormat</code> to the imported items from Gnist. It provides constants describing the layout of the flat particle data export.</p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
@@ -1964,7 +1964,7 @@
   <span class="name">Gnist</span><span class="punct">,</span>
   <span class="name">LineEmitter</span><span class="punct">,</span>
   <span class="name">OpacityFade</span><span class="punct">,</span>
-  <span class="name">ParticleFormat</span><span class="punct">,</span>
+  <span class="name">FlatParticleDataFormat</span><span class="punct">,</span>
   <span class="name">ScaleTween</span><span class="punct">,</span>
   <span class="name">Turbulence</span><span class="punct">,</span>
 <span class="punct">}</span> <span class="kw">from</span> <span class="str">'@gergelybardos/gnist'</span><span class="punct">;</span></code></pre>
@@ -2141,7 +2141,7 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">particleData</span> = <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> * <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">;</span></code></pre>
+              <pre><code><span class="kw">const</span> <span class="name">particleData</span> = <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> * <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">;</span></code></pre>
             </div>
 
             <p>To fill this buffer, call Gnist's <code>fillFlatArray()</code> method after <code>engine.update(dt)</code> in the main loop. This will copy current particle state into the <code>particleData</code> buffer array as a contiguous <code>Float32Array</code> that can be uploaded directly to the WebGL buffer. The returned particle count will be used later.</p>
@@ -2208,10 +2208,10 @@
 
     <span class="comm">// Upload current particle data used by per-instance attributes.</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">bindBuffer</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleBuffer</span><span class="punct">)</span><span class="punct">;</span>
-    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> * <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">)</span><span class="punct">;</span>
+    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> * <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">)</span><span class="punct">;</span>
 
     <span class="comm">// Stride is permanently 32 bytes (8 floats * 4 bytes per float)</span>
-    <span class="kw">const</span> <span class="name">stride</span> = <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span> * <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">stride</span> = <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span> * <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
 
     <span class="comm">// Position (Offset: 0)</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">enableVertexAttribArray</span><span class="punct">(</span><span class="name">positionLocation</span><span class="punct">)</span><span class="punct">;</span>
@@ -2276,7 +2276,7 @@
   <span class="name">Gnist</span><span class="punct">,</span>
   <span class="name">LineEmitter</span><span class="punct">,</span>
   <span class="name">OpacityFade</span><span class="punct">,</span>
-  <span class="name">ParticleFormat</span><span class="punct">,</span>
+  <span class="name">FlatParticleDataFormat</span><span class="punct">,</span>
   <span class="name">ScaleTween</span><span class="punct">,</span>
   <span class="name">Turbulence</span><span class="punct">,</span>
 <span class="punct">}</span> <span class="kw">from</span> <span class="str">'@gergelybardos/gnist'</span><span class="punct">;</span>
@@ -2378,7 +2378,7 @@
 
 <span class="kw">const</span> <span class="name">particleBuffer</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">createBuffer</span><span class="punct">();</span>
 
-<span class="kw">const</span> <span class="name">particleData</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> <span class="punct">*</span> <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span><span class="punct">);</span>
+<span class="kw">const</span> <span class="name">particleData</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> <span class="punct">*</span> <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span><span class="punct">);</span>
 
 <span class="comm">// Retrieve shader attribute and uniform locations used during rendering.</span>
 
@@ -2551,10 +2551,10 @@
 
     <span class="comm">// Upload current particle data used by per-instance attributes.</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">bindBuffer</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleBuffer</span><span class="punct">);</span>
-    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> <span class="punct">*</span> <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span><span class="punct">),</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">);</span>
+    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> <span class="punct">*</span> <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span><span class="punct">),</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">);</span>
 
     <span class="comm">// Stride is permanently 32 bytes (8 floats * 4 bytes per float)</span>
-    <span class="kw">const</span> <span class="name">stride</span> <span class="punct">=</span> <span class="name">ParticleFormat.FLOATS_PER_PARTICLE</span> <span class="punct">*</span> <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">stride</span> <span class="punct">=</span> <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span> <span class="punct">*</span> <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
 
     <span class="comm">// Position (Offset: 0)</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">enableVertexAttribArray</span><span class="punct">(</span><span class="name">positionLocation</span><span class="punct">);</span>

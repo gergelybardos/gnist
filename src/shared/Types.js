@@ -28,7 +28,7 @@
  */
 
 /**
- * @typedef {object} ParticleFormatConstants
+ * @typedef {object} FlatParticleDataFormatConstants
  * @property {number} FLOATS_PER_PARTICLE Number of consecutive entries used to represent a single particle in a flat `Float32Array`.
  */
 

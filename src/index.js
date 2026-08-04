@@ -22,6 +22,6 @@ export { ScaleTween } from './modifiers/visual/ScaleTween.js';
 export { Spin } from './modifiers/visual/Spin.js';
 
 export {
-    ParticleFormat,
+    FlatParticleDataFormat,
     EmissionSource,
 } from './shared/Constants.js';

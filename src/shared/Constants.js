@@ -1,5 +1,5 @@
 /**
- * @import { ModifierCategoryValues, ParticleFormatConstants, SourceValues } from './Types.js'
+ * @import { ModifierCategoryValues, FlatParticleDataFormatConstants, SourceValues } from './Types.js'
  */
 
 /**
@@ -25,8 +25,8 @@ export const EmissionSource = Object.freeze({
 
 /**
  * Runtime constants describing the flat particle data format exported by {@link Gnist#fillFlatArray}.
- * @type {ParticleFormatConstants}
+ * @type {FlatParticleDataFormatConstants}
  */
-export const ParticleFormat = Object.freeze({
+export const FlatParticleDataFormat = Object.freeze({
     FLOATS_PER_PARTICLE: 8
 });
