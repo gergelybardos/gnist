@@ -4,7 +4,7 @@ import { Particle } from '../core/Particle.js';
 import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
 
 /**
- * @import { Color, SourceValues } from '../shared/Types.js'
+ * @import { Color, EmissionSourceValues } from '../shared/Types.js'
  */
 
 /**

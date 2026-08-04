@@ -1,5 +1,5 @@
 /**
- * @import { ModifierCategoryValues, FlatParticleDataFormatConstants, SourceValues } from './Types.js'
+ * @import { ModifierCategoryValues, FlatParticleDataFormatConstants, EmissionSourceValues } from './Types.js'
  */
 
 /**
