@@ -1,0 +1,614 @@
+/* ==========================================================================
+   Design Tokens & Themes
+   ========================================================================== */
+
+:root {
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+
+  --bg-color: #0F0F14;
+  --surface-color: #141419;
+  --border-color: #2A2F3A;
+  --text-color: #ABABB6;
+  --highlighted-color: #FAFAFA;
+  --accent-color: #16D7E1;
+  --inline-code-bg-color: #2A2F3A;
+  --inline-code-color: #16D7E1;
+  --block-code-bg-color: #0F0F14;
+  --block-code-color: #ABABB6;
+  --callout-color: var(--accent-color);
+
+  --toc-width: 220px;
+  --toc-padding: 1.25rem;
+  --toc-font-size: 0.9rem;
+  --toc-top-offset: 4rem;
+  --border-radius: 7px;
+}
+
+[data-theme="light"] {
+  --bg-color: #F8F9FA;
+  --surface-color: #FFFFFF;
+  --border-color: #E2E8F0;
+  --text-color: #64646E;
+  --highlighted-color: #3C3C41;
+  --accent-color: #11A6AD;
+  --inline-code-bg-color: #F8F9FA;
+  --inline-code-color: #11A6AD;
+  --block-code-bg-color: #F8F9FA;
+  --block-code-color: #64646E;
+  --callout-color: var(--accent-color);
+}
+
+/* ==========================================================================
+   Reset & Base Rules
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  line-height: 1.7;
+  font-family: var(--font-family), sans-serif;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+section {
+  margin-bottom: 3rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+  font-weight: 350;
+  color: var(--highlighted-color);
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+/* Images */
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.image-gallery img {
+  width: calc(50% - 1rem);
+  height: auto;
+  display: block;
+}
+
+/* Tables */
+
+div.table-container {
+  margin-top: 1.5rem;
+  margin-bottom: 2.5rem;
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+caption {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+th {
+  text-align: center;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+td.not-applicable {
+  text-align: center;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Base Code & Formatting */
+
+code {
+  font-family: monospace;
+}
+
+:not(pre) > code {
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  color: var(--inline-code-color);
+  background-color: var(--inline-code-bg-color);
+}
+
+pre {
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  color: var(--block-code-color);
+  background: var(--block-code-bg-color);
+  overflow-x: auto;
+}
+
+pre code {
+  white-space: pre;
+  line-height: 1.5;
+}
+
+var {
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-style: italic;
+  font-family: inherit;
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+
+.site-layout {
+  display: grid;
+  grid-template-columns: var(--toc-width) minmax(0, 1fr) var(--toc-width);
+  gap: 1.25rem;
+  max-width: 1500px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 3rem 2rem;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-color);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.site-header ul {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-header ul a {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--highlighted-color);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.site-header ul a:hover,
+.site-header ul a:active {
+  color: var(--bg-color);
+  background: var(--highlighted-color);
+  border-color: var(--highlighted-color);
+}
+
+.main-toc { grid-column: 1; grid-row: 2; }
+.sub-toc  { grid-column: 3; grid-row: 2; }
+
+.content {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  min-height: 120vh;
+  padding: 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--surface-color);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.site-footer {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.site-footer p {
+  margin-bottom: 0.75rem;
+}
+
+.site-footer a {
+  color: var(--highlighted-color);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.site-footer a:hover {
+  color: var(--accent-color);
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li:not(:last-child)::after {
+  content: "•";
+  margin-left: 1rem;
+  color: var(--border-color);
+}
+
+.sticky-box {
+  position: sticky;
+  top: var(--toc-top-offset);
+  align-self: start;
+  max-height: calc(100vh - (var(--toc-top-offset) * 2));
+  padding: var(--toc-padding);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow-y: auto;
+  background: var(--surface-color);
+  font-size: var(--toc-font-size);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* ==========================================================================
+   Components & Widgets
+   ========================================================================== */
+
+/* Brand & Header Controls */
+
+.brand-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--highlighted-color);
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.brand-box img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: var(--toc-font-size);
+  cursor: pointer;
+}
+
+.theme-toggle-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* TOC Component */
+
+.toc h3 {
+  margin-bottom: 0.4rem;
+  color: var(--highlighted-color);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.7;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.toc ul {
+  margin-bottom: 1.6rem;
+  list-style: none;
+}
+
+.toc li {
+  margin-bottom: 0.4rem;
+}
+
+.toc ul ul {
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+  padding-left: 1rem;
+}
+
+.toc a {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.toc a:hover,
+.toc a.active {
+  color: var(--accent-color);
+}
+
+/* Callout Boxes */
+
+.callout {
+  margin: 3rem 0;
+  padding: 0.85rem 1.15rem;
+  border-left: 4px solid var(--callout-color);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  background-image: linear-gradient(
+      140deg,
+      rgba(0, 242, 254, 0.1),
+      rgba(76, 122, 238, 0.1),
+      rgba(143, 0, 255, 0.1),
+      rgba(224, 23, 122, 0.1),
+      rgba(255, 102, 0, 0.1)
+  );
+  color: var(--text-color);
+}
+
+.callout-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--callout-color);
+}
+
+.callout-title svg {
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.callout p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Code Snippets */
+
+.code-snippet {
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font: 14px/1.5 Consolas, Monaco, monospace;
+}
+
+.code-snippet pre {
+  display: block;
+  margin: 0;
+}
+
+.code-snippet code {
+  display: block;
+}
+
+.copy-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.kw    { color: var(--inline-code-color); }
+.name  { color: #777dea; }
+.lit   { color: #FF6600; }
+.comm  { color: #858585; }
+.tag   { color: #777dea; }
+.attr  { color: var(--inline-code-color); }
+.str   { color: #FF6600; }
+.punct { color: #858585; opacity: 0.7; }
+
+/* Utilities */
+
+.transparent {
+  border: none !important;
+  background: transparent !important;
+}
+
+/* ==========================================================================
+   SPA Mechanics
+   ========================================================================== */
+
+.page { display: none; }
+.page.active { display: block; }
+
+.sub-toc-group { display: none; }
+.sub-toc-group.active { display: block; }
+
+/* ==========================================================================
+   Intra-Page Rules
+   ========================================================================== */
+
+.page h1,
+.page h2,
+.page h3,
+.page h4,
+.page h5,
+.page h6,
+.page section {
+  scroll-margin-top: 6rem;
+}
+
+.page h1 { font-size: 2.8rem; margin-bottom: 4rem; }
+.page h2 { font-size: 1.8rem; margin-bottom: 2rem; margin-top: 3rem; }
+.page h3 { font-size: 1.4rem; margin-bottom: 1.5rem; margin-top: 2.5rem; }
+.page h4 { font-size: 1.1rem; margin-bottom: 1rem; margin-top: 2rem; font-weight: 500; }
+
+.page a {
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+}
+
+.page ol, .page ul {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.page ol { list-style-type: decimal; }
+.page ul { list-style-type: disc; }
+
+.page li > ul,
+.page li > ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 1.25rem;
+}
+
+.page li > p {
+  margin-top: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.page img {
+  border-radius: var(--border-radius);
+}
+
+/* ==========================================================================
+   Standalone Start Page View
+   ========================================================================== */
+
+body.start-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+body.start-page main {
+  max-width: 600px;
+  padding: 2rem;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+body.start-page main .logo {
+  width: 145px;
+  height: 145px;
+}
+
+body.start-page main h1 {
+  color: var(--highlighted-color);
+}
+
+body.start-page main p {
+  margin-top: 1.5rem;
+  margin-bottom: 2.5rem;
+  font-size: 1.6rem;
+}
+
+body.start-page main .links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+body.start-page main a {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--highlighted-color);
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+body.start-page main a:hover,
+body.start-page main a:active {
+  color: var(--bg-color);
+  background: var(--highlighted-color);
+}
+
+body.start-page .site-footer {
+  border: none;
+}
+
+/* ==========================================================================
+   Media Queries
+   ========================================================================== */
+
+@media (max-width: 1270px) {
+  .main-toc { grid-column: 1; grid-row: 2; }
+  .content  { grid-column: 2 / -1; grid-row: 2; min-width: 0; }
+  .sub-toc  { display: none; }
+}
+
+@media (max-width: 1010px) {
+  .site-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 1rem 1rem;
+  }
+
+  .site-header ul {
+    position: inherit;
+    left: inherit;
+    transform: none;
+  }
+
+  .sticky-box {
+    position: static;
+    max-height: none;
+  }
+
+  .main-toc { grid-column: 1; grid-row: 2; }
+  .content  { grid-column: 1; grid-row: 3; }
+  .sub-toc  { display: none; }
+
+  .site-footer {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+}

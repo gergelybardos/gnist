@@ -1,0 +1,2409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>EllipseEmitter - Gnist API Reference</title>
+    
+    
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ColorRamp.html">ColorRamp</a></li><li><a href="DirectionalForce.html">DirectionalForce</a></li><li><a href="EllipseEmitter.html">EllipseEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#update">update</a></li></ul></li><li><a href="Emitter.html">Emitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Emitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#update">update</a></li></ul></li><li><a href="Force.html">Force</a></li><li><a href="Gnist.html">Gnist</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Gnist.html#addEmitter">addEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#addGlobalForce">addGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#fillFlatArray">fillFlatArray</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getEmitter">getEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getGlobalForce">getGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeEmitter">removeEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeGlobalForce">removeGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#update">update</a></li></ul></li><li><a href="LineEmitter.html">LineEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="LineEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#update">update</a></li></ul></li><li><a href="LinearDrag.html">LinearDrag</a></li><li><a href="Modifier.html">Modifier</a></li><li><a href="OpacityFade.html">OpacityFade</a></li><li><a href="Particle.html">Particle</a></li><li><a href="PointEmitter.html">PointEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PointEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#update">update</a></li></ul></li><li><a href="RadialForce.html">RadialForce</a></li><li><a href="RectEmitter.html">RectEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="RectEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#update">update</a></li></ul></li><li><a href="RotationTween.html">RotationTween</a></li><li><a href="ScaleTween.html">ScaleTween</a></li><li><a href="SineWave.html">SineWave</a></li><li><a href="Spin.html">Spin</a></li><li><a href="Turbulence.html">Turbulence</a></li><li><a href="Vortex.html">Vortex</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Color">Color</a></li><li><a href="global.html#ColorRampConfig">ColorRampConfig</a></li><li><a href="global.html#CullingBounds">CullingBounds</a></li><li><a href="global.html#DirectionalForceConfig">DirectionalForceConfig</a></li><li><a href="global.html#EllipseEmitterConfig">EllipseEmitterConfig</a></li><li><a href="global.html#EmissionSource">EmissionSource</a></li><li><a href="global.html#EmissionSourceValues">EmissionSourceValues</a></li><li><a href="global.html#EmitterConfig">EmitterConfig</a></li><li><a href="global.html#EngineConfig">EngineConfig</a></li><li><a href="global.html#FlatParticleDataFormat">FlatParticleDataFormat</a></li><li><a href="global.html#FlatParticleDataFormatConstants">FlatParticleDataFormatConstants</a></li><li><a href="global.html#ForceConfig">ForceConfig</a></li><li><a href="global.html#LineEmitterConfig">LineEmitterConfig</a></li><li><a href="global.html#LinearDragConfig">LinearDragConfig</a></li><li><a href="global.html#ModifierConfig">ModifierConfig</a></li><li><a href="global.html#OpacityFadeConfig">OpacityFadeConfig</a></li><li><a href="global.html#ParticleBlueprint">ParticleBlueprint</a></li><li><a href="global.html#RadialForceConfig">RadialForceConfig</a></li><li><a href="global.html#RectEmitterConfig">RectEmitterConfig</a></li><li><a href="global.html#RotationTweenConfig">RotationTweenConfig</a></li><li><a href="global.html#ScaleTweenConfig">ScaleTweenConfig</a></li><li><a href="global.html#SineWaveConfig">SineWaveConfig</a></li><li><a href="global.html#SpinConfig">SpinConfig</a></li><li><a href="global.html#TurbulenceConfig">TurbulenceConfig</a></li><li><a href="global.html#VortexConfig">VortexConfig</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">EllipseEmitter</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        
+            EllipseEmitter
+        
+        </h2>
+        
+            <div class="class-description usertext">Particle emitter that emits particles randomly from an elliptical area, using a uniform distribution.</div>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="EllipseEmitter"><span class="type-signature"></span>new EllipseEmitter<span class="signature">(config<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Initializes an ellipse emitter with a given position and radius.Particles are emitted randomly from the elliptical area using a uniform distribution.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_EllipseEmitter.js.html">emitters/EllipseEmitter.js</a>, <a href="emitters_EllipseEmitter.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#EllipseEmitterConfig">EllipseEmitterConfig</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>{}</code>
+                
+                </td>
+            
+
+            <td class="description last">EllipseEmitter configuration options.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        </div>
+    
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="Emitter.html">Emitter</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="EllipseEmitter.html">EllipseEmitter</a></dt>
+            <dd></dd>
+        </dl>
+    
+    
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="emissionSource"><span class="type-signature"></span>emissionSource<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Emission source mode, defining the geometric distribution and initial direction of emitted particles.The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying`particleBlueprint.direction` in the emitter config.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line72">line 72</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#emissionSource">Emitter#emissionSource</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#EmissionSourceValues">EmissionSourceValues</a> for available configuration constants.</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Emission source mode, defining the geometric distribution and initial direction of emitted particles.The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying`particleBlueprint.direction` in the emitter config.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="particlesPerSecond"><span class="type-signature"></span>particlesPerSecond<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Continuous emission rate of new particles per second.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line51">line 51</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#particlesPerSecond">Emitter#particlesPerSecond</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Continuous emission rate of new particles per second.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="radiusX"><span class="type-signature"></span>radiusX<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Horizontal radius of the emission ellipse.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_EllipseEmitter.js.html">emitters/EllipseEmitter.js</a>, <a href="emitters_EllipseEmitter.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Horizontal radius of the emission ellipse.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="radiusY"><span class="type-signature"></span>radiusY<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Vertical radius of the emission ellipse.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_EllipseEmitter.js.html">emitters/EllipseEmitter.js</a>, <a href="emitters_EllipseEmitter.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Vertical radius of the emission ellipse.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="x"><span class="type-signature"></span>x<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Horizontal coordinate of the emission ellipse center.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_EllipseEmitter.js.html">emitters/EllipseEmitter.js</a>, <a href="emitters_EllipseEmitter.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#x">Emitter#x</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Horizontal coordinate of the emission ellipse center.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="y"><span class="type-signature"></span>y<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Vertical coordinate of the emission ellipse center.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_EllipseEmitter.js.html">emitters/EllipseEmitter.js</a>, <a href="emitters_EllipseEmitter.js.html#line36">line 36</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#y">Emitter#y</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    Vertical coordinate of the emission ellipse center.
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="addModifier"><span class="type-signature"></span>addModifier<span class="signature">(modifier)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Registers a modifier to be applied to the particles emitted by the emitter.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line194">line 194</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#addModifier">Emitter#addModifier</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>modifier</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Modifier.html">Modifier</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Modifier instance to register.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-throws">Throws:</h5>
+
+        
+
+    <div class="param-desc usertext">
+    
+        
+<span class="param-type">Error</span>
+
+
+
+    
+    </div>
+
+
+    
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="addScopedForce"><span class="type-signature"></span>addScopedForce<span class="signature">(force)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Registers a scoped emitter-specific force to be applied to the particles emitted by the emitter.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line237">line 237</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#addScopedForce">Emitter#addScopedForce</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>force</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Force.html">Force</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Force instance to register.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getModifier"><span class="type-signature"></span>getModifier<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Modifier.html">Modifier</a>|null}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Finds a registered modifier by its unique identifier.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line182">line 182</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#getModifier">Emitter#getModifier</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The unique identifier of the target modifier.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The modifier instance if found, null otherwise.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Modifier.html">Modifier</a></span>
+|
+
+<span class="param-type">null</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getScopedForce"><span class="type-signature"></span>getScopedForce<span class="signature">(id)</span><span class="type-signature"> &rarr; {<a href="Force.html">Force</a>|null}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Finds a registered scoped emitter-specific force by its unique identifier.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line228">line 228</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#getScopedForce">Emitter#getScopedForce</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The unique identifier of the target force.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    The force instance if found, null otherwise.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Force.html">Force</a></span>
+|
+
+<span class="param-type">null</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="pause"><span class="type-signature"></span>pause<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Temporarily halts particle emission and locks internal tracking.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line269">line 269</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#pause">Emitter#pause</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="removeModifier"><span class="type-signature"></span>removeModifier<span class="signature">(id)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Removes a modifier from any of the emitter's registered modifier lists by its unique identifier.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line214">line 214</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#removeModifier">Emitter#removeModifier</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The unique identifier of the target modifier.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    True if found and successfully removed, false otherwise.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="removeScopedForce"><span class="type-signature"></span>removeScopedForce<span class="signature">(id)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Removes a scoped emitter-specific force from the emitter's registered forces lists by its unique identifier.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line246">line 246</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#removeScopedForce">Emitter#removeScopedForce</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The unique identifier of the target force.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    True if found and successfully removed, false otherwise.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="resume"><span class="type-signature"></span>resume<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Resumes particle emission and internal tracking from where they were paused.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line277">line 277</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#resume">Emitter#resume</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Starts or forcefully restarts particle emission from the beginning.Resets internal tracking and sets the emitter to an active state.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line259">line 259</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#start">Emitter#start</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="stop"><span class="type-signature"></span>stop<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Halts particle emission and resets internal tracking.The emitter is deactivated but remains ready to be started again.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line286">line 286</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#stop">Emitter#stop</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(dt, particlePool)</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li>Updates the emitter's internal timer and returns any new particles to be emitted in the current frame.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="emitters_Emitter.js.html">emitters/Emitter.js</a>, <a href="emitters_Emitter.js.html#line298">line 298</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Emitter.html#update">Emitter#update</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Time elapsed since the last frame (in seconds).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>particlePool</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Particle.html">Particle</a>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Reference to the internal collection of active particles in the main {Gnist} class.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Tue Aug 04 2026 18:27:01 GMT+0200 (közép-európai nyári idő) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

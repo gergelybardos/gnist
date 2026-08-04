@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>modifiers/visual/RotationTween.js - Gnist API Reference</title>
+    
+    
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="wrap">
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ColorRamp.html">ColorRamp</a></li><li><a href="DirectionalForce.html">DirectionalForce</a></li><li><a href="EllipseEmitter.html">EllipseEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="EllipseEmitter.html#update">update</a></li></ul></li><li><a href="Emitter.html">Emitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Emitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="Emitter.html#update">update</a></li></ul></li><li><a href="Force.html">Force</a></li><li><a href="Gnist.html">Gnist</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Gnist.html#addEmitter">addEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#addGlobalForce">addGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#fillFlatArray">fillFlatArray</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getEmitter">getEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#getGlobalForce">getGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeEmitter">removeEmitter</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#removeGlobalForce">removeGlobalForce</a></li><li data-type='method' style='display: none;'><a href="Gnist.html#update">update</a></li></ul></li><li><a href="LineEmitter.html">LineEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="LineEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="LineEmitter.html#update">update</a></li></ul></li><li><a href="LinearDrag.html">LinearDrag</a></li><li><a href="Modifier.html">Modifier</a></li><li><a href="OpacityFade.html">OpacityFade</a></li><li><a href="Particle.html">Particle</a></li><li><a href="PointEmitter.html">PointEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="PointEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="PointEmitter.html#update">update</a></li></ul></li><li><a href="RadialForce.html">RadialForce</a></li><li><a href="RectEmitter.html">RectEmitter</a><ul class='methods'><li data-type='method' style='display: none;'><a href="RectEmitter.html#addModifier">addModifier</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#addScopedForce">addScopedForce</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#getModifier">getModifier</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#getScopedForce">getScopedForce</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#pause">pause</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#removeModifier">removeModifier</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#removeScopedForce">removeScopedForce</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#resume">resume</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#start">start</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#stop">stop</a></li><li data-type='method' style='display: none;'><a href="RectEmitter.html#update">update</a></li></ul></li><li><a href="RotationTween.html">RotationTween</a></li><li><a href="ScaleTween.html">ScaleTween</a></li><li><a href="SineWave.html">SineWave</a></li><li><a href="Spin.html">Spin</a></li><li><a href="Turbulence.html">Turbulence</a></li><li><a href="Vortex.html">Vortex</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Color">Color</a></li><li><a href="global.html#ColorRampConfig">ColorRampConfig</a></li><li><a href="global.html#CullingBounds">CullingBounds</a></li><li><a href="global.html#DirectionalForceConfig">DirectionalForceConfig</a></li><li><a href="global.html#EllipseEmitterConfig">EllipseEmitterConfig</a></li><li><a href="global.html#EmissionSource">EmissionSource</a></li><li><a href="global.html#EmissionSourceValues">EmissionSourceValues</a></li><li><a href="global.html#EmitterConfig">EmitterConfig</a></li><li><a href="global.html#EngineConfig">EngineConfig</a></li><li><a href="global.html#FlatParticleDataFormat">FlatParticleDataFormat</a></li><li><a href="global.html#FlatParticleDataFormatConstants">FlatParticleDataFormatConstants</a></li><li><a href="global.html#ForceConfig">ForceConfig</a></li><li><a href="global.html#LineEmitterConfig">LineEmitterConfig</a></li><li><a href="global.html#LinearDragConfig">LinearDragConfig</a></li><li><a href="global.html#ModifierConfig">ModifierConfig</a></li><li><a href="global.html#OpacityFadeConfig">OpacityFadeConfig</a></li><li><a href="global.html#ParticleBlueprint">ParticleBlueprint</a></li><li><a href="global.html#RadialForceConfig">RadialForceConfig</a></li><li><a href="global.html#RectEmitterConfig">RectEmitterConfig</a></li><li><a href="global.html#RotationTweenConfig">RotationTweenConfig</a></li><li><a href="global.html#ScaleTweenConfig">ScaleTweenConfig</a></li><li><a href="global.html#SineWaveConfig">SineWaveConfig</a></li><li><a href="global.html#SpinConfig">SpinConfig</a></li><li><a href="global.html#TurbulenceConfig">TurbulenceConfig</a></li><li><a href="global.html#VortexConfig">VortexConfig</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">modifiers/visual/RotationTween.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { Particle } from '../../core/Particle.js';
+import { ModifierCategory } from '../../shared/Constants.js';
+
+import { Modifier } from '../Modifier.js';
+
+/**
+ * @import { ModifierConfig } from './Modifier.js';
+ */
+
+/**
+ * RotationTween configuration options.
+ * Includes all properties from {@link ModifierConfig}.
+ * @typedef {object} RotationTweenConfig
+ * @property {number} [startRotation=0] RotationTween angle (in radians) at particle emission.
+ * @property {number} [endRotation=6.283185] RotationTween angle (in radians) at particle death.
+ */
+
+/**
+ * Particle modifier that interpolates the rotation angle of particles over their lifespan between two target values.
+ * @class
+ * @extends Modifier
+ */
+export class RotationTween extends Modifier {
+    // Skipped @override because it fails on static members in TypeScript
+    /**
+     * Gets the architectural category of the modifier.
+     * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
+     * @ignore
+     * @type {string}
+     * @returns {string}
+     */
+    static get category() {
+        return ModifierCategory.VISUAL;
+    }
+
+    /**
+     * RotationTween angle (in radians) at particle emission.
+     * @type {number}
+     */
+    startRotation;
+
+    /**
+     * RotationTween angle (in radians) at particle death.
+     * @type {number}
+     */
+    endRotation;
+
+    /**
+     * Initializes a rotation tween modifier with starting and ending rotation angles.
+     * @constructor
+     * @param {RotationTweenConfig} [config={}] RotationTween configuration options.
+     */
+    constructor(config = {}) {
+        super(config);
+
+        this.startRotation = config.startRotation ?? 0;
+        this.endRotation = config.endRotation ?? Math.PI * 2;
+    }
+
+    /**
+     * Interpolates a particle's rotation based on its normalized age.
+     * @override
+     * @param {Particle} particle Particle instance to affect.
+     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @returns {void}
+     */
+    update(particle, normalizedAge) {
+        particle.rotation = this.startRotation + (this.endRotation - this.startRotation) * normalizedAge;
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Tue Aug 04 2026 18:27:01 GMT+0200 (közép-európai nyári idő) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>
