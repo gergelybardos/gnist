@@ -1,15 +1,14 @@
 import {
     ColorRamp,
-    DirectionalForce,
+    EmissionSource,
+    FlatParticleDataFormat,
     Gnist,
+    LineEmitter,
     LinearDrag,
     OpacityFade,
-    FlatParticleDataFormat,
     PointEmitter,
     ScaleTween,
-    SineWave,
     Spin,
-    Turbulence,
 } from 'gnist';
 
 /**
@@ -35,6 +34,12 @@ export class Sandbox {
     // CORE
     // =========================================================================
 
+    /** @type {Array} */
+    #avgGnistUpdateTimeSamplesMs;
+
+    /** @type {number} */
+    #performanceHistoryMaxSize;
+
     /** @type {Gnist|null} */
     #gnistEngine;
 
@@ -43,6 +48,15 @@ export class Sandbox {
 
     /** @type {boolean} */
     #useCullingBounds;
+
+    /** @type {number} */
+    #particleCountLimit;
+
+    /** @type {number} */
+    #sampleWindow;
+
+    /** @type {number} */
+    #warmupDurationS;
 
     /** @type {PointEmitter|null} */
     #mainEmitter;
@@ -64,13 +78,13 @@ export class Sandbox {
     #overlayCanvas;
 
     /** @type {CanvasRenderingContext2D|null} */
+    #overlayCtx;
+
+    /** @type {CanvasRenderingContext2D|null} */
     #canvas2dCtx;
 
     /** @type {WebGL2RenderingContext|null} */
     #webgl2Ctx;
-
-    /** @type {CanvasRenderingContext2D|null} */
-    #overlayCtx;
 
     /** @type {Float32Array|null} */
     #glBufferData;
@@ -84,8 +98,21 @@ export class Sandbox {
     /** @type {WebGLBuffer|null} */
     #glQuadBuffer;
 
+    // =========================================================================
+    // OPERATIONS
+    // =========================================================================
+
+    /** @type {boolean} */
+    #displayPerformanceMetricsHud;
+
+    /** @type {boolean} */
+    #displayGrid;
+
     /** @type {boolean} */
     #takeScreenshotNextFrame;
+
+    /** @type {boolean} */
+    #getReportNextFrame;
 
     // =========================================================================
     // PERFORMANCE METRICS
@@ -104,10 +131,16 @@ export class Sandbox {
     #peakAvgGnistUpdateTimeMs;
 
     /** @type {number} */
+    #troughAvgGnistUpdateTimeMs;
+
+    /** @type {number} */
     #fps;
 
     /** @type {number} */
     #totalFrameTimeS;
+
+    /** @type {number} */
+    #totalSimulationTimeS;
 
     /** @type {string} */
     #userAgentInfo;
@@ -117,31 +150,46 @@ export class Sandbox {
      * @param {string} [mode='canvas']
      * @param {boolean} [useCullingBounds=true]
      */
-    constructor(mode = Sandbox.#MODE_CANVAS_2D, useCullingBounds = true) {
+    constructor(mode = Sandbox.#MODE_CANVAS_2D, useCullingBounds = false) {
+        // Core
+        this.#avgGnistUpdateTimeSamplesMs = [];
+        this.#performanceHistoryMaxSize = 200;
         this.#gnistEngine = null;
         this.#previousTime = 0;
         this.#useCullingBounds = useCullingBounds;
+        this.#particleCountLimit = 50000;
+        this.#sampleWindow = 100;
+        this.#warmupDurationS = 10;
         this.#mainEmitter = null;
         this.#sparkEmitter = null;
 
+        // Rendering
         this.#renderMode = mode;
         this.#simulationCanvas = null;
         this.#overlayCanvas = null;
-        this.#canvas2dCtx = null;
         this.#overlayCtx = null;
+        this.#canvas2dCtx = null;
         this.#webgl2Ctx = null;
         this.#glBufferData = null;
         this.#glProgram = null;
         this.#glBuffer = null;
         this.#glQuadBuffer = null;
-        this.#takeScreenshotNextFrame = false;
 
+        // Operations
+        this.#displayPerformanceMetricsHud = true;
+        this.#displayGrid = false;
+        this.#takeScreenshotNextFrame = false;
+        this.#getReportNextFrame = false;
+
+        // Performance metrics
         this.#frameCount = 0;
         this.#totalExecutionTimeMs = 0;
         this.#avgGnistUpdateTimeMs = 0;
         this.#peakAvgGnistUpdateTimeMs = 0;
+        this.#troughAvgGnistUpdateTimeMs = Infinity;
         this.#fps = 0;
         this.#totalFrameTimeS = 0;
+        this.#totalSimulationTimeS = 0;
         this.#userAgentInfo = '';
     }
 
@@ -166,7 +214,14 @@ export class Sandbox {
         this.#userAgentInfo = this.#getUserAgentInfo();
 
         this.#initCanvas();
-        this.#initSimulation();
+
+        this.#initShowcaseSimulation();
+        //this.#initBenchmarkSimulation();
+
+        if (this.#renderMode === Sandbox.#MODE_WEBGL2) {
+            this.#initWebGL();
+        }
+
         this.#updateGnistCullingBounds();
 
         this.#simulationCanvas.addEventListener('mousemove', (event) => this.#handleMouseMove(event));
@@ -203,8 +258,6 @@ export class Sandbox {
                     alpha: false,
                     premultipliedAlpha: false,
                 });
-
-                this.#initWebGL();
 
                 break;
             default:
@@ -341,37 +394,16 @@ export class Sandbox {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.#glQuadBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, quadVertices, gl.STATIC_DRAW);
 
-        this.#glBufferData = new Float32Array(50000 * FlatParticleDataFormat.FLOATS_PER_PARTICLE);
+        this.#glBufferData = new Float32Array(this.#particleCountLimit * FlatParticleDataFormat.FLOATS_PER_PARTICLE);
     }
 
     /**
      * @returns {void}
      */
-    #initSimulation() {
-        // Global forces
-
-        const buoyancy = new DirectionalForce({
-            ax: 0,
-            ay: -200,
-        });
-
+    #initShowcaseSimulation() {
         const friction = new LinearDrag({
             drag: 0.4,
         });
-
-        // Path modifiers
-
-        const wave = new SineWave({
-            amplitude: [1, 50],
-            frequency: 1,
-        });
-
-        const noise = new Turbulence({
-            strength: [100, 750],
-            scale: 1
-        });
-
-        // Visual modifiers
 
         const gnistColorRamp = new ColorRamp({
             colors: [
@@ -419,20 +451,52 @@ export class Sandbox {
             }
         });
 
-        this.#mainEmitter.addModifier(wave);
-        this.#mainEmitter.addModifier(noise);
-
         this.#mainEmitter.addModifier(gnistColorRamp);
         this.#mainEmitter.addModifier(fadeOut);
         this.#mainEmitter.addModifier(enlarge);
         this.#mainEmitter.addModifier(spin);
 
         this.#sparkEmitter.addModifier(gnistColorRamp);
-        this.#gnistEngine.addGlobalForce(buoyancy);
         this.#gnistEngine.addGlobalForce(friction);
 
         this.#gnistEngine.addEmitter(this.#sparkEmitter);
         this.#gnistEngine.addEmitter(this.#mainEmitter);
+    }
+
+    /**
+     * @returns {void}
+     */
+    #initBenchmarkSimulation() {
+        const EMITTER_PRESETS = {
+            1000:    [1000,   1.0, 200],
+            10000:   [5000,   2.0, 150],
+            50000:   [10000,  5.0, 120],
+            100000:  [20000,  5.0, 180],
+            500000:  [100000, 5.0, 200],
+            1000000: [200000, 5.0, 200],
+        };
+
+        const TARGET_PARTICLE_COUNT = 1000;
+        const [particlesPerSecond, lifespan, speed] = EMITTER_PRESETS[TARGET_PARTICLE_COUNT];
+
+        this.#particleCountLimit = TARGET_PARTICLE_COUNT;
+        this.#useCullingBounds = false;
+
+        const lineEmitter = new LineEmitter({
+            x1: 50,
+            y1: 50,
+            x2: this.#simulationCanvas.width - 50,
+            y2: 50,
+            particlesPerSecond: particlesPerSecond,
+            emissionSource: EmissionSource.EDGE_OUT,
+            particleBlueprint: {
+                size: 1,
+                lifespan: lifespan,
+                speed: speed,
+            }
+        });
+
+        this.#gnistEngine.addEmitter(lineEmitter);
     }
 
     /**
@@ -448,20 +512,7 @@ export class Sandbox {
         this.#gnistEngine.update(safeDt);
         const end = performance.now();
 
-        this.#totalExecutionTimeMs += (end - start);
-        this.#totalFrameTimeS += dt;
-        this.#frameCount++;
-
-        const sampleWindow = 100;
-
-        if (this.#frameCount >= sampleWindow) {
-            this.#avgGnistUpdateTimeMs = this.#totalExecutionTimeMs / sampleWindow;
-            this.#peakAvgGnistUpdateTimeMs = Math.max(this.#peakAvgGnistUpdateTimeMs, this.#avgGnistUpdateTimeMs);
-            this.#fps = Math.round(sampleWindow / this.#totalFrameTimeS);
-            this.#frameCount = 0;
-            this.#totalExecutionTimeMs = 0;
-            this.#totalFrameTimeS = 0;
-        }
+        this.#updatePerformanceMetrics(end, start, dt, safeDt);
 
         this.#render();
 
@@ -470,7 +521,49 @@ export class Sandbox {
             this.#downloadMergedSnapshot();
         }
 
+        if (this.#getReportNextFrame) {
+            this.#getReportNextFrame = false;
+            this.#downloadPerformanceReport();
+        }
+
         requestAnimationFrame((time) => this.#loop(time));
+    }
+
+    /**
+     * @param {DOMHighResTimeStamp} end
+     * @param {DOMHighResTimeStamp} start
+     * @param {number} dt
+     * @param {number} safeDt
+     */
+    #updatePerformanceMetrics(end, start, dt, safeDt) {
+        this.#totalExecutionTimeMs += (end - start);
+        this.#totalFrameTimeS += dt;
+        this.#frameCount++;
+        this.#totalSimulationTimeS += safeDt;
+
+        if (this.#frameCount >= this.#sampleWindow) {
+            this.#avgGnistUpdateTimeMs = this.#totalExecutionTimeMs / this.#sampleWindow;
+
+            this.#avgGnistUpdateTimeSamplesMs.push(this.#avgGnistUpdateTimeMs);
+
+            if (this.#avgGnistUpdateTimeSamplesMs.length > this.#performanceHistoryMaxSize) {
+                this.#avgGnistUpdateTimeSamplesMs.shift();
+            }
+
+            this.#peakAvgGnistUpdateTimeMs = Math.max(this.#peakAvgGnistUpdateTimeMs, this.#avgGnistUpdateTimeMs);
+
+            if (   this.#totalSimulationTimeS > this.#warmupDurationS
+                && this.#troughAvgGnistUpdateTimeMs > 0
+                && this.#avgGnistUpdateTimeMs > 0
+            ) {
+                this.#troughAvgGnistUpdateTimeMs = Math.min(this.#troughAvgGnistUpdateTimeMs, this.#avgGnistUpdateTimeMs);
+            }
+
+            this.#fps = Math.round(this.#sampleWindow / this.#totalFrameTimeS);
+            this.#totalExecutionTimeMs = 0;
+            this.#totalFrameTimeS = 0;
+            this.#frameCount = 0;
+        }
     }
 
     /**
@@ -494,7 +587,7 @@ export class Sandbox {
         this.#overlayCtx.clearRect(0, 0, this.#overlayCanvas.width, this.#overlayCanvas.height);
 
         this.#renderPerformanceMetricsHud(particleCount);
-        // this.#renderGrid();
+        this.#renderGrid();
     }
 
     /**
@@ -504,7 +597,7 @@ export class Sandbox {
      * @returns {void}
      */
     #renderGrid(cellWidth = 210, cellHeight = 160, showCoordinates = true) {
-        if (!this.#overlayCanvas || !this.#overlayCtx) {
+        if (!this.#overlayCanvas || !this.#overlayCtx || !this.#displayGrid) {
             return;
         }
 
@@ -674,7 +767,7 @@ export class Sandbox {
      * @returns {void}
      */
     #renderPerformanceMetricsHud(particleCount) {
-        if (!this.#overlayCanvas || !this.#overlayCtx) {
+        if (!this.#overlayCanvas || !this.#overlayCtx || !this.#displayPerformanceMetricsHud) {
             return;
         }
 
@@ -686,31 +779,43 @@ export class Sandbox {
         this.#overlayCtx.textBaseline = 'top';
 
         const hudRowHeight = 20;
-        const hudPadding = Sandbox.#CULLING_BOUNDS_MARGIN + 20;
-        const renderMode = this.#renderMode === Sandbox.#MODE_CANVAS_2D ? 'Canvas 2D' : 'WebGL2';
+        const hudPadding = 20;
+        const renderMode = this.#getRenderMode();
+        const troughAvgGnistUpdateTimeMs = this.#troughAvgGnistUpdateTimeMs !== Infinity
+            ? this.#troughAvgGnistUpdateTimeMs.toFixed(4) + ' ms'
+            : '-';
 
         const performanceMetricsHudRows = [
-            `Gnist version:  ${Gnist.VERSION}`,
-            `Render mode:    ${renderMode}`,
-            `User agent:     ${this.#userAgentInfo}`,
             '',
-            `Particles:      ${particleCount}`,
+            `Gnist version:    ${Gnist.VERSION}`,
+            `User agent:       ${this.#userAgentInfo}`,
             '',
             'Simulation:',
-            `  Avg. update:  ${this.#avgGnistUpdateTimeMs.toFixed(3)} ms`,
-            `  Peak avg.:    ${this.#peakAvgGnistUpdateTimeMs.toFixed(3)} ms`,
+            `  Elapsed time:   ${Math.floor(this.#totalSimulationTimeS)} s`,
+            `  Particle count: ${particleCount}`,
+            '',
+            'Measurement:',
+            `  Warm-up:        ${this.#warmupDurationS} s`,
+            `  Sample window:  ${this.#sampleWindow} frames`,
+            `  Samples:        ${this.#avgGnistUpdateTimeSamplesMs.length}`,
+            '',
+            'Performance:',
+            `  Avg. update:    ${this.#avgGnistUpdateTimeMs.toFixed(4)} ms`,
+            `  Peak avg.:      ${this.#peakAvgGnistUpdateTimeMs.toFixed(4)} ms`,
+            `  Trough avg.:    ${troughAvgGnistUpdateTimeMs}`,
             '',
             'Rendering:',
-            `  FPS:          ${this.#fps}`,
+            `  Mode:           ${renderMode}`,
+            `  FPS:            ${this.#fps}`,
         ];
 
         for (let i = 0; i < performanceMetricsHudRows.length; i++) {
             this.#overlayCtx.fillText(performanceMetricsHudRows[i], hudPadding, hudPadding + hudRowHeight + hudRowHeight * i);
         }
 
-        const shortcutHint = 'Press [CTRL] + [S] to take a snapshot.';
-        const shortcutHintWidth = this.#overlayCtx.measureText(shortcutHint).width;
-        this.#overlayCtx.fillText(shortcutHint, (this.#overlayCanvas.width - shortcutHintWidth) / 2, hudPadding);
+        const shortcutHintForSnapshot = '[CTRL+H] Toggle HUD   [CTRL+G] Toggle Grid   [CTRL+S] Take Snapshot   [CTRL+R] Generate Report';
+        const shortcutHintForSnapshotWidth = this.#overlayCtx.measureText(shortcutHintForSnapshot).width;
+        this.#overlayCtx.fillText(shortcutHintForSnapshot, (this.#overlayCanvas.width - shortcutHintForSnapshotWidth) / 2, hudPadding);
 
         if (this.#gnistEngine.cullingBounds !== null) {
             this.#overlayCtx.strokeRect(
@@ -720,6 +825,13 @@ export class Sandbox {
                 this.#gnistEngine.cullingBounds.yMax - this.#gnistEngine.cullingBounds.yMin,
             );
         }
+    }
+
+    /**
+     * @returns {string}
+     */
+    #getRenderMode() {
+        return this.#renderMode === Sandbox.#MODE_CANVAS_2D ? 'Canvas 2D' : 'WebGL2';
     }
 
     /**
@@ -749,6 +861,51 @@ export class Sandbox {
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
+    }
+
+    /**
+     * @returns {void}
+     */
+    #downloadPerformanceReport() {
+        const performanceReport = [
+            `Gnist version:           ${Gnist.VERSION}`,
+            `User agent:              ${this.#userAgentInfo}`,
+            `Render mode:             ${this.#getRenderMode()}`,
+            `Particles:               ${this.#gnistEngine.particles.length}`,
+            `Sample window:           ${this.#sampleWindow} frames`,
+            `Samples:                 ${this.#avgGnistUpdateTimeSamplesMs.length}`,
+            `Median avg. update time: ${this.#median(this.#avgGnistUpdateTimeSamplesMs)} ms`,
+        ].join('\n');
+
+        const now = new Date();
+        const dateTimeString = now.toISOString().replace('T', '_').replace(/\..*/, '');
+        const millisString = String(now.getMilliseconds()).padStart(3, '0');
+        const filenameSuffix = `${dateTimeString}-${millisString}`.replace(/:/g, '-');
+
+        const blob = new Blob([performanceReport], { type: 'text/plain;charset=utf-8' });
+        const downloadLink = document.createElement('a');
+
+        downloadLink.download = `gnist-performance-report-${filenameSuffix}.txt`;
+        downloadLink.href = URL.createObjectURL(blob);
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        URL.revokeObjectURL(downloadLink.href);
+    }
+
+    /**
+     * @param {Array} values
+     * @returns {number}
+     */
+    #median(values) {
+        const sorted = [...values].sort((a, b) => a - b);
+        const middle = Math.floor(sorted.length / 2);
+
+        return sorted.length % 2 === 0
+            ? (sorted[middle - 1] + sorted[middle]) / 2
+            : sorted[middle];
     }
 
     /**
@@ -782,9 +939,22 @@ export class Sandbox {
      * @returns {void}
      */
     #handleKeyDown(event) {
+        event.preventDefault();
+
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'h') {
+            this.#displayPerformanceMetricsHud = !this.#displayPerformanceMetricsHud;
+        }
+
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'g') {
+            this.#displayGrid = !this.#displayGrid;
+        }
+
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
-            event.preventDefault();
             this.#takeScreenshotNextFrame = true;
+        }
+
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'r') {
+            this.#getReportNextFrame = true;
         }
     }
 
@@ -796,6 +966,7 @@ export class Sandbox {
             this.#simulationCanvas.width = window.innerWidth;
             this.#simulationCanvas.height = window.innerHeight;
         }
+
         if (this.#overlayCanvas) {
             this.#overlayCanvas.width = window.innerWidth;
             this.#overlayCanvas.height = window.innerHeight;
