@@ -128,6 +128,13 @@ export class Particle {
      * @constructor
      */
     constructor() {
+        this.reset()
+    }
+
+    /**
+     * @returns {void}
+     */
+    reset() {
         this.x = 0;
         this.y = 0;
         this.vx = 0;
@@ -137,11 +144,10 @@ export class Particle {
 
         this.size = 1;
         this.baseSize = 1;
-        this.color = {
-            r: 255,
-            g: 255,
-            b: 255,
-        };
+        this.color ??= {};
+        this.color.r = 255;
+        this.color.g = 255;
+        this.color.b = 255;
         this.opacity = 1.0;
 
         this.age = 0;

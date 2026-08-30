@@ -53,6 +53,19 @@ export class Gnist {
     #particles;
 
     /**
+     * Internal collection of reusable particles.
+     * Used for object pooling to reduce memory allocation overhead and garbage collection delays.
+     * @type {Array<Particle>}
+     */
+    #particlePool;
+
+    /**
+     * Callback used internally to provide particle acquisition for object pooling to other components.
+     * @type {() => Particle}
+     */
+    #acquireParticleCallback;
+
+    /**
      * Internal state of the optional region used for particle culling.
      * @type {CullingBounds|null}
      */
@@ -67,7 +80,8 @@ export class Gnist {
         this.#emitters = [];
         this.#globalForces = [];
         this.#particles = [];
-
+        this.#particlePool = [];
+        this.#acquireParticleCallback = () => this.#acquireParticle();
         this.cullingBounds = config.cullingBounds;
     }
 
@@ -245,18 +259,44 @@ export class Gnist {
     }
 
     /**
+     * Retrieves a reusable particle from the pool or creates a new one.
+     * @returns {Particle}
+     */
+    #acquireParticle() {
+        return this.#particlePool.pop() ?? new Particle();
+    }
+
+    /**
+     * Resets a particle and returns it to the pool.
+     * @param {Particle} particle
+     * @returns {void}
+     */
+    #releaseParticle(particle) {
+        particle.reset();
+        this.#particlePool.push(particle);
+    }
+
+    /**
      * Iterates through registered emitters to emit new particles.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
     #emitParticles(dt) {
-        const particlePool = this.#particles;
+        const particles = this.#particles;
         const emitterCount = this.#emitters.length;
 
         for (let i = 0; i < emitterCount; i++) {
             const emitter = this.#emitters[i];
+
+            // TODO
+            // This creates a bound function repeatedly.
+            // Make the acquisition mechanism an engine-owned object/API rather than a per-frame callback.
             if (emitter) {
-                emitter.update(dt, particlePool);
+                emitter.update(
+                    dt,
+                    particles,
+                    this.#acquireParticleCallback,
+                );
             }
         }
     }
@@ -342,6 +382,8 @@ export class Gnist {
                     particles[aliveCount] = particle;
                 }
                 aliveCount++;
+            } else {
+                this.#releaseParticle(particle);
             }
         }
 

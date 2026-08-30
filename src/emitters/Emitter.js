@@ -292,10 +292,11 @@ export class Emitter {
     /**
      * Updates the emitter's internal timer and returns any new particles to be emitted in the current frame.
      * @param {number} dt Time elapsed since the last frame (in seconds).
-     * @param {Array<Particle>} particlePool Reference to the internal collection of active particles in the main {Gnist} class.
+     * @param {Array<Particle>} particles Reference to the internal collection of active particles in the main {Gnist} class.
+     * @param {() => Particle} acquireParticle Callback used internally to provide particle acquisition for object pooling.
      * @returns {void}
      */
-    update(dt, particlePool) {
+    update(dt, particles, acquireParticle) {
         if (!this.#enabled) {
             return;
         }
@@ -313,7 +314,7 @@ export class Emitter {
         this.#accumulator -= spawnCount;
 
         for (let i = 0; i < spawnCount; i++) {
-            const particle = new Particle();
+            const particle = acquireParticle();
 
             this._initParticle(particle);
 
@@ -321,7 +322,7 @@ export class Emitter {
             particle.pathModifiers = this.#pathModifiers;
             particle.scopedForces = this.#scopedForces;
 
-            particlePool.push(particle);
+            particles.push(particle);
         }
     }
 
