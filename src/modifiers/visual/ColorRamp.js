@@ -34,10 +34,24 @@ export class ColorRamp extends Modifier {
     }
 
     /**
-     * Array of color stop objects; keys and their relative positions along the timeline.
-     * @type {Array<{pos: number, r: number, g: number, b: number}>}
+     * Array of precomputed linear interpolation segments between consecutive color stops.
+     * Each segment caches the starting RGB color components and the precalculated delta values to the subsequent color stop.
+     * @type {Array<{
+     *     r: number,
+     *     g: number,
+     *     b: number,
+     *     dr: number,
+     *     dg: number,
+     *     db: number
+     * }>}
      */
-    #colorStops = [];
+    #segments = [];
+
+    /**
+     * Number of color ramp segments.
+     * @type {number}
+     */
+    #segmentCount = 0;
 
     /**
      * Initializes a color ramp modifier with evenly distributed color stops.
@@ -48,18 +62,43 @@ export class ColorRamp extends Modifier {
         super(config);
 
         const colors = config.colors ?? [[255, 255, 255], [0, 0, 0]];
+        const colorCount = colors.length;
 
-        const count = colors.length;
-        for (let i = 0; i < count; i++) {
-            const relativePosition = count === 1 ? 0 : i / (count - 1);  // [0.0, 1.0]
+        if (colorCount < 2) {
+            if (colorCount === 1) {
+                const color = colors[0];
 
-            this.#colorStops.push({
-                pos: relativePosition,
-                r: colors[i][0],
-                g: colors[i][1],
-                b: colors[i][2],
+                this.#segments.push({
+                    r: color[0],
+                    g: color[1],
+                    b: color[2],
+                    dr: 0,
+                    dg: 0,
+                    db: 0,
+                });
+            }
+
+            this.#segmentCount = 1;
+            return;
+        }
+
+        const segmentCount = colorCount - 1;
+
+        for (let i = 0; i < segmentCount; i++) {
+            const lower = colors[i];
+            const upper = colors[i + 1];
+
+            this.#segments.push({
+                r: lower[0],
+                g: lower[1],
+                b: lower[2],
+                dr: upper[0] - lower[0],
+                dg: upper[1] - lower[1],
+                db: upper[2] - lower[2],
             });
         }
+
+        this.#segmentCount = segmentCount;
     }
 
     /**
@@ -70,42 +109,19 @@ export class ColorRamp extends Modifier {
      * @returns {void}
      */
     update(particle, normalizedAge) {
-        const totalColorStopCount = this.#colorStops.length;
-
-        if (totalColorStopCount === 0) {
+        if (this.#segmentCount === 0) {
             return;
         }
 
-        if (totalColorStopCount === 1) {
-            const stop = this.#colorStops[0];
-            particle.color.r = stop.r;
-            particle.color.g = stop.g;
-            particle.color.b = stop.b;
-            return;
-        }
+        const segmentCount = this.#segmentCount;
+        const age = Math.max(0, Math.min(1, normalizedAge));
+        const scaledAge = age * segmentCount;
+        const segmentIndex = Math.min(Math.floor(scaledAge), segmentCount - 1);
+        const interpolationFactor = scaledAge - segmentIndex;
+        const segment = this.#segments[segmentIndex];
 
-        const particleAge = Math.max(0, Math.min(1, normalizedAge));
-
-        // Map the normalized particle age onto the array indices of the color stops.
-        // E.g., if there are 5 stops, the max index is 4. An age of 0.5 results in 2.0.
-        const fractionalIndex = particleAge * (totalColorStopCount - 1);
-
-        // The integer part of the index represents the lower color stop flanking the particle's age
-        const lowerColorStopIndex = Math.floor(fractionalIndex);
-
-        // The next integer represents the upper color stop, capped to stay inside array bounds
-        const upperColorStopIndex = Math.min(lowerColorStopIndex + 1, totalColorStopCount - 1);
-
-        const lowerColorStop = this.#colorStops[lowerColorStopIndex];
-        const upperColorStop = this.#colorStops[upperColorStopIndex];
-
-        // The decimal part is the particle's local age (progress factor) within this segment
-        const interpolationFactor = fractionalIndex - lowerColorStopIndex;
-
-        // Linear interpolation on each RGB channel between the lower and upper colors of this segment
-        // based on the particle's local progress
-        particle.color.r = lowerColorStop.r + (upperColorStop.r - lowerColorStop.r) * interpolationFactor;
-        particle.color.g = lowerColorStop.g + (upperColorStop.g - lowerColorStop.g) * interpolationFactor;
-        particle.color.b = lowerColorStop.b + (upperColorStop.b - lowerColorStop.b) * interpolationFactor;
+        particle.color.r = segment.r + segment.dr * interpolationFactor;
+        particle.color.g = segment.g + segment.dg * interpolationFactor;
+        particle.color.b = segment.b + segment.db * interpolationFactor;
     }
 }
