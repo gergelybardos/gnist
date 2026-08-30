@@ -495,7 +495,30 @@ export class Sandbox {
                 speed: speed,
             }
         });
+/*
+        const fadeOut = new OpacityFade({
+            startOpacity: 1.0,
+            endOpacity: 0.0,
+        });
 
+        const enlarge = new ScaleTween({
+            startScale: 1,
+            endScale: 5,
+        });
+
+        const colorRamp = new ColorRamp({
+            colors: [
+                [0, 242, 254],
+                [143, 0, 255],
+                [255, 0, 127],
+                [255, 102, 0],
+            ],
+        });
+
+        lineEmitter.addModifier(fadeOut);
+        lineEmitter.addModifier(enlarge);
+        lineEmitter.addModifier(colorRamp);
+*/
         this.#gnistEngine.addEmitter(lineEmitter);
     }
 
