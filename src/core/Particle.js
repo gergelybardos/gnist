@@ -140,7 +140,7 @@ export class Particle {
      * @constructor
      */
     constructor() {
-        this.reset()
+        this.reset();
     }
 
     /**
