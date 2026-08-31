@@ -27,6 +27,18 @@ export class Particle {
     y;
 
     /**
+     * Horizontal coordinate at particle emission.
+     * @type {number}
+     */
+    originX;
+
+    /**
+     * Vertical coordinate at particle emission.
+     * @type {number}
+     */
+    originY;
+
+    /**
      * Current horizontal velocity component (in pixels per second).
      * @type {number}
      */
@@ -137,6 +149,8 @@ export class Particle {
     reset() {
         this.x = 0;
         this.y = 0;
+        this.originX = 0;
+        this.originY = 0;
         this.vx = 0;
         this.vy = 0;
         this.rotation = 0;

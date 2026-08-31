@@ -340,6 +340,9 @@ export class Emitter {
 
         this.#initParticleVelocity(particle);
 
+        particle.originX = particle.x;
+        particle.originY = particle.y;
+
         particle.rotation = this.#resolveNumber(blueprint.rotation, particle.rotation);
         particle.angularVelocity = this.#resolveNumber(blueprint.angularVelocity, particle.angularVelocity);
 

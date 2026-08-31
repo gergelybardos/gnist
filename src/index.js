@@ -14,6 +14,7 @@ export { RadialForce } from './forces/RadialForce.js';
 export { Vortex } from './forces/Vortex.js';
 
 export { Modifier } from './modifiers/Modifier.js';
+export { ElasticAnchor } from './modifiers/path/ElasticAnchor.js';
 export { SineWave } from './modifiers/path/SineWave.js';
 export { Turbulence } from './modifiers/path/Turbulence.js';
 export { ColorRamp } from './modifiers/visual/ColorRamp.js';

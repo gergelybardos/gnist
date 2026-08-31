@@ -69,12 +69,12 @@ export class LineEmitter extends Emitter {
      * @returns {void}
      */
     _initParticle(particle) {
-        super._initParticle(particle);
-
         const t = Math.random();
 
         particle.x = this.x1 + (this.x2 - this.x1) * t;
         particle.y = this.y1 + (this.y2 - this.y1) * t;
+
+        super._initParticle(particle);
     }
 
     /**

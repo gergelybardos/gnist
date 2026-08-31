@@ -15,10 +15,10 @@ export class PointEmitter extends Emitter {
      * @returns {void}
      */
     _initParticle(particle) {
-        super._initParticle(particle);
-
         particle.x = this.x;
         particle.y = this.y;
+
+        super._initParticle(particle);
     }
 
     /**
