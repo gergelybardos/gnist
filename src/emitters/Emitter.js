@@ -6,6 +6,10 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
 /**
  * @import { Gnist } from '../core/Gnist.js'
  * @import { Color, EmissionSourceValues } from '../shared/Types.js'
+ * @import { PointEmitterConfig } from 'PointEmitter'
+ * @import { LineEmitterConfig } from 'LineEmitter'
+ * @import { RectEmitterConfig } from 'RectEmitter'
+ * @import { EllipseEmitterConfig } from 'EllipseEmitter'
  */
 
 /**
@@ -19,6 +23,10 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
  * See {@link EmissionSourceValues} for available configuration constants.
  * @property {ParticleBlueprint} [particleBlueprint={}] Configuration for emitted particles.
+ */
+
+/**
+ * @typedef {EmitterConfig | PointEmitterConfig | LineEmitterConfig | RectEmitterConfig | EllipseEmitterConfig} AnyEmitterConfig
  */
 
 /**
@@ -157,7 +165,11 @@ export class Emitter {
         }
 
         this.#id = config.id ?? crypto.randomUUID();
+
         this.#enabled = config.enabled ?? true;
+        this.#accumulator = 0;
+        this.#elapsedTime = 0;
+
         this.particlesPerSecond = config.particlesPerSecond ?? 10;
 
         this.#duration = (config.duration < 0) ? Infinity : (config.duration ?? Infinity);
@@ -167,9 +179,6 @@ export class Emitter {
         this.emissionSource = config.emissionSource ?? EmissionSource.VOLUME;
 
         this.#particleBlueprint = config.particleBlueprint ?? {};
-
-        this.#accumulator = 0;
-        this.#elapsedTime = 0;
 
         this.#visualModifiers = [];
         this.#pathModifiers = [];
@@ -356,8 +365,8 @@ export class Emitter {
      * Instantly emits particles using optional overrides.
      * The number of particles emitted instantly is determined by the emitter's `particlesPerSecond` configuration
      * option or its corresponding override value.
-     * @param {Partial<EmitterConfig>} [emitterOverrides={}] Temporary overrides for emitter-level properties.
-     * @param {ParticleBlueprint} [particleBlueprintOverrides={}] Temporary overrides for the particle blueprint.
+     * @param {Partial<AnyEmitterConfig>} [emitterOverrides={}] Temporary overrides for emitter-level properties.
+     * @param {Partial<ParticleBlueprint>} [particleBlueprintOverrides={}] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
     emit(emitterOverrides = {}, particleBlueprintOverrides = {}) {
