@@ -61,9 +61,6 @@ export class Sandbox {
     /** @type {PointEmitter|null} */
     #mainEmitter;
 
-    /** @type {PointEmitter|null} */
-    #sparkEmitter;
-
     // =========================================================================
     // RENDERING
     // =========================================================================
@@ -157,11 +154,10 @@ export class Sandbox {
         this.#gnistEngine = null;
         this.#previousTime = 0;
         this.#useCullingBounds = useCullingBounds;
-        this.#particleCountLimit = 50000;
+        this.#particleCountLimit = 500000;
         this.#sampleWindow = 100;
         this.#warmupDurationS = 10;
         this.#mainEmitter = null;
-        this.#sparkEmitter = null;
 
         // Rendering
         this.#renderMode = mode;
@@ -225,6 +221,7 @@ export class Sandbox {
         this.#updateGnistCullingBounds();
 
         this.#simulationCanvas.addEventListener('mousemove', (event) => this.#handleMouseMove(event));
+
         window.addEventListener('resize', () => this.#handleResize());
         window.addEventListener('keydown', (event) => this.#handleKeyDown(event));
     }
@@ -426,41 +423,50 @@ export class Sandbox {
 
         const spin = new Spin({});
 
-        this.#mainEmitter = new PointEmitter({
+        const subEmitter = new PointEmitter({
+            enabled: false,
             x: this.#simulationCanvas.width / 2,
             y: this.#simulationCanvas.height / 2,
-            particlesPerSecond: 500,
+            particlesPerSecond: 10,
             particleBlueprint: {
-                angularVelocity: [1, 6],
-                size: [1, 5],
-                lifespan: [1, 3],
-                speed: [15, 150],
+                size: [1, 2],
+                lifespan: [1, 2],
+                speed: [50, 150],
                 direction: [0, Math.PI * 2],
             }
         });
 
-        this.#sparkEmitter = new PointEmitter({
+        this.#mainEmitter = new PointEmitter({
             x: this.#simulationCanvas.width / 2,
             y: this.#simulationCanvas.height / 2,
-            particlesPerSecond: 20,
+            particlesPerSecond: 50,
             particleBlueprint: {
-                size: [1, 4],
-                lifespan: [1, 3],
-                speed: [100, 300],
+                onDeath: (particle) => {
+                    subEmitter.emit({
+                        x: particle.x,
+                        y: particle.y,
+                    })
+                },
+                angularVelocity: [1, 6],
+                size: [1, 5],
+                lifespan: [1, 2],
+                speed: [10, 50],
                 direction: [0, Math.PI * 2],
             }
         });
+
+        subEmitter.addModifier(gnistColorRamp);
+        subEmitter.addModifier(fadeOut);
 
         this.#mainEmitter.addModifier(gnistColorRamp);
         this.#mainEmitter.addModifier(fadeOut);
         this.#mainEmitter.addModifier(enlarge);
         this.#mainEmitter.addModifier(spin);
 
-        this.#sparkEmitter.addModifier(gnistColorRamp);
         this.#gnistEngine.addGlobalForce(friction);
 
-        this.#gnistEngine.addEmitter(this.#sparkEmitter);
         this.#gnistEngine.addEmitter(this.#mainEmitter);
+        this.#gnistEngine.addEmitter(subEmitter);
     }
 
     /**
@@ -927,7 +933,7 @@ export class Sandbox {
      * @returns {void}
      */
     #handleMouseMove(event) {
-        if (!this.#mainEmitter || !this.#sparkEmitter || !this.#simulationCanvas) {
+        if (!this.#mainEmitter || !this.#simulationCanvas) {
             return;
         }
 
@@ -935,9 +941,6 @@ export class Sandbox {
 
         this.#mainEmitter.x = event.clientX - bounds.left;
         this.#mainEmitter.y = event.clientY - bounds.top;
-
-        this.#sparkEmitter.x = event.clientX - bounds.left;
-        this.#sparkEmitter.y = event.clientY - bounds.top;
     }
 
     /**
