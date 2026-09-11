@@ -4,7 +4,7 @@ import { EmissionSource } from '../shared/Constants.js';
 import { Emitter } from './Emitter.js';
 
 /**
- * @import { EmitterConfig } from './Emitter.js'
+ * @import { EmitterConfig, ParticleBlueprint } from './Emitter.js'
  */
 
 /**
@@ -48,7 +48,7 @@ export class EllipseEmitter extends Emitter {
     radiusY;
 
     /**
-     * Initializes an ellipse emitter with a given position and radius.
+     * Initializes an ellipse emitter with given coordinates and radius.
      * Particles are emitted randomly from the elliptical area using a uniform distribution.
      * @constructor
      * @param {EllipseEmitterConfig} [config={}] EllipseEmitter configuration options.
@@ -60,15 +60,18 @@ export class EllipseEmitter extends Emitter {
         this.y = config.y ?? 0;
         this.radiusX = config.radiusX ?? 50;
         this.radiusY = config.radiusY ?? 50;
+
+        this._overridableFields.push('x', 'y', 'radiusX', 'radiusY');
     }
 
     /**
      * Extends the base initialization by positioning the particle at a random point along or within the ellipse.
      * @override
      * @param {Particle} particle Particle instance to initialize.
+     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Optional particle blueprint overrides.
      * @returns {void}
      */
-    _initParticle(particle) {
+    _initParticle(particle, particleBlueprintOverrides = null) {
         const angle = Math.random() * Math.PI * 2;
 
         const factor = this.emissionSource === EmissionSource.VOLUME
@@ -78,20 +81,20 @@ export class EllipseEmitter extends Emitter {
         particle.x = this.x + Math.cos(angle) * this.radiusX * factor;
         particle.y = this.y + Math.sin(angle) * this.radiusY * factor;
 
-        super._initParticle(particle);
+        super._initParticle(particle, particleBlueprintOverrides);
     }
 
     /**
      * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
-     * @param {Particle} particle Particle instance used to calculate the direction from its spawn position.
+     * @param {Particle} particle Particle instance used to calculate the direction from its coordinates at emission.
      * @returns {number} The default emission direction angle (in radians).
      */
     _getDefaultDirection(particle) {
         const dy = particle.y - this.y;
         const dx = particle.x - this.x;
 
-        // If a particle spawns at the center, fallback to a random direction
+        // If a particle is emitted at the center, fallback to a random direction
         const outwardAngle = (dx === 0 && dy === 0)
             ? Math.random() * Math.PI * 2
             : Math.atan2(dy, dx);

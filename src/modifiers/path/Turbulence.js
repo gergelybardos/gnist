@@ -4,7 +4,7 @@ import { ModifierCategory } from '../../shared/Constants.js';
 import { Modifier } from '../Modifier.js';
 
 /**
- * @import { ModifierConfig } from './Modifier.js';
+ * @import { ModifierConfig } from '../Modifier.js';
  */
 
 /**
@@ -73,7 +73,7 @@ export class Turbulence extends Modifier {
     }
 
     /**
-     * Applies noise-based displacement to the particle's position.
+     * Applies noise-based displacement to the particle's coordinates.
      * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).

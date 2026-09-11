@@ -1,3 +1,5 @@
+import { Particle } from '../core/Particle.js';
+
 import { Force } from './Force.js';
 
 /**
@@ -37,7 +39,7 @@ export class LinearDrag extends Force {
     /**
      * Reduces the velocity of particles over time using linear damping.
      * @override
-     * @param {object} particle Particle instance to affect.
+     * @param {Particle} particle Particle instance to affect.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */

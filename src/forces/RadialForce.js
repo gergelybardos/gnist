@@ -85,8 +85,7 @@ export class RadialForce extends Force {
         const distanceSquared = dx * dx + dy * dy;
 
         if (this.cullingRadiusSquared > 0 && distanceSquared < this.cullingRadiusSquared) {
-            particle.age = particle.lifespan;
-            particle.alive = false;
+            particle.kill();
             return;
         }
 

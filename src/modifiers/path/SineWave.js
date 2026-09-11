@@ -4,7 +4,7 @@ import { ModifierCategory } from '../../shared/Constants.js';
 import { Modifier } from '../Modifier.js';
 
 /**
- * @import { ModifierConfig } from './Modifier.js';
+ * @import { ModifierConfig } from '../Modifier.js';
  */
 
 /**
@@ -87,7 +87,7 @@ export class SineWave extends Modifier {
     }
 
     /**
-     * Offsets the particle's position along a wave axis perpendicular to the particle's current movement direction.
+     * Offsets the particle's coordinates along a wave axis perpendicular to the particle's current movement direction.
      * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).

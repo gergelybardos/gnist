@@ -4,7 +4,7 @@ import { EmissionSource } from '../shared/Constants.js';
 import { Emitter } from './Emitter.js';
 
 /**
- * @import { EmitterConfig } from './Emitter.js'
+ * @import { EmitterConfig, ParticleBlueprint } from './Emitter.js'
  */
 
 /**
@@ -60,21 +60,24 @@ export class LineEmitter extends Emitter {
         this.y1 = config.y1 ?? 0;
         this.x2 = config.x2 ?? 100;
         this.y2 = config.y2 ?? 0;
+
+        this._overridableFields.push('x1', 'y1', 'x2', 'y2');
     }
 
     /**
      * Extends the base initialization by positioning the particle at a random point along the line segment.
      * @override
      * @param {Particle} particle Particle instance to initialize.
+     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Optional particle blueprint overrides.
      * @returns {void}
      */
-    _initParticle(particle) {
+    _initParticle(particle, particleBlueprintOverrides = null) {
         const t = Math.random();
 
         particle.x = this.x1 + (this.x2 - this.x1) * t;
         particle.y = this.y1 + (this.y2 - this.y1) * t;
 
-        super._initParticle(particle);
+        super._initParticle(particle, particleBlueprintOverrides);
     }
 
     /**

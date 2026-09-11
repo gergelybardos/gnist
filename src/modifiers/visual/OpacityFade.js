@@ -4,7 +4,7 @@ import { ModifierCategory } from '../../shared/Constants.js';
 import { Modifier } from '../Modifier.js';
 
 /**
- * @import { ModifierConfig } from './Modifier.js';
+ * @import { ModifierConfig } from '../Modifier.js';
  */
 
 /**

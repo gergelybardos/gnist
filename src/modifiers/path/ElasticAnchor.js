@@ -4,7 +4,7 @@ import { ModifierCategory } from '../../shared/Constants.js';
 import { Modifier } from '../Modifier.js';
 
 /**
- * @import { ModifierConfig } from './Modifier.js';
+ * @import { ModifierConfig } from '../Modifier.js';
  */
 
 /**
@@ -17,7 +17,7 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Path modifier that pulls particles back to their original coordinates at spawn time.
+ * Path modifier that pulls particles back to their coordinates at emission time.
  * @class
  * @extends Modifier
  */
@@ -81,7 +81,7 @@ export class ElasticAnchor extends Modifier {
     }
 
     /**
-     * Accelerates particle velocity toward (originX, originY) and applies damping to settle it.
+     * Accelerates the particle toward its emission position and applies damping to settle it.
      * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).

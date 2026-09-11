@@ -150,7 +150,7 @@ export class Sandbox {
      * @param {string} [mode='canvas']
      * @param {boolean} [useCullingBounds=true]
      */
-    constructor(mode = Sandbox.#MODE_CANVAS_2D, useCullingBounds = false) {
+    constructor(mode = Sandbox.#MODE_CANVAS_2D, useCullingBounds = true) {
         // Core
         this.#avgGnistUpdateTimeSamplesMs = [];
         this.#performanceHistoryMaxSize = 200;
@@ -270,7 +270,7 @@ export class Sandbox {
     /**
      * @param {HTMLCanvasElement} canvas
      * @param {'2d'|'webgl2'} type
-     * @param {object} [options]
+     * @param {object} [options={}]
      * @returns {CanvasRenderingContext2D|WebGL2RenderingContext}
      */
     #getContext(canvas, type, options = {}) {
@@ -839,15 +839,6 @@ export class Sandbox {
         const shortcutHintForSnapshot = '[CTRL+H] Toggle HUD   [CTRL+G] Toggle Grid   [CTRL+S] Take Snapshot   [CTRL+R] Generate Report';
         const shortcutHintForSnapshotWidth = this.#overlayCtx.measureText(shortcutHintForSnapshot).width;
         this.#overlayCtx.fillText(shortcutHintForSnapshot, (this.#overlayCanvas.width - shortcutHintForSnapshotWidth) / 2, hudPadding);
-
-        if (this.#gnistEngine.cullingBounds !== null) {
-            this.#overlayCtx.strokeRect(
-                this.#gnistEngine.cullingBounds.xMin,
-                this.#gnistEngine.cullingBounds.yMin,
-                this.#gnistEngine.cullingBounds.xMax - this.#gnistEngine.cullingBounds.xMin,
-                this.#gnistEngine.cullingBounds.yMax - this.#gnistEngine.cullingBounds.yMin,
-            );
-        }
     }
 
     /**
@@ -962,21 +953,23 @@ export class Sandbox {
      * @returns {void}
      */
     #handleKeyDown(event) {
-        event.preventDefault();
-
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'h') {
+            event.preventDefault();
             this.#displayPerformanceMetricsHud = !this.#displayPerformanceMetricsHud;
         }
 
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'g') {
+            event.preventDefault();
             this.#displayGrid = !this.#displayGrid;
         }
 
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+            event.preventDefault();
             this.#takeScreenshotNextFrame = true;
         }
 
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'r') {
+            event.preventDefault();
             this.#getReportNextFrame = true;
         }
     }

@@ -11,7 +11,7 @@ import { Particle } from './Particle.js';
 
 /**
  * Defines a region beyond which particles are considered outside the simulation and are marked dead.
- * A safety margin is applied per particle based on its position and size, preventing early removal while it is still
+ * A safety margin is applied per particle based on its coordinates and size, preventing early removal while it is still
  * partially inside the region.
  * @typedef {object} CullingBounds
  * @property {number} xMin Left boundary of the region.
@@ -41,7 +41,7 @@ export class Gnist {
     #emitters;
 
     /**
-     * Internal collection of registered global environmental forces
+     * Internal collection of registered global environmental forces.
      * @type {Array<Force>}
      */
     #globalForces;
@@ -50,18 +50,25 @@ export class Gnist {
      * Internal collection of active particles.
      * @type {Array<Particle>}
      */
-    #particles;
+    #activeParticles;
+
+    /**
+     * Internal staging queue of particles created mid-frame during sub-emission.
+     * Prevents mid-frame array mutation issues.
+     * @type {Array<Particle>}
+     */
+    #pendingParticles;
 
     /**
      * Internal collection of reusable particles.
-     * Used for object pooling to reduce memory allocation overhead and garbage collection delays.
+     * Used for object pooling to reduce the overhead of memory allocation and garbage collection.
      * @type {Array<Particle>}
      */
-    #particlePool;
+    #reusableParticles;
 
     /**
      * Callback used internally to provide particle acquisition for object pooling to other components.
-     * @type {() => Particle}
+     * @type {function(): Particle}
      */
     #acquireParticleCallback;
 
@@ -79,8 +86,9 @@ export class Gnist {
     constructor(config = {}) {
         this.#emitters = [];
         this.#globalForces = [];
-        this.#particles = [];
-        this.#particlePool = [];
+        this.#activeParticles = [];
+        this.#pendingParticles = [];
+        this.#reusableParticles = [];
         this.#acquireParticleCallback = () => this.#acquireParticle();
         this.cullingBounds = config.cullingBounds;
     }
@@ -109,7 +117,7 @@ export class Gnist {
      * @readonly
      */
     get particles() {
-        return this.#particles;
+        return this.#activeParticles;
     }
 
     /**
@@ -153,27 +161,39 @@ export class Gnist {
     }
 
     /**
-     * Registers an emitter into the simulation pipeline.
+     * Registers an emitter with the simulation pipeline.
      * @param {Emitter} emitter The emitter instance to register.
      * @returns {this} The Gnist engine instance for method chaining.
      */
     addEmitter(emitter) {
-        this.#emitters.push(emitter);
+        if (!this.#emitters.includes(emitter)) {
+            this.#emitters.push(emitter);
+
+            emitter.bindEngineContext({
+                acquireParticle: this.#acquireParticleCallback,
+                enqueueParticle: (particle) => this.#pendingParticles.push(particle),
+            });
+        }
 
         return this;
     }
 
     /**
-     * Removes an emitter from the simulation pipeline by its unique identifier.
-     * @param {string} id The unique identifier of the target emitter.
-     * @returns {boolean} True if found and successfully removed, false otherwise.
+     * Removes an emitter from the simulation pipeline.
+     * @param {Emitter} emitter The emitter instance to remove.
+     * @returns {boolean} True if found and removed, false otherwise.
      */
-    removeEmitter(id) {
-        const initialLength = this.#emitters.length;
+    removeEmitter(emitter) {
+        const index = this.#emitters.indexOf(emitter);
 
-        this.#emitters = this.#emitters.filter(e => e.id !== id);
+        if (index !== -1) {
+            this.#emitters.splice(index, 1);
+            emitter.unbindEngineContext();
 
-        return this.#emitters.length < initialLength;
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -186,7 +206,7 @@ export class Gnist {
     }
 
     /**
-     * Registers a global environmental force into the simulation pipeline.
+     * Registers a global environmental force with the simulation pipeline.
      * @param {Force} force The force instance to register.
      * @returns {this} The Gnist engine instance for method chaining.
      */
@@ -224,6 +244,17 @@ export class Gnist {
 
         this.#emitParticles(safeDt);
         this.#tickParticles(safeDt);
+
+        // Flush particles queued during ticking
+
+        const pending = this.#pendingParticles;
+        const pendingCount = pending.length;
+
+        for (let i = 0; i < pendingCount; i++) {
+            this.#activeParticles.push(pending[i]);
+        }
+
+        this.#pendingParticles.length = 0;
     }
 
     /**
@@ -233,10 +264,11 @@ export class Gnist {
      */
     fillFlatArray(targetArray) {
         let offset = 0;
-        const count = this.#particles.length;
+        const count = this.#activeParticles.length;
+        const particles = this.#activeParticles;
 
         for (let i = 0; i < count; i++) {
-            const p = this.particles[i];
+            const p = particles[i];
 
             if (!p.alive) {
                 continue;
@@ -263,7 +295,7 @@ export class Gnist {
      * @returns {Particle}
      */
     #acquireParticle() {
-        return this.#particlePool.pop() ?? new Particle();
+        return this.#reusableParticles.pop() ?? new Particle();
     }
 
     /**
@@ -273,7 +305,7 @@ export class Gnist {
      */
     #releaseParticle(particle) {
         particle.reset();
-        this.#particlePool.push(particle);
+        this.#reusableParticles.push(particle);
     }
 
     /**
@@ -282,7 +314,7 @@ export class Gnist {
      * @returns {void}
      */
     #emitParticles(dt) {
-        const particles = this.#particles;
+        const particles = this.#activeParticles;
         const emitterCount = this.#emitters.length;
 
         for (let i = 0; i < emitterCount; i++) {
@@ -310,7 +342,7 @@ export class Gnist {
     #tickParticles(dt) {
         const globalForces = this.#globalForces;
         const globalForcesCount = globalForces.length;
-        const particles = this.#particles;
+        const particles = this.#activeParticles;
         const particleCount = particles.length;
         const cullingBounds = this.#cullingBounds;
 
@@ -321,7 +353,7 @@ export class Gnist {
 
             particle.age += dt;
             if (particle.age >= particle.lifespan) {
-                particle.alive = false;
+                particle.kill();
             }
 
             if (particle.alive) {
@@ -339,7 +371,7 @@ export class Gnist {
                     scopedForces[j].apply(particle, dt);
                 }
 
-                // 2. Path modifiers (must run BEFORE position integration so vx/vy changes apply immediately)
+                // 2. Path modifiers (must run BEFORE kinematic integration so vx/vy changes apply immediately)
 
                 const pathModifiers = particle.pathModifiers;
                 const pathModifiersCount = pathModifiers.length;
@@ -347,13 +379,13 @@ export class Gnist {
                     pathModifiers[j].update(particle, normalizedAge, dt);
                 }
 
-                // 3. Position integration
+                // 3. Kinematic integration
 
                 particle.x += particle.vx * dt;
                 particle.y += particle.vy * dt;
                 particle.rotation += particle.angularVelocity * dt;
 
-                // 4. Visual Modifiers (must run AFTER position integration)
+                // 4. Visual Modifiers (must run AFTER kinematic integration)
 
                 const visualModifiers = particle.visualModifiers;
                 const visualModifiersCount = visualModifiers.length;
@@ -371,12 +403,12 @@ export class Gnist {
                         particle.y < cullingBounds.yMin - safetyMargin ||
                         particle.y > cullingBounds.yMax + safetyMargin
                     ) {
-                        particle.alive = false;
+                        particle.kill();
                     }
                 }
             }
 
-            // In-place dual-pointer compaction avoids Array.filter allocations, eliminating garbage collection spikes
+            // In-place dual-pointer compaction (avoids Array.filter allocations and garbage collection spikes)
             if (particle.alive) {
                 if (aliveCount !== i) {
                     particles[aliveCount] = particle;

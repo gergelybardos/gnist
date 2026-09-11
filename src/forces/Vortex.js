@@ -110,8 +110,7 @@ export class Vortex extends Force {
 
         // Inside dead zone check
         if (this.cullingRadiusSquared > 0 && distanceSq <= this.cullingRadiusSquared) {
-            particle.age = particle.lifespan;
-            particle.alive = false;
+            particle.kill();
             return;
         }
 

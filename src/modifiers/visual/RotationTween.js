@@ -4,15 +4,15 @@ import { ModifierCategory } from '../../shared/Constants.js';
 import { Modifier } from '../Modifier.js';
 
 /**
- * @import { ModifierConfig } from './Modifier.js';
+ * @import { ModifierConfig } from '../Modifier.js';
  */
 
 /**
  * RotationTween configuration options.
  * Includes all properties from {@link ModifierConfig}.
  * @typedef {object} RotationTweenConfig
- * @property {number} [startRotation=0] RotationTween angle (in radians) at particle emission.
- * @property {number} [endRotation=6.283185] RotationTween angle (in radians) at particle death.
+ * @property {number} [startRotation=0] Rotation angle (in radians) at particle emission.
+ * @property {number} [endRotation=6.283185] Rotation angle (in radians) at particle death.
  */
 
 /**
@@ -34,13 +34,13 @@ export class RotationTween extends Modifier {
     }
 
     /**
-     * RotationTween angle (in radians) at particle emission.
+     * Rotation angle (in radians) at particle emission.
      * @type {number}
      */
     startRotation;
 
     /**
-     * RotationTween angle (in radians) at particle death.
+     * Rotation angle (in radians) at particle death.
      * @type {number}
      */
     endRotation;

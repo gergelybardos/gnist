@@ -135,6 +135,16 @@ export class Particle {
      */
     scopedForces;
 
+    // =========================================================================
+    // LIFECYCLE HOOKS
+    // =========================================================================
+
+    /**
+     * Optional callback triggered at particle death.
+     * @type {?function(Particle): void}
+     */
+    onDeath;
+
     /**
      * Initializes a blank, inactive particle.
      * @constructor
@@ -144,6 +154,7 @@ export class Particle {
     }
 
     /**
+     * Resets the particle to its initial state.
      * @returns {void}
      */
     reset() {
@@ -172,5 +183,23 @@ export class Particle {
         this.visualModifiers = null;
         this.pathModifiers = null;
         this.scopedForces = null;
+
+        this.onDeath = null;
+    }
+
+    /**
+     * Marks the particle as dead and eligible for pool recycling, and triggers the onDeath hook.
+     * @returns {void}
+     */
+    kill() {
+        if (!this.alive) {
+            return;
+        }
+
+        if (this.onDeath) {
+            this.onDeath(this);
+        }
+
+        this.alive = false;
     }
 }

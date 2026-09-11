@@ -4,7 +4,7 @@ import {EmissionSource} from '../shared/Constants.js';
 import { Emitter } from './Emitter.js';
 
 /**
- * @import { EmitterConfig } from './Emitter.js'
+ * @import { EmitterConfig, ParticleBlueprint } from './Emitter.js'
  */
 
 /**
@@ -48,7 +48,7 @@ export class RectEmitter extends Emitter {
     height;
 
     /**
-     * Initializes a rectangle emitter with a given top-left origin position, width, and height.
+     * Initializes a rectangle emitter with given top-left origin coordinates, width, and height.
      * Particles are emitted randomly from the rectangular area using a uniform distribution.
      * @constructor
      * @param {RectEmitterConfig} [config={}] RectEmitter configuration options.
@@ -60,15 +60,18 @@ export class RectEmitter extends Emitter {
         this.y = config.y ?? 0;
         this.width = config.width ?? 100;
         this.height = config.height ?? 100;
+
+        this._overridableFields.push('x', 'y', 'width', 'height');
     }
 
     /**
      * Extends the base initialization by positioning the particle at a random point along or within the rectangle.
      * @override
      * @param {Particle} particle Particle instance to initialize.
+     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Optional particle blueprint overrides.
      * @returns {void}
      */
-    _initParticle(particle) {
+    _initParticle(particle, particleBlueprintOverrides = null) {
         if (this.emissionSource === EmissionSource.VOLUME) {
             particle.x = this.x + Math.random() * this.width;
             particle.y = this.y + Math.random() * this.height;
@@ -95,14 +98,14 @@ export class RectEmitter extends Emitter {
             }
         }
 
-        super._initParticle(particle);
+        super._initParticle(particle, particleBlueprintOverrides);
     }
 
     /**
      * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
-     * @param {Particle} particle Particle instance used to calculate the direction from its spawn position.
-     * @returns {number} The default direction angle (in radians).
+     * @param {Particle} particle Particle instance used to calculate the direction from its coordinates at emission.
+     * @returns {number} The default emission direction angle (in radians).
      */
     _getDefaultDirection(particle) {
         const centerX = this.x + this.width / 2;
