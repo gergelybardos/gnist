@@ -8,13 +8,17 @@ import { Emitter } from './Emitter.js';
  */
 
 /**
- * EllipseEmitter configuration options.
- * Includes all properties from {@link EmitterConfig}.
- * @typedef {object} EllipseEmitterConfig
+ * EllipseEmitter-specific configuration options.
+ * @typedef {object} EllipseEmitterConfigSpecifics
  * @property {number} [x=0] Horizontal coordinate of the emission ellipse center.
  * @property {number} [y=0] Vertical coordinate of the emission ellipse center.
  * @property {number} [radiusX=50] Horizontal radius of the emission ellipse.
  * @property {number} [radiusY=50] Vertical radius of the emission ellipse.
+ */
+
+/**
+ * EllipseEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * @typedef {EmitterConfig & EllipseEmitterConfigSpecifics} EllipseEmitterConfig
  */
 
 /**

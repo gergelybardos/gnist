@@ -7,14 +7,18 @@ import { Force } from './Force.js';
  */
 
 /**
- * RadialForce configuration options.
- * Includes all properties from {@link ForceConfig}.
- * @typedef {object} RadialForceConfig
+ * RadialForce-specific configuration options.
+ * @typedef {object} RadialForceConfigSpecifics
  * @property {number} [x=0] Horizontal coordinate of the force center.
  * @property {number} [y=0] Vertical coordinate of the force center.
  * @property {number} [strength=50000] Magnitude of the force. Positive values create attraction, negative values create repulsion. Typical values range from several thousand to several hundred thousand, depending on scene size.
  * @property {number} [epsilon=10] Smoothing factor to prevent divide-by-zero errors and infinite acceleration spikes near the center. Stored internally as a squared value in {@link RadialForce#epsilonSquared}.
  * @property {number} [cullingRadius=0] Distance threshold from the center below which particles are marked dead. Set to 0 to disable. Stored internally as a squared value in {@link RadialForce#cullingRadiusSquared}.
+ */
+
+/**
+ * RadialForce configuration options. Includes all properties from {@link ForceConfig}.
+ * @typedef {ForceConfig & RadialForceConfigSpecifics} RadialForceConfig
  */
 
 /**

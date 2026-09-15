@@ -8,13 +8,17 @@ import { Emitter } from './Emitter.js';
  */
 
 /**
- * RectEmitter configuration options.
- * Includes all properties from {@link EmitterConfig}.
- * @typedef {object} RectEmitterConfig
+ * RectEmitter-specific configuration options.
+ * @typedef {object} RectEmitterConfigSpecifics
  * @property {number} [x=0] Horizontal coordinate of the top-left corner of the emission rectangle.
  * @property {number} [y=0] Vertical coordinate of the top-left corner of the emission rectangle.
  * @property {number} [width=100] Width of the emission rectangle.
  * @property {number} [height=100] Height of the emission rectangle.
+ */
+
+/**
+ * RectEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * @typedef {EmitterConfig & RectEmitterConfigSpecifics} RectEmitterConfig
  */
 
 /**

@@ -7,10 +7,14 @@ import { Force } from './Force.js';
  */
 
 /**
- * LinearDrag configuration options.
- * Includes all properties from {@link ForceConfig}.
- * @typedef {object} LinearDragConfig
+ * LinearDrag-specific configuration options.
+ * @typedef {object} LinearDragConfigSpecifics
  * @property {number} [drag=0.99] Friction coefficient where 0 means no drag and higher values slow particles down faster.
+ */
+
+/**
+ * LinearDrag configuration options. Includes all properties from {@link ForceConfig}.
+ * @typedef {ForceConfig & LinearDragConfigSpecifics} LinearDragConfig
  */
 
 /**

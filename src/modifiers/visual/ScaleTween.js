@@ -8,11 +8,15 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * ScaleTween configuration options.
- * Includes all properties from {@link ModifierConfig}.
- * @typedef {object} ScaleTweenConfig
+ * ScaleTween-specific configuration options.
+ * @typedef {object} ScaleTweenConfigSpecifics
  * @property {number} [startScale=1.0] Scale multiplier at particle emission.
  * @property {number} [endScale=0.1] Scale multiplier at particle death.
+ */
+
+/**
+ * ScaleTween configuration options. Includes all properties from {@link ModifierConfig}.
+ * @typedef {ModifierConfig & ScaleTweenConfigSpecifics} ScaleTweenConfig
  */
 
 /**

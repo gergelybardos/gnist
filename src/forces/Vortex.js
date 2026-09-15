@@ -7,9 +7,8 @@ import { Force } from './Force.js';
  */
 
 /**
- * Vortex force configuration options.
- * Includes all properties from {@link ForceConfig}.
- * @typedef {object} VortexConfig
+ * Vortex-specific force configuration options.
+ * @typedef {object} VortexConfigSpecifics
  * @property {number} [x=0] Horizontal coordinate of the vortex center.
  * @property {number} [y=0] Vertical coordinate of the vortex center.
  * @property {number} [rotationSpeed=100] Rotation speed. Positive values for clockwise, negative values for counter-clockwise rotation.
@@ -20,6 +19,11 @@ import { Force } from './Force.js';
  * may cause particles to mathematically bypass the center and slingshot outward. In such cases, increase this radius to
  * intercept particles before they reach their escape brink. Omit or set to 0 to disable. Stored internally as
  * {@link Vortex#cullingRadius} and as a squared value in {@link Vortex#cullingRadiusSquared}.
+ */
+
+/**
+ * Vortex configuration options. Includes all properties from {@link ForceConfig}.
+ * @typedef {ForceConfig & VortexConfigSpecifics} VortexConfig
  */
 
 /**

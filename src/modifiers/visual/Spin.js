@@ -8,10 +8,14 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Spin configuration options.
- * Includes all properties from {@link ModifierConfig}.
- * @typedef {object} SpinConfig
+ * Spin-specific configuration options.
+ * @typedef {object} SpinConfigSpecifics
  * @property {number} [angularVelocity] Optional spin rate in radians per second. If omitted, the particle's own angularVelocity value is used.
+ */
+
+/**
+ * Spin configuration options. Includes all properties from {@link ModifierConfig}.
+ * @typedef {ModifierConfig & SpinConfigSpecifics} SpinConfig
  */
 
 /**

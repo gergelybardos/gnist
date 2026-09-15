@@ -7,11 +7,15 @@ import { Emitter } from './Emitter.js';
  */
 
 /**
- * PointEmitter configuration options.
- * Includes all properties from {@link EmitterConfig}.
- * @typedef {object} PointEmitterConfig
+ * PointEmitter-specific configuration options.
+ * @typedef {object} PointEmitterConfigSpecifics
  * @property {number} [x=0] Horizontal coordinate of the emission point.
  * @property {number} [y=0] Vertical coordinate of the emission point.
+ */
+
+/**
+ * PointEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * @typedef {EmitterConfig & PointEmitterConfigSpecifics} PointEmitterConfig
  */
 
 /**

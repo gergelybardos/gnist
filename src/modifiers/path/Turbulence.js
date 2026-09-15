@@ -8,11 +8,15 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Turbulence configuration options.
- * Includes all properties from {@link ModifierConfig}.
- * @typedef {object} TurbulenceConfig
+ * Turbulence-specific configuration options.
+ * @typedef {object} TurbulenceConfigSpecifics
  * @property {number|number[]} [strength=20] Magnitude of displacement (in pixels per second) or a [start, end] range array interpolated over lifespan.
  * @property {number} [scale=0.01] Noise scale factor. Smaller values produce smooth, sweeping currents; larger values produce tight, chaotic jitter.
+ */
+
+/**
+ * Turbulence configuration options. Includes all properties from {@link ModifierConfig}.
+ * @typedef {ModifierConfig & TurbulenceConfigSpecifics} TurbulenceConfig
  */
 
 /**

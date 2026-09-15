@@ -8,10 +8,14 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * ColorRamp configuration options.
- * Includes all properties from {@link ModifierConfig}.
- * @typedef {object} ColorRampConfig
+ * ColorRamp-specific configuration options.
+ * @typedef {object} ColorRampConfigSpecifics
  * @property {Array<Array<number>>} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
+ */
+
+/**
+ * ColorRamp configuration options. Includes all properties from {@link ModifierConfig}.
+ * @typedef {ModifierConfig & ColorRampConfigSpecifics} ColorRampConfig
  */
 
 /**
