@@ -1,10 +1,43 @@
+import { Particle } from '../core/Particle.js';
+import { Force } from './Force.js';
+import type { ForceConfig } from './Force.js';
+export type VortexConfigSpecifics = {
+    /**
+     * Horizontal coordinate of the vortex center.
+     */
+    x?: number;
+    /**
+     * Vertical coordinate of the vortex center.
+     */
+    y?: number;
+    /**
+     * Rotation speed. Positive values for clockwise, negative values for counter-clockwise rotation.
+     */
+    rotationSpeed?: number;
+    /**
+     * Inward suction speed. Positive values pull inward, negative values push outward.
+     */
+    suctionSpeed?: number;
+    /**
+     * Maximum radius of influence. Particles outside this distance are unaffected.
+     */
+    radius?: number;
+    /**
+     * Distance threshold from the center below which particles are marked dead, surrounded
+     * by a frame-rate independent soft-aging buffer zone to prevent visual popping. Note that high velocities or long lifespans
+     * may cause particles to mathematically bypass the center and slingshot outward. In such cases, increase this radius to
+     * intercept particles before they reach their escape brink. Omit or set to 0 to disable. Stored internally as
+     * {@link Vortex#cullingRadius} and as a squared value in {@link Vortex#cullingRadiusSquared}.
+     */
+    cullingRadius?: number;
+};
+export type VortexConfig = ForceConfig & VortexConfigSpecifics;
 /**
  * @import { ForceConfig } from './Force.js'
  */
 /**
- * Vortex force configuration options.
- * Includes all properties from {@link ForceConfig}.
- * @typedef {object} VortexConfig
+ * Vortex-specific force configuration options.
+ * @typedef {object} VortexConfigSpecifics
  * @property {number} [x=0] Horizontal coordinate of the vortex center.
  * @property {number} [y=0] Vertical coordinate of the vortex center.
  * @property {number} [rotationSpeed=100] Rotation speed. Positive values for clockwise, negative values for counter-clockwise rotation.
@@ -17,17 +50,15 @@
  * {@link Vortex#cullingRadius} and as a squared value in {@link Vortex#cullingRadiusSquared}.
  */
 /**
+ * Vortex configuration options. Includes all properties from {@link ForceConfig}.
+ * @typedef {ForceConfig & VortexConfigSpecifics} VortexConfig
+ */
+/**
  * Environmental force that applies a swirling combination of radial attraction/repulsion and tangential (orbital) forces to particles.
  * @class
  * @extends Force
  */
-export class Vortex extends Force {
-    /**
-     * Initializes a vortex force with a center point, rotation speed, and suction speed.
-     * @constructor
-     * @param {VortexConfig} [config={}] Vortex configuration options.
-     */
-    constructor(config?: VortexConfig);
+export declare class Vortex extends Force {
     /**
      * Horizontal coordinate of the vortex center.
      * @type {number}
@@ -66,39 +97,18 @@ export class Vortex extends Force {
      * @type {number}
      */
     cullingRadiusSquared: number;
+    /**
+     * Initializes a vortex force with a center point, rotation speed, and suction speed.
+     * @constructor
+     * @param {VortexConfig} [config={}] Vortex configuration options.
+     */
+    constructor(config?: VortexConfig);
+    /**
+     * Applies a swirling combination of centripetal (suction) and tangential (orbital) forces to a particle.
+     * @override
+     * @param {Particle} particle Particle instance to affect.
+     * @param {number} dt Time elapsed since the last frame (in seconds).
+     * @returns {void}
+     */
+    apply(particle: Particle, dt: number): void;
 }
-/**
- * Vortex force configuration options.
- * Includes all properties from {@link ForceConfig}.
- */
-export type VortexConfig = {
-    /**
-     * Horizontal coordinate of the vortex center.
-     */
-    x?: number | undefined;
-    /**
-     * Vertical coordinate of the vortex center.
-     */
-    y?: number | undefined;
-    /**
-     * Rotation speed. Positive values for clockwise, negative values for counter-clockwise rotation.
-     */
-    rotationSpeed?: number | undefined;
-    /**
-     * Inward suction speed. Positive values pull inward, negative values push outward.
-     */
-    suctionSpeed?: number | undefined;
-    /**
-     * Maximum radius of influence. Particles outside this distance are unaffected.
-     */
-    radius?: number | undefined;
-    /**
-     * Distance threshold from the center below which particles are marked dead, surrounded
-     * by a frame-rate independent soft-aging buffer zone to prevent visual popping. Note that high velocities or long lifespans
-     * may cause particles to mathematically bypass the center and slingshot outward. In such cases, increase this radius to
-     * intercept particles before they reach their escape brink. Omit or set to 0 to disable. Stored internally as
-     * {@link Vortex#cullingRadius} and as a squared value in {@link Vortex#cullingRadiusSquared}.
-     */
-    cullingRadius?: number | undefined;
-};
-import { Force } from './Force.js';

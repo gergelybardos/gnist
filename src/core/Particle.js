@@ -15,13 +15,13 @@ export class Particle {
     // =========================================================================
 
     /**
-     * Current horizontal coordinate.
+     * Horizontal coordinate.
      * @type {number}
      */
     x;
 
     /**
-     * Current vertical coordinate.
+     * Vertical coordinate.
      * @type {number}
      */
     y;
@@ -39,19 +39,19 @@ export class Particle {
     originY;
 
     /**
-     * Current horizontal velocity component (in pixels per second).
+     * Horizontal velocity component (in pixels per second).
      * @type {number}
      */
     vx;
 
     /**
-     * Current vertical velocity component (in pixels per second).
+     * Vertical velocity component (in pixels per second).
      * @type {number}
      */
     vy;
 
     /**
-     * Current orientation angle (in radians).
+     * Orientation angle (in radians).
      * @type {number}
      */
     rotation;
@@ -80,13 +80,13 @@ export class Particle {
      */
     baseSize;
 
-    /** Current RGB color channels.
+    /** RGB color channels.
      * @type {Color}
      */
     color;
 
     /**
-     * Current transparency (0.0 = fully transparent, 1.0 = fully opaque).
+     * Transparency (0.0 = fully transparent, 1.0 = fully opaque).
      * @type {number}
      */
     opacity;
@@ -112,6 +112,18 @@ export class Particle {
      * @type {boolean}
      */
     alive;
+
+    /**
+     * Time interval between `onInterval` executions (in seconds).
+     * @type {number}
+     */
+    interval;
+
+    /**
+     * Accumulator tracking the time towards the next `onInterval` execution (in seconds).
+     * @type {number}
+     */
+    intervalTimer;
 
     // =========================================================================
     // PIPELINE TRACKING REFERENCES
@@ -140,10 +152,16 @@ export class Particle {
     // =========================================================================
 
     /**
-     * Optional callback triggered at particle death.
+     * Lifecycle callback executed at particle death.
      * @type {?function(Particle): void}
      */
     onDeath;
+
+    /**
+     * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+     * @type {?function(Particle): void}
+     */
+    onInterval;
 
     /**
      * Initializes a blank, inactive particle.
@@ -155,6 +173,7 @@ export class Particle {
 
     /**
      * Resets the particle to its initial state.
+     * @ignore
      * @returns {void}
      */
     reset() {
@@ -179,16 +198,40 @@ export class Particle {
         this.lifespan = 0;
         this.alive = false;
 
+        this.interval = 0;
+        this.intervalTimer = 0;
+
         // Emitter classes will initialize these immediately. No need to allocate empty arrays here.
         this.visualModifiers = null;
         this.pathModifiers = null;
         this.scopedForces = null;
 
         this.onDeath = null;
+        this.onInterval = null;
     }
 
     /**
-     * Marks the particle as dead and eligible for pool recycling, and triggers the onDeath hook.
+     * Periodically triggers the `onInterval` hook.
+     * @ignore
+     * @param {number} dt Time elapsed since the last frame (in seconds).
+     * @returns {void}
+     */
+    update(dt) {
+        if (!this.alive || this.onInterval === null || this.interval <= 0) {
+            return;
+        }
+
+        this.intervalTimer += dt;
+
+        while (this.intervalTimer >= this.interval) {
+            this.intervalTimer -= this.interval;
+            this.onInterval(this);
+        }
+    }
+
+    /**
+     * Marks the particle as dead and eligible for pool recycling, triggers the `onDeath` hook.
+     * @ignore
      * @returns {void}
      */
     kill() {

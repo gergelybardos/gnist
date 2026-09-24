@@ -20,7 +20,7 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Path modifier that applies a perpendicular sine-wave displacement relative to the particle's current movement direction.
+ * Path modifier that applies a perpendicular sine-wave displacement relative to the particle's movement direction.
  * @class
  * @extends Modifier
  */
@@ -91,7 +91,7 @@ export class SineWave extends Modifier {
     }
 
     /**
-     * Offsets the particle's coordinates along a wave axis perpendicular to the particle's current movement direction.
+     * Offsets the particle's coordinates along a wave axis perpendicular to the particle's movement direction.
      * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).

@@ -26,7 +26,7 @@ import { Particle } from './Particle.js';
  */
 export class Gnist {
     /**
-     * The current semantic version of the Gnist particle engine.
+     * The semantic version of the Gnist particle engine.
      * @type {string}
      * @returns {string}
      */
@@ -392,6 +392,8 @@ export class Gnist {
                 for (let j = 0; j < visualModifiersCount; j++) {
                     visualModifiers[j].update(particle, normalizedAge, dt);
                 }
+
+                particle.update(dt);
 
                 // 5. Culling
 

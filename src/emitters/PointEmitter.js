@@ -55,10 +55,10 @@ export class PointEmitter extends Emitter {
      * Extends the base initialization by positioning the particle at the coordinates of the emitter origin.
      * @override
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Optional particle blueprint overrides.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
-    _initParticle(particle, particleBlueprintOverrides = null) {
+    _initParticle(particle, particleBlueprintOverrides = {}) {
         particle.x = this.x;
         particle.y = this.y;
 
@@ -68,9 +68,10 @@ export class PointEmitter extends Emitter {
     /**
      * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
+     * @param {Particle} _particle The newly emitted Particle instance providing coordinates for the direction calculation.
      * @returns {number} The default emission direction angle (in radians).
      */
-    _getDefaultDirection() {
+    _getInitialParticleDirection(_particle) {
         return 0;
     }
 }

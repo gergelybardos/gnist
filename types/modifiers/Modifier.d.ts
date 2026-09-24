@@ -1,3 +1,10 @@
+import { Particle } from '../core/Particle.js';
+export type ModifierConfig = {
+    /**
+     * Unique identifier. Defaults to a generated UUID.
+     */
+    id?: string;
+};
 /**
  * Modifier configuration options.
  * @typedef {object} ModifierConfig
@@ -9,7 +16,8 @@
  * @abstract
  * @class
  */
-export class Modifier {
+export declare class Modifier {
+    #private;
     /**
      * Gets the architectural category of the modifier.
      * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
@@ -44,15 +52,4 @@ export class Modifier {
      * @throws {TypeError}
      */
     update(_particle: Particle, _normalizedAge: number, _dt: number): void;
-    #private;
 }
-/**
- * Modifier configuration options.
- */
-export type ModifierConfig = {
-    /**
-     * Unique identifier. Defaults to a generated UUID.
-     */
-    id?: string | undefined;
-};
-import { Particle } from '../core/Particle.js';

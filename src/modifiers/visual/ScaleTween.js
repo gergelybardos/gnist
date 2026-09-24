@@ -66,9 +66,10 @@ export class ScaleTween extends Modifier {
      * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle, normalizedAge) {
+    update(particle, normalizedAge, _dt) {
         if (particle.lifespan <= 0) {
             return;
         }

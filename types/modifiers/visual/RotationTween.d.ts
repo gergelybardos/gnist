@@ -1,19 +1,54 @@
+import { Particle } from '../../core/Particle.js';
+import { Modifier } from '../Modifier.js';
+import type { ModifierConfig } from '../Modifier.js';
+export type RotationTweenConfigSpecifics = {
+    /**
+     * Rotation angle (in radians) at particle emission.
+     */
+    startRotation?: number;
+    /**
+     * Rotation angle (in radians) at particle death.
+     */
+    endRotation?: number;
+};
+export type RotationTweenConfig = ModifierConfig & RotationTweenConfigSpecifics;
 /**
- * @import { ModifierConfig } from './Modifier.js';
+ * @import { ModifierConfig } from '../Modifier.js';
  */
 /**
- * RotationTween configuration options.
- * Includes all properties from {@link ModifierConfig}.
- * @typedef {object} RotationTweenConfig
- * @property {number} [startRotation=0] RotationTween angle (in radians) at particle emission.
- * @property {number} [endRotation=6.283185] RotationTween angle (in radians) at particle death.
+ * RotationTween-specific configuration options.
+ * @typedef {object} RotationTweenConfigSpecifics
+ * @property {number} [startRotation=0] Rotation angle (in radians) at particle emission.
+ * @property {number} [endRotation=6.283185] Rotation angle (in radians) at particle death.
+ */
+/**
+ * RotationTween configuration options. Includes all properties from {@link ModifierConfig}.
+ * @typedef {ModifierConfig & RotationTweenConfigSpecifics} RotationTweenConfig
  */
 /**
  * Particle modifier that interpolates the rotation angle of particles over their lifespan between two target values.
  * @class
  * @extends Modifier
  */
-export class RotationTween extends Modifier {
+export declare class RotationTween extends Modifier {
+    /**
+     * Gets the architectural category of the modifier.
+     * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
+     * @ignore
+     * @type {string}
+     * @returns {string}
+     */
+    static get category(): string;
+    /**
+     * Rotation angle (in radians) at particle emission.
+     * @type {number}
+     */
+    startRotation: number;
+    /**
+     * Rotation angle (in radians) at particle death.
+     * @type {number}
+     */
+    endRotation: number;
     /**
      * Initializes a rotation tween modifier with starting and ending rotation angles.
      * @constructor
@@ -21,37 +56,12 @@ export class RotationTween extends Modifier {
      */
     constructor(config?: RotationTweenConfig);
     /**
-     * RotationTween angle (in radians) at particle emission.
-     * @type {number}
-     */
-    startRotation: number;
-    /**
-     * RotationTween angle (in radians) at particle death.
-     * @type {number}
-     */
-    endRotation: number;
-    /**
      * Interpolates a particle's rotation based on its normalized age.
      * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    override update(particle: Particle, normalizedAge: number): void;
+    update(particle: Particle, normalizedAge: number, _dt: number): void;
 }
-/**
- * RotationTween configuration options.
- * Includes all properties from {@link ModifierConfig}.
- */
-export type RotationTweenConfig = {
-    /**
-     * RotationTween angle (in radians) at particle emission.
-     */
-    startRotation?: number | undefined;
-    /**
-     * RotationTween angle (in radians) at particle death.
-     */
-    endRotation?: number | undefined;
-};
-import { Modifier } from '../Modifier.js';
-import { Particle } from '../../core/Particle.js';

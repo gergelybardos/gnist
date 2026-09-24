@@ -6,10 +6,10 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
 /**
  * @import { Gnist } from '../core/Gnist.js'
  * @import { Color, EmissionSourceValues } from '../shared/Types.js'
- * @import { PointEmitterConfig } from 'PointEmitter'
- * @import { LineEmitterConfig } from 'LineEmitter'
- * @import { RectEmitterConfig } from 'RectEmitter'
- * @import { EllipseEmitterConfig } from 'EllipseEmitter'
+ * @import { PointEmitterConfigSpecifics } from 'PointEmitter'
+ * @import { LineEmitterConfigSpecifics } from 'LineEmitter'
+ * @import { RectEmitterConfigSpecifics } from 'RectEmitter'
+ * @import { EllipseEmitterConfigSpecifics } from 'EllipseEmitter'
  */
 
 /**
@@ -26,7 +26,9 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  */
 
 /**
- * @typedef {EmitterConfig | PointEmitterConfig | LineEmitterConfig | RectEmitterConfig | EllipseEmitterConfig} AnyEmitterConfig
+ * Temporary emitter configuration option overrides for an `emit()` call.
+ * Allows overriding emitter-specific geometry (e.g., `x`, `y`, `width`, `height`).
+ * @typedef {Partial<PointEmitterConfigSpecifics | LineEmitterConfigSpecifics | RectEmitterConfigSpecifics | EllipseEmitterConfigSpecifics>} EmitterOverrides
  */
 
 /**
@@ -35,7 +37,8 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  * Options are interpreted either directly or indirectly to derive Particle properties.
  * Most options may be specified as a single number or a [min, max] range array.
  * @typedef {object} ParticleBlueprint
- * @property {?function(Particle): void} [onDeath] Lifecycle callback executed at particle death.
+ * @property {function(Particle): void} [onDeath] Lifecycle callback executed at particle death.
+ * @property {function(Particle): void} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
  * @property {number|number[]} [rotation] Orientation angle (in radians).
  * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
  * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
@@ -44,6 +47,7 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds).
  * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
  * @property {number|number[]} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
+ * @property {number|number[]} [interval] Time interval between `onInterval` callback executions (in seconds).
  */
 
 /**
@@ -64,18 +68,6 @@ export class Emitter {
      * @type {number}
      */
     particlesPerSecond;
-
-    /**
-     * Current horizontal coordinate of the emitter origin.
-     * @type {number}
-     */
-    x;
-
-    /**
-     * Current vertical coordinate of the emitter origin.
-     * @type {number}
-     */
-    y;
 
     /**
      * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
@@ -174,8 +166,6 @@ export class Emitter {
 
         this.#duration = (config.duration < 0) ? Infinity : (config.duration ?? Infinity);
 
-        this.x = config.x ?? 0;
-        this.y = config.y ?? 0;
         this.emissionSource = config.emissionSource ?? EmissionSource.VOLUME;
 
         this.#particleBlueprint = config.particleBlueprint ?? {};
@@ -184,10 +174,7 @@ export class Emitter {
         this.#pathModifiers = [];
         this.#scopedForces = [];
 
-        this._overridableFields = [
-            'particlesPerSecond',
-            'emissionSource',
-        ];
+        this._overridableFields = [];
     }
 
     /**
@@ -351,7 +338,7 @@ export class Emitter {
         for (let i = 0; i < particleCount; i++) {
             const particle = acquireParticle();
 
-            this._initParticle(particle, null);
+            this._initParticle(particle);
 
             particle.visualModifiers = this.#visualModifiers;
             particle.pathModifiers = this.#pathModifiers;
@@ -363,13 +350,12 @@ export class Emitter {
 
     /**
      * Instantly emits particles using optional overrides.
-     * The number of particles emitted instantly is determined by the emitter's `particlesPerSecond` configuration
-     * option or its corresponding override value.
-     * @param {Partial<AnyEmitterConfig>} [emitterOverrides={}] Temporary overrides for emitter-level properties.
-     * @param {Partial<ParticleBlueprint>} [particleBlueprintOverrides={}] Temporary overrides for the particle blueprint.
+     * @param {number} particleCount Number of particles to emit.
+     * @param {EmitterOverrides} [emitterOverrides={}] Temporary overrides for emitter-specific geometry (e.g., `x`, `y`, `width`, `height`).
+     * @param {ParticleBlueprint} [particleBlueprintOverrides={}] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
-    emit(emitterOverrides = {}, particleBlueprintOverrides = {}) {
+    emit(particleCount, emitterOverrides = {}, particleBlueprintOverrides = {}) {
         if (!this.#engineContext) {
             return;
         }
@@ -380,16 +366,17 @@ export class Emitter {
             const overrideValue = emitterOverrides[field];
 
             if (overrideValue !== null && overrideValue !== undefined) {
-                originalEmitterState[field] = this[field];
+                if (field in this) {
+                    originalEmitterState[field] = this[field];
+                }
+
                 this[field] = overrideValue;
             }
         }
 
         const { acquireParticle, enqueueParticle } = this.#engineContext;
 
-        const count = this.particlesPerSecond;
-
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < particleCount; i++) {
             const particle = acquireParticle();
 
             this._initParticle(particle, particleBlueprintOverrides);
@@ -429,10 +416,10 @@ export class Emitter {
      * Sets up a particle's movement, visuals, and lifecycle state.
      * @ignore
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Optional particle blueprint overrides.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
-    _initParticle(particle, particleBlueprintOverrides = null) {
+    _initParticle(particle, particleBlueprintOverrides = {}) {
         // Keep this allocation-free as this is a hot path executed for every particle, including sub-emitter particles.
 
         const blueprint = this.#particleBlueprint;
@@ -460,18 +447,27 @@ export class Emitter {
         particle.lifespan = this.#resolveNumber(particleBlueprintOverrides?.lifespan ?? blueprint.lifespan, particle.lifespan);
         particle.alive = true;
 
+        particle.interval = this.#resolveNumber(
+            particleBlueprintOverrides?.interval ?? blueprint.interval,
+            0
+        );
+        particle.intervalTimer = 0;
+
         particle.onDeath = particleBlueprintOverrides?.onDeath ?? blueprint.onDeath ?? null;
+        particle.onInterval = particleBlueprintOverrides?.onInterval ?? blueprint.onInterval ?? null;
     }
 
     /**
      * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * This is a fallback value when no explicit `direction` was specified in the emitter config's `particleBlueprint`.
      * @ignore
-     * @param {Particle} _particle Particle instance. Subclasses may use this when calculating the direction.
+     * @abstract
+     * @param {Particle} _particle The newly emitted Particle instance providing coordinates for the direction calculation.
      * @returns {number} The default emission direction angle (in radians).
+     * @throws {TypeError}
      */
-    _getDefaultDirection(_particle) {
-        return 0;
+    _getInitialParticleDirection(_particle) {
+        throw new TypeError('[Gnist] Method _getInitialParticleDirection() must be implemented by subclass.');
     }
 
     /**
@@ -479,14 +475,14 @@ export class Emitter {
      * specified in the emitter config's `particleBlueprint`. If no explicit `direction` was specified, it falls back
      * to the emitter's shape-specific direction.
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Optional particle blueprint overrides.
+     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
     #initParticleVelocity(particle, particleBlueprintOverrides) {
         const blueprint = this.#particleBlueprint;
 
         const speed = this.#resolveNumber(particleBlueprintOverrides?.speed ?? blueprint.speed, 50);
-        const direction = this.#resolveNumber(particleBlueprintOverrides?.direction ?? blueprint.direction, this._getDefaultDirection(particle));
+        const direction = this.#resolveNumber(particleBlueprintOverrides?.direction ?? blueprint.direction, this._getInitialParticleDirection(particle));
 
         particle.vx = Math.cos(direction) * speed;
         particle.vy = Math.sin(direction) * speed;

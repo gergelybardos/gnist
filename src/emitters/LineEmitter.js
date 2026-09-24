@@ -72,10 +72,10 @@ export class LineEmitter extends Emitter {
      * Extends the base initialization by positioning the particle at a random point along the line segment.
      * @override
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Optional particle blueprint overrides.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
-    _initParticle(particle, particleBlueprintOverrides = null) {
+    _initParticle(particle, particleBlueprintOverrides = {}) {
         const t = Math.random();
 
         particle.x = this.x1 + (this.x2 - this.x1) * t;
@@ -87,9 +87,10 @@ export class LineEmitter extends Emitter {
     /**
      * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
+     * @param {Particle} _particle The newly emitted Particle instance providing coordinates for the direction calculation.
      * @returns {number} The default emission direction angle (in radians).
      */
-    _getDefaultDirection() {
+    _getInitialParticleDirection(_particle) {
         const dx = this.x2 - this.x1;
         const dy = this.y2 - this.y1;
         const lineAngle = Math.atan2(dy, dx);

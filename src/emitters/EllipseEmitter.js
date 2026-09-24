@@ -72,10 +72,10 @@ export class EllipseEmitter extends Emitter {
      * Extends the base initialization by positioning the particle at a random point along or within the ellipse.
      * @override
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Optional particle blueprint overrides.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
-    _initParticle(particle, particleBlueprintOverrides = null) {
+    _initParticle(particle, particleBlueprintOverrides = {}) {
         const angle = Math.random() * Math.PI * 2;
 
         const factor = this.emissionSource === EmissionSource.VOLUME
@@ -91,10 +91,10 @@ export class EllipseEmitter extends Emitter {
     /**
      * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
-     * @param {Particle} particle Particle instance used to calculate the direction from its coordinates at emission.
+     * @param {Particle} particle The newly emitted Particle instance providing coordinates for the direction calculation.
      * @returns {number} The default emission direction angle (in radians).
      */
-    _getDefaultDirection(particle) {
+    _getInitialParticleDirection(particle) {
         const dy = particle.y - this.y;
         const dx = particle.x - this.x;
 

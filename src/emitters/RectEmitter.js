@@ -72,10 +72,10 @@ export class RectEmitter extends Emitter {
      * Extends the base initialization by positioning the particle at a random point along or within the rectangle.
      * @override
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Optional particle blueprint overrides.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
-    _initParticle(particle, particleBlueprintOverrides = null) {
+    _initParticle(particle, particleBlueprintOverrides = {}) {
         if (this.emissionSource === EmissionSource.VOLUME) {
             particle.x = this.x + Math.random() * this.width;
             particle.y = this.y + Math.random() * this.height;
@@ -108,10 +108,10 @@ export class RectEmitter extends Emitter {
     /**
      * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
-     * @param {Particle} particle Particle instance used to calculate the direction from its coordinates at emission.
+     * @param {Particle} particle The newly emitted Particle instance providing coordinates for the direction calculation.
      * @returns {number} The default emission direction angle (in radians).
      */
-    _getDefaultDirection(particle) {
+    _getInitialParticleDirection(particle) {
         const centerX = this.x + this.width / 2;
         const centerY = this.y + this.height / 2;
         const outwardAngle = Math.atan2(particle.y - centerY, particle.x - centerX);

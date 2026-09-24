@@ -1,3 +1,10 @@
+import { Particle } from '../core/Particle.js';
+export type ForceConfig = {
+    /**
+     * Unique identifier. Defaults to a generated UUID.
+     */
+    id?: string;
+};
 /**
  * Force configuration options.
  * @typedef {object} ForceConfig
@@ -8,7 +15,8 @@
  * @abstract
  * @class
  */
-export class Force {
+export declare class Force {
+    #private;
     /**
      * Initializes an environmental force.
      * @constructor
@@ -32,15 +40,4 @@ export class Force {
      * @throws {TypeError}
      */
     apply(_particle: Particle, _dt: number): void;
-    #private;
 }
-/**
- * Force configuration options.
- */
-export type ForceConfig = {
-    /**
-     * Unique identifier. Defaults to a generated UUID.
-     */
-    id?: string | undefined;
-};
-import { Particle } from '../core/Particle.js';

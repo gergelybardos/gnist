@@ -1,28 +1,56 @@
+import { Particle } from '../core/Particle.js';
+import { Emitter } from './Emitter.js';
+import type { EmitterConfig, ParticleBlueprint } from './Emitter.js';
+export type RectEmitterConfigSpecifics = {
+    /**
+     * Horizontal coordinate of the top-left corner of the emission rectangle.
+     */
+    x?: number;
+    /**
+     * Vertical coordinate of the top-left corner of the emission rectangle.
+     */
+    y?: number;
+    /**
+     * Width of the emission rectangle.
+     */
+    width?: number;
+    /**
+     * Height of the emission rectangle.
+     */
+    height?: number;
+};
+export type RectEmitterConfig = EmitterConfig & RectEmitterConfigSpecifics;
 /**
- * @import { EmitterConfig } from './Emitter.js'
+ * @import { EmitterConfig, ParticleBlueprint } from './Emitter.js'
  */
 /**
- * RectEmitter configuration options.
- * Includes all properties from {@link EmitterConfig}.
- * @typedef {object} RectEmitterConfig
+ * RectEmitter-specific configuration options.
+ * @typedef {object} RectEmitterConfigSpecifics
  * @property {number} [x=0] Horizontal coordinate of the top-left corner of the emission rectangle.
  * @property {number} [y=0] Vertical coordinate of the top-left corner of the emission rectangle.
  * @property {number} [width=100] Width of the emission rectangle.
  * @property {number} [height=100] Height of the emission rectangle.
  */
 /**
+ * RectEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * @typedef {EmitterConfig & RectEmitterConfigSpecifics} RectEmitterConfig
+ */
+/**
  * Particle emitter that emits particles from a rectangular area.
  * @class
  * @extends Emitter
  */
-export class RectEmitter extends Emitter {
+export declare class RectEmitter extends Emitter {
     /**
-     * Initializes a rectangle emitter with a given top-left origin position, width, and height.
-     * Particles are emitted randomly from the rectangular area using a uniform distribution.
-     * @constructor
-     * @param {RectEmitterConfig} [config={}] RectEmitter configuration options.
+     * Horizontal coordinate of the top-left corner of the emission rectangle.
+     * @type {number}
      */
-    constructor(config?: RectEmitterConfig);
+    x: number;
+    /**
+     * Vertical coordinate of the top-left corner of the emission rectangle.
+     * @type {number}
+     */
+    y: number;
     /**
      * Width of the emission rectangle.
      * @type {number}
@@ -34,34 +62,25 @@ export class RectEmitter extends Emitter {
      */
     height: number;
     /**
+     * Initializes a rectangle emitter with given top-left origin coordinates, width, and height.
+     * Particles are emitted randomly from the rectangular area using a uniform distribution.
+     * @constructor
+     * @param {RectEmitterConfig} [config={}] RectEmitter configuration options.
+     */
+    constructor(config?: RectEmitterConfig);
+    /**
+     * Extends the base initialization by positioning the particle at a random point along or within the rectangle.
+     * @override
+     * @param {Particle} particle Particle instance to initialize.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
+     * @returns {void}
+     */
+    _initParticle(particle: Particle, particleBlueprintOverrides?: ParticleBlueprint): void;
+    /**
      * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override
-     * @param {Particle} particle Particle instance used to calculate the direction from its spawn position.
-     * @returns {number} The default direction angle (in radians).
+     * @param {Particle} particle The newly emitted Particle instance providing coordinates for the direction calculation.
+     * @returns {number} The default emission direction angle (in radians).
      */
-    override _getDefaultDirection(particle: Particle): number;
+    _getInitialParticleDirection(particle: Particle): number;
 }
-/**
- * RectEmitter configuration options.
- * Includes all properties from {@link EmitterConfig}.
- */
-export type RectEmitterConfig = {
-    /**
-     * Horizontal coordinate of the top-left corner of the emission rectangle.
-     */
-    x?: number | undefined;
-    /**
-     * Vertical coordinate of the top-left corner of the emission rectangle.
-     */
-    y?: number | undefined;
-    /**
-     * Width of the emission rectangle.
-     */
-    width?: number | undefined;
-    /**
-     * Height of the emission rectangle.
-     */
-    height?: number | undefined;
-};
-import { Emitter } from './Emitter.js';
-import { Particle } from '../core/Particle.js';

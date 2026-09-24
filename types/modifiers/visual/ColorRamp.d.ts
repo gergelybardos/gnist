@@ -1,11 +1,24 @@
+import { Particle } from '../../core/Particle.js';
+import { Modifier } from '../Modifier.js';
+import type { ModifierConfig } from '../Modifier.js';
+export type ColorRampConfigSpecifics = {
+    /**
+     * Array of RGB color arrays.
+     */
+    colors?: Array<Array<number>>;
+};
+export type ColorRampConfig = ModifierConfig & ColorRampConfigSpecifics;
 /**
- * @import { ModifierConfig } from './Modifier.js';
+ * @import { ModifierConfig } from '../Modifier.js';
  */
 /**
- * ColorRamp configuration options.
- * Includes all properties from {@link ModifierConfig}.
- * @typedef {object} ColorRampConfig
+ * ColorRamp-specific configuration options.
+ * @typedef {object} ColorRampConfigSpecifics
  * @property {Array<Array<number>>} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
+ */
+/**
+ * ColorRamp configuration options. Includes all properties from {@link ModifierConfig}.
+ * @typedef {ModifierConfig & ColorRampConfigSpecifics} ColorRampConfig
  */
 /**
  * Particle modifier that blends the color of particles over their lifespan by interpolating through an arbitrary number of colors.
@@ -13,7 +26,16 @@
  * @class
  * @extends Modifier
  */
-export class ColorRamp extends Modifier {
+export declare class ColorRamp extends Modifier {
+    #private;
+    /**
+     * Gets the architectural category of the modifier.
+     * Used by emitters to sort modifiers into specialized update loops (e.g., visual vs. path).
+     * @ignore
+     * @type {string}
+     * @returns {string}
+     */
+    static get category(): string;
     /**
      * Initializes a color ramp modifier with evenly distributed color stops.
      * @constructor
@@ -25,20 +47,8 @@ export class ColorRamp extends Modifier {
      * @override
      * @param {Particle} particle Particle instance to affect.
      * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    override update(particle: Particle, normalizedAge: number): void;
-    #private;
+    update(particle: Particle, normalizedAge: number, _dt: number): void;
 }
-/**
- * ColorRamp configuration options.
- * Includes all properties from {@link ModifierConfig}.
- */
-export type ColorRampConfig = {
-    /**
-     * Array of RGB color arrays.
-     */
-    colors?: number[][] | undefined;
-};
-import { Modifier } from '../Modifier.js';
-import { Particle } from '../../core/Particle.js';

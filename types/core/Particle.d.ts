@@ -1,3 +1,6 @@
+import { Force } from '../forces/Force.js';
+import { Modifier } from '../modifiers/Modifier.js';
+import type { Color } from '../shared/Types.js';
 /**
  * @import { Color } from '../shared/Types.js'
  */
@@ -5,29 +8,39 @@
  * Represents a single particle within the simulation.
  * @class
  */
-export class Particle {
+export declare class Particle {
     /**
-     * Current horizontal coordinate.
+     * Horizontal coordinate.
      * @type {number}
      */
     x: number;
     /**
-     * Current vertical coordinate.
+     * Vertical coordinate.
      * @type {number}
      */
     y: number;
     /**
-     * Current horizontal velocity component (in pixels per second).
+     * Horizontal coordinate at particle emission.
+     * @type {number}
+     */
+    originX: number;
+    /**
+     * Vertical coordinate at particle emission.
+     * @type {number}
+     */
+    originY: number;
+    /**
+     * Horizontal velocity component (in pixels per second).
      * @type {number}
      */
     vx: number;
     /**
-     * Current vertical velocity component (in pixels per second).
+     * Vertical velocity component (in pixels per second).
      * @type {number}
      */
     vy: number;
     /**
-     * Current orientation angle (in radians).
+     * Orientation angle (in radians).
      * @type {number}
      */
     rotation: number;
@@ -48,12 +61,12 @@ export class Particle {
      * @type {number}
      */
     baseSize: number;
-    /** Current RGB color channels.
+    /** RGB color channels.
      * @type {Color}
      */
     color: Color;
     /**
-     * Current transparency (0.0 = fully transparent, 1.0 = fully opaque).
+     * Transparency (0.0 = fully transparent, 1.0 = fully opaque).
      * @type {number}
      */
     opacity: number;
@@ -73,6 +86,16 @@ export class Particle {
      */
     alive: boolean;
     /**
+     * Time interval between `onInterval` executions (in seconds).
+     * @type {number}
+     */
+    interval: number;
+    /**
+     * Accumulator tracking the time towards the next `onInterval` execution (in seconds).
+     * @type {number}
+     */
+    intervalTimer: number;
+    /**
      * Shared reference to the owner emitter's visual modifier array.
      * @type {Array<Modifier>|null}
      */
@@ -87,7 +110,38 @@ export class Particle {
      * @type {Array<Force>|null}
      */
     scopedForces: Array<Force> | null;
+    /**
+     * Lifecycle callback executed at particle death.
+     * @type {?function(Particle): void}
+     */
+    onDeath: Function | null;
+    /**
+     * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+     * @type {?function(Particle): void}
+     */
+    onInterval: Function | null;
+    /**
+     * Initializes a blank, inactive particle.
+     * @constructor
+     */
+    constructor();
+    /**
+     * Resets the particle to its initial state.
+     * @ignore
+     * @returns {void}
+     */
+    reset(): void;
+    /**
+     * Periodically triggers the `onInterval` hook.
+     * @ignore
+     * @param {number} dt Time elapsed since the last frame (in seconds).
+     * @returns {void}
+     */
+    update(dt: number): void;
+    /**
+     * Marks the particle as dead and eligible for pool recycling, triggers the `onDeath` hook.
+     * @ignore
+     * @returns {void}
+     */
+    kill(): void;
 }
-import type { Color } from '../shared/Types.js';
-import { Modifier } from '../modifiers/Modifier.js';
-import { Force } from '../forces/Force.js';

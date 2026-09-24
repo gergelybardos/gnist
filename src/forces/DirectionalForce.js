@@ -25,13 +25,13 @@ import { Force } from './Force.js';
  */
 export class DirectionalForce extends Force {
     /**
-     * Current horizontal acceleration component (in pixels per second²).
+     * Horizontal acceleration component (in pixels per second²).
      * @type {number}
      */
     ax;
 
     /**
-     * Current vertical acceleration component (in pixels per second²).
+     * Vertical acceleration component (in pixels per second²).
      * @type {number}
      */
     ay;
