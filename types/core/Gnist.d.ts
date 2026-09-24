@@ -61,21 +61,18 @@ export declare class Gnist {
     /**
      * Registered emitters emitting active particles.
      * @type {Array<Emitter>}
-     * @readonly
      */
-    readonly get emitters(): Array<Emitter>;
+    get emitters(): Array<Emitter>;
     /**
      * Registered global environmental forces affecting all active particles.
      * @type {Array<Force>}
-     * @readonly
      */
-    readonly get globalForces(): Array<Force>;
+    get globalForces(): Array<Force>;
     /**
      * Common pool of active particles.
      * @type {Array<Particle>}
-     * @readonly
      */
-    readonly get particles(): Array<Particle>;
+    get particles(): Array<Particle>;
     /**
      * Optional region used for particle culling.
      * @type {CullingBounds|null}

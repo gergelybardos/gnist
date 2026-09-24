@@ -6,10 +6,10 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
 /**
  * @import { Gnist } from '../core/Gnist.js'
  * @import { Color, EmissionSourceValues } from '../shared/Types.js'
- * @import { PointEmitterConfigSpecifics } from 'PointEmitter'
- * @import { LineEmitterConfigSpecifics } from 'LineEmitter'
- * @import { RectEmitterConfigSpecifics } from 'RectEmitter'
- * @import { EllipseEmitterConfigSpecifics } from 'EllipseEmitter'
+ * @import { PointEmitterConfigSpecifics } from './PointEmitter'
+ * @import { LineEmitterConfigSpecifics } from './LineEmitter'
+ * @import { RectEmitterConfigSpecifics } from './RectEmitter'
+ * @import { EllipseEmitterConfigSpecifics } from './EllipseEmitter'
  */
 
 /**
@@ -32,13 +32,26 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  */
 
 /**
+ * Callback executed during particle lifecycle events.
+ * @callback ParticleLifecycleCallback
+ * @param {Particle} particle The particle instance.
+ * @returns {void}
+ */
+
+/**
+ * Callback to retrieve a particle instance from the reusable particles.
+ * @callback AcquireParticleCallback
+ * @returns {Particle} Reusable particle instance.
+ */
+
+/**
  * Configuration options used by emitters to initialize particles at emission.
  * This object is not runtime Particle state and does not correspond directly to Particle properties.
  * Options are interpreted either directly or indirectly to derive Particle properties.
  * Most options may be specified as a single number or a [min, max] range array.
  * @typedef {object} ParticleBlueprint
- * @property {function(Particle): void} [onDeath] Lifecycle callback executed at particle death.
- * @property {function(Particle): void} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+ * @property {ParticleLifecycleCallback} [onDeath] Lifecycle callback executed at particle death.
+ * @property {ParticleLifecycleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
  * @property {number|number[]} [rotation] Orientation angle (in radians).
  * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
  * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
@@ -53,8 +66,8 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
 /**
  * Engine context providing particle acquisition and queueing callbacks.
  * @typedef {object} EngineContext
- * @property {function(): Particle} acquireParticle Callback to retrieve a particle instance from the reusable particles.
- * @property {function(Particle): void} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
+ * @property {AcquireParticleCallback} acquireParticle Callback to retrieve a particle instance from the reusable particles.
+ * @property {ParticleLifecycleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
  */
 
 /**
@@ -180,7 +193,6 @@ export class Emitter {
     /**
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
-     * @readonly
      */
     get id() {
         return this.#id;
@@ -189,7 +201,6 @@ export class Emitter {
     /**
      * Flag indicating whether the emitter is running or not.
      * @type {boolean}
-     * @readonly
      */
     get enabled() {
         return this.#enabled;

@@ -96,7 +96,6 @@ export class Gnist {
     /**
      * Registered emitters emitting active particles.
      * @type {Array<Emitter>}
-     * @readonly
      */
     get emitters() {
         return this.#emitters;
@@ -105,7 +104,6 @@ export class Gnist {
     /**
      * Registered global environmental forces affecting all active particles.
      * @type {Array<Force>}
-     * @readonly
      */
     get globalForces() {
         return this.#globalForces;
@@ -114,7 +112,6 @@ export class Gnist {
     /**
      * Common pool of active particles.
      * @type {Array<Particle>}
-     * @readonly
      */
     get particles() {
         return this.#activeParticles;

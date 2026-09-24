@@ -35,7 +35,6 @@ export class Force {
     /**
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
-     * @readonly
      */
     get id() {
         return this.#id;

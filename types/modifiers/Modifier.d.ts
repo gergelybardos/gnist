@@ -38,9 +38,8 @@ export declare class Modifier {
     /**
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
-     * @readonly
      */
-    readonly get id(): string;
+    get id(): string;
     /**
      * Applies visual or lifecycle changes to a particle based on its normalized age.
      * @ignore

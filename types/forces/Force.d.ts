@@ -27,9 +27,8 @@ export declare class Force {
     /**
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
-     * @readonly
      */
-    readonly get id(): string;
+    get id(): string;
     /**
      * Applies acceleration to a particle's velocity.
      * @ignore

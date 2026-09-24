@@ -2,10 +2,10 @@ import { Force } from '../forces/Force.js';
 import { Modifier } from '../modifiers/Modifier.js';
 import { Particle } from '../core/Particle.js';
 import type { Color } from '../shared/Types.js';
-import type { PointEmitterConfigSpecifics } from 'PointEmitter';
-import type { LineEmitterConfigSpecifics } from 'LineEmitter';
-import type { RectEmitterConfigSpecifics } from 'RectEmitter';
-import type { EllipseEmitterConfigSpecifics } from 'EllipseEmitter';
+import type { PointEmitterConfigSpecifics } from './PointEmitter';
+import type { LineEmitterConfigSpecifics } from './LineEmitter';
+import type { RectEmitterConfigSpecifics } from './RectEmitter';
+import type { EllipseEmitterConfigSpecifics } from './EllipseEmitter';
 export type EmitterConfig = {
     /**
      * Unique identifier. Defaults to a generated UUID.
@@ -35,15 +35,17 @@ export type EmitterConfig = {
     particleBlueprint?: ParticleBlueprint;
 };
 export type EmitterOverrides = Partial<PointEmitterConfigSpecifics | LineEmitterConfigSpecifics | RectEmitterConfigSpecifics | EllipseEmitterConfigSpecifics>;
+export type ParticleCallback = (particle: Particle) => void;
+export type AcquireParticleCallback = () => Particle;
 export type ParticleBlueprint = {
     /**
-     * (Particle): void} [onDeath] Lifecycle callback executed at particle death.
+     * Lifecycle callback executed at particle death.
      */
-    : Function;
+    onDeath?: ParticleCallback;
     /**
-     * (Particle): void} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+     * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
      */
-    : Function;
+    onInterval?: ParticleCallback;
     /**
      * Orientation angle (in radians).
      */
@@ -83,21 +85,21 @@ export type ParticleBlueprint = {
 };
 export type EngineContext = {
     /**
-     * (): Particle} acquireParticle Callback to retrieve a particle instance from the reusable particles.
+     * Callback to retrieve a particle instance from the reusable particles.
      */
-    : Function;
+    acquireParticle: AcquireParticleCallback;
     /**
-     * (Particle): void} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
+     * Callback to queue a newly emitted particle into the pending particles.
      */
-    : Function;
+    enqueueParticle: ParticleCallback;
 };
 /**
  * @import { Gnist } from '../core/Gnist.js'
  * @import { Color, EmissionSourceValues } from '../shared/Types.js'
- * @import { PointEmitterConfigSpecifics } from 'PointEmitter'
- * @import { LineEmitterConfigSpecifics } from 'LineEmitter'
- * @import { RectEmitterConfigSpecifics } from 'RectEmitter'
- * @import { EllipseEmitterConfigSpecifics } from 'EllipseEmitter'
+ * @import { PointEmitterConfigSpecifics } from './PointEmitter'
+ * @import { LineEmitterConfigSpecifics } from './LineEmitter'
+ * @import { RectEmitterConfigSpecifics } from './RectEmitter'
+ * @import { EllipseEmitterConfigSpecifics } from './EllipseEmitter'
  */
 /**
  * Emitter configuration options.
@@ -117,13 +119,24 @@ export type EngineContext = {
  * @typedef {Partial<PointEmitterConfigSpecifics | LineEmitterConfigSpecifics | RectEmitterConfigSpecifics | EllipseEmitterConfigSpecifics>} EmitterOverrides
  */
 /**
+ * Callback executed during particle lifecycle events.
+ * @callback ParticleCallback
+ * @param {Particle} particle The particle instance.
+ * @returns {void}
+ */
+/**
+ * Callback used to acquire a reusable particle instance.
+ * @callback AcquireParticleCallback
+ * @returns {Particle} Reusable particle instance.
+ */
+/**
  * Configuration options used by emitters to initialize particles at emission.
  * This object is not runtime Particle state and does not correspond directly to Particle properties.
  * Options are interpreted either directly or indirectly to derive Particle properties.
  * Most options may be specified as a single number or a [min, max] range array.
  * @typedef {object} ParticleBlueprint
- * @property {function(Particle): void} [onDeath] Lifecycle callback executed at particle death.
- * @property {function(Particle): void} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+ * @property {ParticleCallback} [onDeath] Lifecycle callback executed at particle death.
+ * @property {ParticleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
  * @property {number|number[]} [rotation] Orientation angle (in radians).
  * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
  * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
@@ -137,8 +150,8 @@ export type EngineContext = {
 /**
  * Engine context providing particle acquisition and queueing callbacks.
  * @typedef {object} EngineContext
- * @property {function(): Particle} acquireParticle Callback to retrieve a particle instance from the reusable particles.
- * @property {function(Particle): void} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
+ * @property {AcquireParticleCallback} acquireParticle Callback to retrieve a particle instance from the reusable particles.
+ * @property {ParticleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
  */
 /**
  * Abstract base class for particle emitters.
@@ -176,15 +189,13 @@ export declare class Emitter {
     /**
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
-     * @readonly
      */
-    readonly get id(): string;
+    get id(): string;
     /**
      * Flag indicating whether the emitter is running or not.
      * @type {boolean}
-     * @readonly
      */
-    readonly get enabled(): boolean;
+    get enabled(): boolean;
     /**
      * Finds a registered modifier by its unique identifier.
      * @param {string} id The unique identifier of the target modifier.
