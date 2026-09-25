@@ -1,5 +1,6 @@
 import {
     ColorRamp,
+    ElasticAnchor,
     EmissionSource,
     FlatParticleDataFormat,
     Gnist,
@@ -7,6 +8,8 @@ import {
     LinearDrag,
     OpacityFade,
     PointEmitter,
+    RadialForce,
+    RectEmitter,
     ScaleTween,
     Spin,
 } from 'gnist';
@@ -60,6 +63,9 @@ export class Sandbox {
 
     /** @type {PointEmitter|null} */
     #mainEmitter;
+
+    /** @type {RadialForce|null} */
+    #repulsion;
 
     // =========================================================================
     // RENDERING
@@ -158,6 +164,7 @@ export class Sandbox {
         this.#sampleWindow = 100;
         this.#warmupDurationS = 10;
         this.#mainEmitter = null;
+        this.#repulsion = null;
 
         // Rendering
         this.#renderMode = mode;
@@ -398,10 +405,6 @@ export class Sandbox {
      * @returns {void}
      */
     #initShowcaseSimulation() {
-        const friction = new LinearDrag({
-            drag: 0.4,
-        });
-
         const gnistColorRamp = new ColorRamp({
             colors: [
                 [0, 242, 254],
@@ -423,6 +426,40 @@ export class Sandbox {
 
         const spin = new Spin({});
 
+        const anchor = new ElasticAnchor({
+            damping: 0.9,
+        });
+
+        const friction = new LinearDrag({
+            drag: 0.4,
+        });
+
+        this.#repulsion = new RadialForce({
+            x: this.#simulationCanvas.width / 2,
+            y: this.#simulationCanvas.height / 2,
+            strength: -100000,
+        });
+
+        const webEmitter = new RectEmitter({
+            x: Sandbox.#CULLING_BOUNDS_MARGIN + 10,
+            y: Sandbox.#CULLING_BOUNDS_MARGIN + 10,
+            width: this.#simulationCanvas.width - (Sandbox.#CULLING_BOUNDS_MARGIN - 20) * 2,
+            height: this.#simulationCanvas.height - (Sandbox.#CULLING_BOUNDS_MARGIN - 20) * 2,
+            particlesPerSecond: 1000,
+            duration: 1,
+            particleBlueprint: {
+                color: {
+                    r: 154,
+                    g: 160,
+                    b: 166,
+                },
+                size: 1.5,
+                lifespan: Infinity,
+                speed: [0.5, 1.5],
+                direction: [0, Math.PI * 2],
+            }
+        });
+
         const subEmitter = new PointEmitter({
             enabled: false,
             x: this.#simulationCanvas.width / 2,
@@ -442,31 +479,32 @@ export class Sandbox {
             particlesPerSecond: 50,
             particleBlueprint: {
                 onDeath: (particle) => {
-                    subEmitter.emit({
-                        x: particle.x,
-                        y: particle.y,
-                    })
+                    subEmitter.emit(10, { x: particle.x, y: particle.y });
                 },
                 angularVelocity: [1, 6],
-                size: [1, 5],
+                size: [1, 3],
                 lifespan: [1, 2],
                 speed: [10, 50],
                 direction: [0, Math.PI * 2],
             }
         });
 
-        subEmitter.addModifier(gnistColorRamp);
-        subEmitter.addModifier(fadeOut);
-
         this.#mainEmitter.addModifier(gnistColorRamp);
         this.#mainEmitter.addModifier(fadeOut);
         this.#mainEmitter.addModifier(enlarge);
         this.#mainEmitter.addModifier(spin);
 
+        subEmitter.addModifier(gnistColorRamp);
+        subEmitter.addModifier(fadeOut);
+
+        webEmitter.addModifier(anchor);
+        webEmitter.addScopedForce(this.#repulsion);
+
         this.#gnistEngine.addGlobalForce(friction);
 
         this.#gnistEngine.addEmitter(this.#mainEmitter);
         this.#gnistEngine.addEmitter(subEmitter);
+        this.#gnistEngine.addEmitter(webEmitter);
     }
 
     /**
@@ -933,7 +971,7 @@ export class Sandbox {
      * @returns {void}
      */
     #handleMouseMove(event) {
-        if (!this.#mainEmitter || !this.#simulationCanvas) {
+        if (!this.#mainEmitter || !this.#repulsion || !this.#simulationCanvas) {
             return;
         }
 
@@ -941,6 +979,9 @@ export class Sandbox {
 
         this.#mainEmitter.x = event.clientX - bounds.left;
         this.#mainEmitter.y = event.clientY - bounds.top;
+
+        this.#repulsion.x = event.clientX - bounds.left;
+        this.#repulsion.y = event.clientY - bounds.top;
     }
 
     /**
