@@ -1,8 +1,10 @@
 import { Force } from '../forces/Force.js';
 import { Modifier } from '../modifiers/Modifier.js';
 import type { Color } from '../shared/Types.js';
+import type { ParticleLifecycleCallback } from '../emitters/Emitter.js';
 /**
  * @import { Color } from '../shared/Types.js'
+ * @import { ParticleLifecycleCallback } from '../emitters/Emitter.js'
  */
 /**
  * Represents a single particle within the simulation.
@@ -112,14 +114,14 @@ export declare class Particle {
     scopedForces: Array<Force> | null;
     /**
      * Lifecycle callback executed at particle death.
-     * @type {?function(Particle): void}
+     * @type {ParticleLifecycleCallback}
      */
-    onDeath: Function | null;
+    onDeath: ParticleLifecycleCallback;
     /**
      * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
-     * @type {?function(Particle): void}
+     * @type {ParticleLifecycleCallback}
      */
-    onInterval: Function | null;
+    onInterval: ParticleLifecycleCallback;
     /**
      * Initializes a blank, inactive particle.
      * @constructor

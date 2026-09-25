@@ -35,17 +35,17 @@ export type EmitterConfig = {
     particleBlueprint?: ParticleBlueprint;
 };
 export type EmitterOverrides = Partial<PointEmitterConfigSpecifics | LineEmitterConfigSpecifics | RectEmitterConfigSpecifics | EllipseEmitterConfigSpecifics>;
-export type ParticleCallback = (particle: Particle) => void;
+export type ParticleLifecycleCallback = (particle: Particle) => void;
 export type AcquireParticleCallback = () => Particle;
 export type ParticleBlueprint = {
     /**
      * Lifecycle callback executed at particle death.
      */
-    onDeath?: ParticleCallback;
+    onDeath?: ParticleLifecycleCallback;
     /**
      * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
      */
-    onInterval?: ParticleCallback;
+    onInterval?: ParticleLifecycleCallback;
     /**
      * Orientation angle (in radians).
      */
@@ -91,7 +91,7 @@ export type EngineContext = {
     /**
      * Callback to queue a newly emitted particle into the pending particles.
      */
-    enqueueParticle: ParticleCallback;
+    enqueueParticle: ParticleLifecycleCallback;
 };
 /**
  * @import { Gnist } from '../core/Gnist.js'
@@ -120,12 +120,12 @@ export type EngineContext = {
  */
 /**
  * Callback executed during particle lifecycle events.
- * @callback ParticleCallback
+ * @callback ParticleLifecycleCallback
  * @param {Particle} particle The particle instance.
  * @returns {void}
  */
 /**
- * Callback used to acquire a reusable particle instance.
+ * Callback to retrieve a particle instance from the reusable particles.
  * @callback AcquireParticleCallback
  * @returns {Particle} Reusable particle instance.
  */
@@ -135,8 +135,8 @@ export type EngineContext = {
  * Options are interpreted either directly or indirectly to derive Particle properties.
  * Most options may be specified as a single number or a [min, max] range array.
  * @typedef {object} ParticleBlueprint
- * @property {ParticleCallback} [onDeath] Lifecycle callback executed at particle death.
- * @property {ParticleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+ * @property {ParticleLifecycleCallback} [onDeath] Lifecycle callback executed at particle death.
+ * @property {ParticleLifecycleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
  * @property {number|number[]} [rotation] Orientation angle (in radians).
  * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
  * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
@@ -151,7 +151,7 @@ export type EngineContext = {
  * Engine context providing particle acquisition and queueing callbacks.
  * @typedef {object} EngineContext
  * @property {AcquireParticleCallback} acquireParticle Callback to retrieve a particle instance from the reusable particles.
- * @property {ParticleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
+ * @property {ParticleLifecycleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
  */
 /**
  * Abstract base class for particle emitters.

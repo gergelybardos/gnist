@@ -3,6 +3,7 @@ import { Modifier } from '../modifiers/Modifier.js';
 
 /**
  * @import { Color } from '../shared/Types.js'
+ * @import { ParticleLifecycleCallback } from '../emitters/Emitter.js'
  */
 
 /**
@@ -153,13 +154,13 @@ export class Particle {
 
     /**
      * Lifecycle callback executed at particle death.
-     * @type {?function(Particle): void}
+     * @type {ParticleLifecycleCallback}
      */
     onDeath;
 
     /**
      * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
-     * @type {?function(Particle): void}
+     * @type {ParticleLifecycleCallback}
      */
     onInterval;
 
