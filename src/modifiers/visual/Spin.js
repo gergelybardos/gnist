@@ -14,7 +14,8 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Spin configuration options. Includes all properties from {@link ModifierConfig}.
+ * Spin configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & SpinConfigSpecifics} SpinConfig
  */
 
@@ -57,11 +58,11 @@ export class Spin extends Modifier {
      * Advances the particle's rotation angle based on angular velocity and frame time delta.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} _normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle, normalizedAge, dt) {
+    update(particle, _normalizedProgress, dt) {
         const rate = this.angularVelocity ?? particle.angularVelocity ?? 0;
         particle.rotation += rate * dt;
     }

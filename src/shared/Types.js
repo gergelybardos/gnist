@@ -12,14 +12,12 @@
  * @ignore
  * @typedef {object} ModifierCategoryValues
  * @property {string} VISUAL Modifiers that manipulate visual appearance (e.g., color, opacity, scale).
- * @property {string} PATH Modifiers that manipulate trajectories (e.g., zig-zag, orbit).
+ * @property {string} PATH Modifiers that manipulate trajectories (e.g., turbulence).
  */
 
 /**
- * Available emission source modes used in emitter configurations (specifically for `EmitterConfig.emissionSource`)
- * to define the geometric distribution and initial direction of emitted particles.
- * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying
- * `particleBlueprint.direction` in the emitter config.
+ * Available emission source modes used for `EmitterConfig.emissionSource` to define the geometric distribution and initial direction of emitted particles.
+ * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
  * @typedef {object} EmissionSourceValues
  * @property {string} EDGE_OUT Emit from the shape's boundary, directing particles outward.
  * @property {string} EDGE_IN Emit from the shape's boundary, directing particles inward.
@@ -28,8 +26,24 @@
  */
 
 /**
+ * Various characteristics of the flat particle data format returned by {@link Gnist#fillFlatArray}.
  * @typedef {object} FlatParticleDataFormatConstants
  * @property {number} FLOATS_PER_PARTICLE Number of consecutive entries used to represent a single particle in a flat `Float32Array`.
+ */
+
+/**
+ * Available directions for tracking whether an oscillating particle loop is in its forward or reverse stage.
+ * @typedef {object} LoopDirectionValues
+ * @property {number} FORWARD - Modifiers receive normalized particle age unchanged (0 → 1).
+ * @property {number} REVERSE - Modifiers receive normalized particle age reversed (1 - normalized age).
+ */
+
+/**
+ * Available particle loop modes that determine how particle age is interpreted by modifiers.
+ * @typedef {object} LoopModeValues
+ * @property {string} REPEAT - Resets modifier progress to the beginning when the particle loops.
+ * @property {string} OSCILLATE - Alternates modifier progress between forward and reverse when the particle loops.
+ * @property {string} HOLD - Holds modifier progress at the end when the particle first loops.
  */
 
 export {};

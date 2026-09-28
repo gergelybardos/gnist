@@ -17,7 +17,8 @@ import { Emitter } from './Emitter.js';
  */
 
 /**
- * RectEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * RectEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  * @typedef {EmitterConfig & RectEmitterConfigSpecifics} RectEmitterConfig
  */
 

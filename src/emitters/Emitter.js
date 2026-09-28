@@ -58,6 +58,8 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  * @property {Color} [color] The particle color, defined by individual RGB channels.
  * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
  * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds).
+ * @property {boolean} [loopLifecycle] Flag indicating whether the particle's age resets to zero upon reaching its lifespan instead of dying, creating a continuous loop for modifiers.
+ * @property {string} [loopMode] Determines how particle age is interpreted by modifiers when the particle loops.
  * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
  * @property {number|number[]} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
  * @property {number|number[]} [interval] Time interval between `onInterval` callback executions (in seconds).
@@ -84,8 +86,7 @@ export class Emitter {
 
     /**
      * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
-     * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying
-     * `particleBlueprint.direction` in the emitter config.
+     * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
      * @see {@link EmissionSourceValues} for available configuration constants.
      * @type {string}
      */
@@ -191,6 +192,7 @@ export class Emitter {
     }
 
     /**
+     * Read-only.
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */
@@ -199,6 +201,7 @@ export class Emitter {
     }
 
     /**
+     * Read-only.
      * Flag indicating whether the emitter is running or not.
      * @type {boolean}
      */
@@ -424,7 +427,7 @@ export class Emitter {
     }
 
     /**
-     * Sets up a particle's movement, visuals, and lifecycle state.
+     * Sets up a particle's movement, visuals, and lifecycle state based on both the `particleBlueprint` object the emitter was configured with and optional temporary overrides.
      * @ignore
      * @param {Particle} particle Particle instance to initialize.
      * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
@@ -456,13 +459,13 @@ export class Emitter {
 
         particle.age = 0;
         particle.lifespan = this.#resolveNumber(particleBlueprintOverrides?.lifespan ?? blueprint.lifespan, particle.lifespan);
+        particle.loopLifecycle = particleBlueprintOverrides?.loopLifecycle ?? blueprint.loopLifecycle ?? particle.loopLifecycle;
+        particle.loopMode = particleBlueprintOverrides?.loopMode ?? blueprint.loopMode ?? particle.loopMode;
         particle.alive = true;
-
         particle.interval = this.#resolveNumber(
             particleBlueprintOverrides?.interval ?? blueprint.interval,
             0
         );
-        particle.intervalTimer = 0;
 
         particle.onDeath = particleBlueprintOverrides?.onDeath ?? blueprint.onDeath ?? null;
         particle.onInterval = particleBlueprintOverrides?.onInterval ?? blueprint.onInterval ?? null;
@@ -482,9 +485,8 @@ export class Emitter {
     }
 
     /**
-     * Sets up a particle's horizontal and vertical velocity components using the `speed` and `direction` values
-     * specified in the emitter config's `particleBlueprint`. If no explicit `direction` was specified, it falls back
-     * to the emitter's shape-specific direction.
+     * Sets up a particle's horizontal and vertical velocity components using the `speed` and `direction` values specified in the emitter config's `particleBlueprint`.
+     * If no explicit `direction` was specified, it falls back to the emitter's shape-specific direction.
      * @param {Particle} particle Particle instance to initialize.
      * @param {ParticleBlueprint|null} [particleBlueprintOverrides=null] Temporary overrides for the particle blueprint.
      * @returns {void}

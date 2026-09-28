@@ -15,7 +15,8 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Turbulence configuration options. Includes all properties from {@link ModifierConfig}.
+ * Turbulence configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & TurbulenceConfigSpecifics} TurbulenceConfig
  */
 
@@ -50,7 +51,8 @@ export class Turbulence extends Modifier {
     endStrength;
 
     /**
-     * Noise scale factor controlling the size of turbulence patterns. Smaller values produce smooth, sweeping currents; larger values produce tight, chaotic jitter.
+     * Noise scale factor controlling the size of turbulence patterns.
+     * Smaller values produce smooth, sweeping currents; larger values produce tight, chaotic jitter.
      * @type {number}
      */
     scale;
@@ -80,12 +82,12 @@ export class Turbulence extends Modifier {
      * Applies noise-based displacement to the particle's coordinates.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} dt Frame time step in seconds.
      * @returns {void}
      */
-    update(particle, normalizedAge, dt) {
-        const strength = this.startStrength + (this.endStrength - this.startStrength) * normalizedAge;
+    update(particle, normalizedProgress, dt) {
+        const strength = this.startStrength + (this.endStrength - this.startStrength) * normalizedProgress;
 
         if (strength === 0) {
             return;

@@ -24,6 +24,7 @@ export { ScaleTween } from './modifiers/visual/ScaleTween.js';
 export { Spin } from './modifiers/visual/Spin.js';
 
 export {
-    FlatParticleDataFormat,
     EmissionSource,
+    FlatParticleDataFormat,
+    LoopMode,
 } from './shared/Constants.js';

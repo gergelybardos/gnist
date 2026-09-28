@@ -15,7 +15,8 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * ScaleTween configuration options. Includes all properties from {@link ModifierConfig}.
+ * ScaleTween configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & ScaleTweenConfigSpecifics} ScaleTweenConfig
  */
 
@@ -65,17 +66,17 @@ export class ScaleTween extends Modifier {
      * Scales the particle relative to its base size based on its normalized age.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle, normalizedAge, _dt) {
+    update(particle, normalizedProgress, _dt) {
         if (particle.lifespan <= 0) {
             return;
         }
 
         const base = particle.baseSize ?? 1;
-        const currentScale = this.startScale + (this.endScale - this.startScale) * (normalizedAge);
+        const currentScale = this.startScale + (this.endScale - this.startScale) * (normalizedProgress);
 
         particle.size = base * currentScale;
     }

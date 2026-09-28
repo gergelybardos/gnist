@@ -15,7 +15,8 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * SineWave configuration options. Includes all properties from {@link ModifierConfig}.
+ * SineWave configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & SineWaveConfigSpecifics} SineWaveConfig
  */
 
@@ -94,17 +95,17 @@ export class SineWave extends Modifier {
      * Offsets the particle's coordinates along a wave axis perpendicular to the particle's movement direction.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} dt Frame time step in seconds.
      * @returns {void}
      */
-    update(particle, normalizedAge, dt) {
+    update(particle, normalizedProgress, dt) {
         if (particle.vx === 0 && particle.vy === 0) {
             return;
         }
 
-        const amplitude = this.startAmplitude + (this.endAmplitude - this.startAmplitude) * normalizedAge;
-        const frequency = this.startFrequency + (this.endFrequency - this.startFrequency) * normalizedAge;
+        const amplitude = this.startAmplitude + (this.endAmplitude - this.startAmplitude) * normalizedProgress;
+        const frequency = this.startFrequency + (this.endFrequency - this.startFrequency) * normalizedProgress;
 
         if (amplitude === 0 || frequency === 0) {
             return;

@@ -14,7 +14,8 @@ import { Force } from './Force.js';
  */
 
 /**
- * DirectionalForce configuration options. Includes all properties from {@link ForceConfig}.
+ * DirectionalForce configuration options.
+ * Includes all properties from {@link ForceConfig}.
  * @typedef {ForceConfig & DirectionalForceConfigSpecifics} DirectionalForceConfig
  */
 

@@ -1,5 +1,6 @@
 import { Emitter } from '../emitters/Emitter.js';
 import { Force } from '../forces/Force.js';
+import { LoopMode, LoopDirection } from '../shared/Constants.js';
 
 import { Particle } from './Particle.js';
 
@@ -11,8 +12,7 @@ import { Particle } from './Particle.js';
 
 /**
  * Defines a region beyond which particles are considered outside the simulation and are marked dead.
- * A safety margin is applied per particle based on its coordinates and size, preventing early removal while it is still
- * partially inside the region.
+ * A safety margin is applied per particle based on its coordinates and size, preventing early removal while it is still partially inside the region.
  * @typedef {object} CullingBounds
  * @property {number} xMin Left boundary of the region.
  * @property {number} yMin Top boundary of the region.
@@ -128,7 +128,7 @@ export class Gnist {
     /**
      * Sets the optional region used for particle culling.
      * @param {CullingBounds|null} cullingBounds The new region or null to disable culling.
-     * @throws {Error}
+     * @throws {RangeError}
      */
     set cullingBounds(cullingBounds) {
         if (!cullingBounds) {
@@ -142,7 +142,7 @@ export class Gnist {
         const yMax = cullingBounds.yMax ?? 10_000_000;
 
         if (xMin > xMax || yMin > yMax) {
-            throw new Error('[Gnist] Invalid culling bounds: xMin must be less than or equal to xMax and yMin must be less than or equal to yMax.');
+            throw new RangeError('[Gnist] Invalid culling bounds: `xMin` must be less than or equal to `xMax` and `yMin` must be less than or equal to `yMax`.');
         }
 
         this.#cullingBounds = { xMin, yMin, xMax, yMax };
@@ -317,9 +317,6 @@ export class Gnist {
         for (let i = 0; i < emitterCount; i++) {
             const emitter = this.#emitters[i];
 
-            // TODO
-            // This creates a bound function repeatedly.
-            // Make the acquisition mechanism an engine-owned object/API rather than a per-frame callback.
             if (emitter) {
                 emitter.update(
                     dt,
@@ -331,10 +328,10 @@ export class Gnist {
     }
 
     /**
-     * Updates particle lifecycles, applies global and scoped emitter-specific forces, moves particles, and
-     * applies modifiers.
+     * Updates particle lifecycles, applies global and scoped emitter-specific forces, moves particles, and applies modifiers.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
+     * @throws {Error}
      */
     #tickParticles(dt) {
         const globalForces = this.#globalForces;
@@ -349,12 +346,40 @@ export class Gnist {
             const particle = particles[i];
 
             particle.age += dt;
+
             if (particle.age >= particle.lifespan) {
-                particle.kill();
+                if (particle.loopLifecycle) {
+                    particle.age = dt;
+                    particle.toggleLoopDirection();
+                } else {
+                    particle.kill();
+                }
             }
 
             if (particle.alive) {
                 const normalizedAge = Math.min(particle.age / particle.lifespan, 1.0);
+
+                let normalizedModifierProgress = normalizedAge;
+
+                if (particle.loopLifecycle) {
+                    switch (particle.loopMode) {
+                        case LoopMode.REPEAT:
+                            // Already the default.
+                            break;
+                        case LoopMode.OSCILLATE:
+                            normalizedModifierProgress = particle.loopDirection === LoopDirection.FORWARD
+                                ? normalizedAge
+                                : 1 - normalizedAge;
+                            break;
+                        case LoopMode.HOLD:
+                            if (particle.loopHasBeenReset) {
+                                normalizedModifierProgress = 1;
+                            }
+                            break;
+                        default:
+                            throw new Error('[Gnist] Invalid loop mode.');
+                    }
+                }
 
                 // 1. Environmental forces
 
@@ -373,7 +398,7 @@ export class Gnist {
                 const pathModifiers = particle.pathModifiers;
                 const pathModifiersCount = pathModifiers.length;
                 for (let j = 0; j < pathModifiersCount; j++) {
-                    pathModifiers[j].update(particle, normalizedAge, dt);
+                    pathModifiers[j].update(particle, normalizedModifierProgress, dt);
                 }
 
                 // 3. Kinematic integration
@@ -387,7 +412,7 @@ export class Gnist {
                 const visualModifiers = particle.visualModifiers;
                 const visualModifiersCount = visualModifiers.length;
                 for (let j = 0; j < visualModifiersCount; j++) {
-                    visualModifiers[j].update(particle, normalizedAge, dt);
+                    visualModifiers[j].update(particle, normalizedModifierProgress, dt);
                 }
 
                 particle.update(dt);

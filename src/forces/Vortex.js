@@ -14,15 +14,16 @@ import { Force } from './Force.js';
  * @property {number} [rotationSpeed=100] Rotation speed. Positive values for clockwise, negative values for counter-clockwise rotation.
  * @property {number} [suctionSpeed=50] Inward suction speed. Positive values pull inward, negative values push outward.
  * @property {number} [radius=Infinity] Maximum radius of influence. Particles outside this distance are unaffected.
- * @property {number} [cullingRadius=0] Distance threshold from the center below which particles are marked dead, surrounded
- * by a frame-rate independent soft-aging buffer zone to prevent visual popping. Note that high velocities or long lifespans
- * may cause particles to mathematically bypass the center and slingshot outward. In such cases, increase this radius to
- * intercept particles before they reach their escape brink. Omit or set to 0 to disable. Stored internally as
- * {@link Vortex#cullingRadius} and as a squared value in {@link Vortex#cullingRadiusSquared}.
+ * @property {number} [cullingRadius=0] Distance threshold from the center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
+ * Note that high velocities or long lifespans may cause particles to mathematically bypass the center and slingshot outward.
+ * In such cases, increase this radius to intercept particles before they reach their escape brink.
+ * Omit or set to 0 to disable.
+ * Stored internally as {@link Vortex#cullingRadius} and as a squared value in {@link Vortex#cullingRadiusSquared}.
  */
 
 /**
- * Vortex configuration options. Includes all properties from {@link ForceConfig}.
+ * Vortex configuration options.
+ * Includes all properties from {@link ForceConfig}.
  * @typedef {ForceConfig & VortexConfigSpecifics} VortexConfig
  */
 
@@ -63,10 +64,10 @@ export class Vortex extends Force {
     radius;
 
     /**
-     * Distance threshold from the center below which particles are marked dead, surrounded by a frame-rate independent
-     * soft-aging buffer zone to prevent visual popping. Note that high velocities or long lifespans may cause particles
-     * to mathematically bypass the center and slingshot outward. In such cases, increase this radius to intercept
-     * particles before they reach their escape brink. Omit or set to 0 to disable.
+     * Distance threshold from the center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
+     * Note that high velocities or long lifespans may cause particles to mathematically bypass the center and slingshot outward.
+     * In such cases, increase this radius to intercept particles before they reach their escape brink.
+     * Omit or set to 0 to disable.
      * @type {number}
      */
     cullingRadius;

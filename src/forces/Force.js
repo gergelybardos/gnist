@@ -33,6 +33,7 @@ export class Force {
     }
 
     /**
+     * Read-only.
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */

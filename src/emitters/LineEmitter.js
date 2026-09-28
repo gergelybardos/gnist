@@ -17,7 +17,8 @@ import { Emitter } from './Emitter.js';
  */
 
 /**
- * LineEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * LineEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  * @typedef {EmitterConfig & LineEmitterConfigSpecifics} LineEmitterConfig
  */
 

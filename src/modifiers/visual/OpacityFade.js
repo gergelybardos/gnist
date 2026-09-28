@@ -15,7 +15,8 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * OpacityFade configuration options. Includes all properties from {@link ModifierConfig}.
+ * OpacityFade configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & OpacityFadeConfigSpecifics} OpacityFadeConfig
  */
 
@@ -65,11 +66,11 @@ export class OpacityFade extends Modifier {
      * Blends a particle's opacity based on its normalized age.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle, normalizedAge, _dt) {
-        particle.opacity = this.startOpacity + (this.endOpacity - this.startOpacity) * normalizedAge;
+    update(particle, normalizedProgress, _dt) {
+        particle.opacity = this.startOpacity + (this.endOpacity - this.startOpacity) * normalizedProgress;
     }
 }

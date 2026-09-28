@@ -17,7 +17,8 @@ import { Emitter } from './Emitter.js';
  */
 
 /**
- * EllipseEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * EllipseEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  * @typedef {EmitterConfig & EllipseEmitterConfigSpecifics} EllipseEmitterConfig
  */
 

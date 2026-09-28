@@ -17,7 +17,8 @@ import { Force } from './Force.js';
  */
 
 /**
- * RadialForce configuration options. Includes all properties from {@link ForceConfig}.
+ * RadialForce configuration options.
+ * Includes all properties from {@link ForceConfig}.
  * @typedef {ForceConfig & RadialForceConfigSpecifics} RadialForceConfig
  */
 

@@ -1,8 +1,9 @@
 import { Force } from '../forces/Force.js';
 import { Modifier } from '../modifiers/Modifier.js';
+import { LoopMode, LoopDirection } from '../shared/Constants.js';
 
 /**
- * @import { Color } from '../shared/Types.js'
+ * @import { Color, LoopModeValues } from '../shared/Types.js'
  * @import { ParticleLifecycleCallback } from '../emitters/Emitter.js'
  */
 
@@ -109,6 +110,19 @@ export class Particle {
     lifespan;
 
     /**
+     * Flag indicating whether the particle's age resets to zero upon reaching its lifespan instead of dying, creating a continuous loop for modifiers.
+     * @type {boolean}
+     */
+    loopLifecycle;
+
+    /**
+     * Determines how particle age is interpreted by modifiers when the particle loops.
+     * For the list of available modes, see {@link LoopModeValues}.
+     * @type {string}
+     */
+    loopMode;
+
+    /**
      * Flag indicating whether the particle is still alive. Dead particles are automatically removed from the simulation.
      * @type {boolean}
      */
@@ -120,11 +134,22 @@ export class Particle {
      */
     interval;
 
+    // =========================================================================
+    // LIFECYCLE HOOKS
+    // =========================================================================
+
     /**
-     * Accumulator tracking the time towards the next `onInterval` execution (in seconds).
-     * @type {number}
+     * Lifecycle callback executed at particle death.
+     * @type {ParticleLifecycleCallback}
      */
-    intervalTimer;
+    onDeath;
+
+    /**
+     * Lifecycle callback executed periodically at particle update.
+     * The interval is specified by the `interval` property.
+     * @type {ParticleLifecycleCallback}
+     */
+    onInterval;
 
     // =========================================================================
     // PIPELINE TRACKING REFERENCES
@@ -149,20 +174,26 @@ export class Particle {
     scopedForces;
 
     // =========================================================================
-    // LIFECYCLE HOOKS
+    // INTERNALS
     // =========================================================================
 
     /**
-     * Lifecycle callback executed at particle death.
-     * @type {ParticleLifecycleCallback}
+     * Internal tracker for whether an oscillating particle loop is in its forward or reverse stage.
+     * @type {number}
      */
-    onDeath;
+    #loopDirection;
 
     /**
-     * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
-     * @type {ParticleLifecycleCallback}
+     * Internal tracker for whether a looping particle has completed at least one lifecycle loop.
+     * @type {boolean}
      */
-    onInterval;
+    #loopHasBeenReset;
+
+    /**
+     * Accumulator tracking time until the next `onInterval` execution (in seconds).
+     * @type {number}
+     */
+    #intervalTimer;
 
     /**
      * Initializes a blank, inactive particle.
@@ -170,6 +201,35 @@ export class Particle {
      */
     constructor() {
         this.reset();
+    }
+
+    /**
+     * Tracks whether an oscillating particle loop is in its forward or reverse stage.
+     * For the list of available directions, see {@link LoopDirection}.
+     * @ignore
+     * @returns {number}
+     */
+    get loopDirection() {
+        return this.#loopDirection;
+    }
+
+    /**
+     * Tracks whether the particle has completed at least one lifecycle loop.
+     * @ignore
+     * @returns {boolean}
+     */
+    get loopHasBeenReset() {
+        return this.#loopHasBeenReset;
+    }
+
+    /**
+     * Toggles the progression direction of an oscillating particle loop and marks the lifecycle as reset.
+     * @ignore
+     * @returns {void}
+     */
+    toggleLoopDirection() {
+        this.#loopDirection *= -1;
+        this.#loopHasBeenReset = true;
     }
 
     /**
@@ -197,18 +257,21 @@ export class Particle {
 
         this.age = 0;
         this.lifespan = 0;
+        this.loopLifecycle = false;
+        this.loopMode = LoopMode.REPEAT;
         this.alive = false;
-
         this.interval = 0;
-        this.intervalTimer = 0;
 
-        // Emitter classes will initialize these immediately. No need to allocate empty arrays here.
+        this.onDeath = null;
+        this.onInterval = null;
+
         this.visualModifiers = null;
         this.pathModifiers = null;
         this.scopedForces = null;
 
-        this.onDeath = null;
-        this.onInterval = null;
+        this.#loopDirection = LoopDirection.FORWARD;
+        this.#loopHasBeenReset = false;
+        this.#intervalTimer = 0;
     }
 
     /**
@@ -222,10 +285,10 @@ export class Particle {
             return;
         }
 
-        this.intervalTimer += dt;
+        this.#intervalTimer += dt;
 
-        while (this.intervalTimer >= this.interval) {
-            this.intervalTimer -= this.interval;
+        while (this.#intervalTimer >= this.interval) {
+            this.#intervalTimer -= this.interval;
             this.onInterval(this);
         }
     }

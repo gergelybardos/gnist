@@ -6,6 +6,7 @@ import {
     Gnist,
     LineEmitter,
     LinearDrag,
+    LoopMode,
     OpacityFade,
     PointEmitter,
     RadialForce,
@@ -235,6 +236,7 @@ export class Sandbox {
 
     /**
      * @returns {void}
+     * @throws {Error}
      */
     #initCanvas() {
         const container = document.createElement('div');
@@ -255,14 +257,12 @@ export class Sandbox {
         switch (this.#renderMode) {
             case Sandbox.#MODE_CANVAS_2D:
                 this.#canvas2dCtx = this.#getContext(this.#simulationCanvas, '2d');
-
                 break;
             case Sandbox.#MODE_WEBGL2:
                 this.#webgl2Ctx = this.#getContext(this.#simulationCanvas, 'webgl2', {
                     alpha: false,
                     premultipliedAlpha: false,
                 });
-
                 break;
             default:
                 throw new Error(`Unsupported render mode: ${this.#renderMode}`);
@@ -276,6 +276,7 @@ export class Sandbox {
      * @param {'2d'|'webgl2'} type
      * @param {object} [options={}]
      * @returns {CanvasRenderingContext2D|WebGL2RenderingContext}
+     * @throws {Error}
      */
     #getContext(canvas, type, options = {}) {
         const ctx = canvas.getContext(type, options);
@@ -445,16 +446,20 @@ export class Sandbox {
             y: Sandbox.#CULLING_BOUNDS_MARGIN + 10,
             width: this.#simulationCanvas.width - (Sandbox.#CULLING_BOUNDS_MARGIN - 20) * 2,
             height: this.#simulationCanvas.height - (Sandbox.#CULLING_BOUNDS_MARGIN - 20) * 2,
-            particlesPerSecond: 1000,
+            particlesPerSecond: 1500,
             duration: 1,
+
+            /** @type {ParticleBlueprint} */
             particleBlueprint: {
                 color: {
                     r: 154,
                     g: 160,
                     b: 166,
                 },
-                size: 1.5,
-                lifespan: Infinity,
+                size: [1, 2],
+                lifespan: 5,
+                loopLifecycle: true,
+                loopMode: LoopMode.OSCILLATE,
                 speed: [0.5, 1.5],
                 direction: [0, Math.PI * 2],
             }
@@ -497,6 +502,7 @@ export class Sandbox {
         subEmitter.addModifier(gnistColorRamp);
         subEmitter.addModifier(fadeOut);
 
+        webEmitter.addModifier(gnistColorRamp);
         webEmitter.addModifier(anchor);
         webEmitter.addScopedForce(this.#repulsion);
 

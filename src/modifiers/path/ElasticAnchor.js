@@ -16,7 +16,8 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * ElasticAnchor configuration options. Includes all properties from {@link ModifierConfig}.
+ * ElasticAnchor configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & ElasticAnchorConfigSpecifics} ElasticAnchorConfig
  */
 
@@ -88,12 +89,12 @@ export class ElasticAnchor extends Modifier {
      * Accelerates the particle toward its emission position and applies damping to settle it.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} dt Frame time step in seconds.
      * @returns {void}
      */
-    update(particle, normalizedAge, dt) {
-        const stiffness = this.startStiffness + (this.endStiffness - this.startStiffness) * normalizedAge;
+    update(particle, normalizedProgress, dt) {
+        const stiffness = this.startStiffness + (this.endStiffness - this.startStiffness) * normalizedProgress;
 
         if (stiffness === 0) {
             return;

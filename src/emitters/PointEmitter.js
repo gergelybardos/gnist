@@ -14,7 +14,8 @@ import { Emitter } from './Emitter.js';
  */
 
 /**
- * PointEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * PointEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  * @typedef {EmitterConfig & PointEmitterConfigSpecifics} PointEmitterConfig
  */
 

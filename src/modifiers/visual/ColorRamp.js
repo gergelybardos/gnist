@@ -14,7 +14,8 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * ColorRamp configuration options. Includes all properties from {@link ModifierConfig}.
+ * ColorRamp configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & ColorRampConfigSpecifics} ColorRampConfig
  */
 
@@ -109,17 +110,17 @@ export class ColorRamp extends Modifier {
      * Blends a particle's color channels based on its normalized age.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle, normalizedAge, _dt) {
+    update(particle, normalizedProgress, _dt) {
         if (this.#segmentCount === 0) {
             return;
         }
 
         const segmentCount = this.#segmentCount;
-        const age = Math.max(0, Math.min(1, normalizedAge));
+        const age = Math.max(0, Math.min(1, normalizedProgress));
         const scaledAge = age * segmentCount;
         const segmentIndex = Math.min(Math.floor(scaledAge), segmentCount - 1);
         const interpolationFactor = scaledAge - segmentIndex;

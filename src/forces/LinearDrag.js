@@ -13,7 +13,8 @@ import { Force } from './Force.js';
  */
 
 /**
- * LinearDrag configuration options. Includes all properties from {@link ForceConfig}.
+ * LinearDrag configuration options.
+ * Includes all properties from {@link ForceConfig}.
  * @typedef {ForceConfig & LinearDragConfigSpecifics} LinearDragConfig
  */
 
