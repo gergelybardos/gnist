@@ -32,7 +32,30 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  */
 
 /**
+ * Configuration options used by emitters to initialize particles at emission.
+ * This object is not runtime Particle state and does not correspond directly to Particle properties.
+ * Options are interpreted either directly or indirectly to derive Particle properties.
+ * Most options may be specified as a single number or a [min, max] range array.
+ * @typedef {object} ParticleBlueprint
+ * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
+ * @property {number|number[]} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
+ * @property {number|number[]} [rotation] Orientation angle (in radians).
+ * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
+ * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
+ * @property {Color} [color] The particle color, defined by individual RGB channels.
+ * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
+ * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds). Must be a finite number.
+ * @property {boolean} [persistent] Flag indicating whether the particle bypasses death at `lifespan`.
+ * @property {number} [loopDuration] Duration (in seconds) for age-based modifiers to complete one cycle.
+ * @property {string} [loopMode] Determines how particle age is interpreted by modifiers when the particle loops.
+ * @property {number|number[]} [interval] Time interval between `onInterval` callback executions (in seconds).
+ * @property {ParticleLifecycleCallback} [onDeath] Lifecycle callback executed at particle death.
+ * @property {ParticleLifecycleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+ */
+
+/**
  * Callback executed during particle lifecycle events.
+ * @ignore
  * @callback ParticleLifecycleCallback
  * @param {Particle} particle The particle instance.
  * @returns {void}
@@ -40,33 +63,14 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
 
 /**
  * Callback to retrieve a particle instance from the reusable particles.
+ * @ignore
  * @callback AcquireParticleCallback
  * @returns {Particle} Reusable particle instance.
  */
 
 /**
- * Configuration options used by emitters to initialize particles at emission.
- * This object is not runtime Particle state and does not correspond directly to Particle properties.
- * Options are interpreted either directly or indirectly to derive Particle properties.
- * Most options may be specified as a single number or a [min, max] range array.
- * @typedef {object} ParticleBlueprint
- * @property {ParticleLifecycleCallback} [onDeath] Lifecycle callback executed at particle death.
- * @property {ParticleLifecycleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
- * @property {number|number[]} [rotation] Orientation angle (in radians).
- * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
- * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
- * @property {Color} [color] The particle color, defined by individual RGB channels.
- * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
- * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds).
- * @property {boolean} [loopLifecycle] Flag indicating whether the particle's age resets to zero upon reaching its lifespan instead of dying, creating a continuous loop for modifiers.
- * @property {string} [loopMode] Determines how particle age is interpreted by modifiers when the particle loops.
- * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
- * @property {number|number[]} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
- * @property {number|number[]} [interval] Time interval between `onInterval` callback executions (in seconds).
- */
-
-/**
  * Engine context providing particle acquisition and queueing callbacks.
+ * @ignore
  * @typedef {object} EngineContext
  * @property {AcquireParticleCallback} acquireParticle Callback to retrieve a particle instance from the reusable particles.
  * @property {ParticleLifecycleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
@@ -459,7 +463,11 @@ export class Emitter {
 
         particle.age = 0;
         particle.lifespan = this.#resolveNumber(particleBlueprintOverrides?.lifespan ?? blueprint.lifespan, particle.lifespan);
-        particle.loopLifecycle = particleBlueprintOverrides?.loopLifecycle ?? blueprint.loopLifecycle ?? particle.loopLifecycle;
+        particle.persistent = particleBlueprintOverrides?.persistent ?? blueprint.persistent ?? particle.persistent;
+        particle.loopDuration = this.#resolveNumber(
+            particleBlueprintOverrides?.loopDuration ?? blueprint.loopDuration,
+            particle.lifespan
+        );
         particle.loopMode = particleBlueprintOverrides?.loopMode ?? blueprint.loopMode ?? particle.loopMode;
         particle.alive = true;
         particle.interval = this.#resolveNumber(
@@ -506,9 +514,20 @@ export class Emitter {
      * @param {number|Array<number>} value Number or [min, max] range array to resolve.
      * @param {number} defaultValue Fallback value to use if the property is neither a number nor a valid [min, max] range array.
      * @returns {number} Resolved numeric value.
+     * @throws {Error}
      */
     #resolveNumber(value, defaultValue) {
+        const ERROR_INFINITE_VALUE = '[Gnist] Infinite numeric values are not supported.';
+
+        if (!Number.isFinite(defaultValue)) {
+            throw new Error(ERROR_INFINITE_VALUE);
+        }
+
         if (typeof value === 'number') {
+            if (!Number.isFinite(value)) {
+                throw new Error(ERROR_INFINITE_VALUE);
+            }
+
             return value;
         }
 
@@ -517,6 +536,10 @@ export class Emitter {
             const max = value[1];
 
             if (typeof min === 'number' && typeof max === 'number') {
+                if (!Number.isFinite(min) || !Number.isFinite(max)) {
+                    throw new Error(ERROR_INFINITE_VALUE);
+                }
+
                 return min + Math.random() * (max - min);
             }
         }

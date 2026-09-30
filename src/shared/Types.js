@@ -32,13 +32,6 @@
  */
 
 /**
- * Available directions for tracking whether an oscillating particle loop is in its forward or reverse stage.
- * @typedef {object} LoopDirectionValues
- * @property {number} FORWARD - Modifiers receive normalized particle age unchanged (0 → 1).
- * @property {number} REVERSE - Modifiers receive normalized particle age reversed (1 - normalized age).
- */
-
-/**
  * Available particle loop modes that determine how particle age is interpreted by modifiers.
  * @typedef {object} LoopModeValues
  * @property {string} REPEAT - Resets modifier progress to the beginning when the particle loops.

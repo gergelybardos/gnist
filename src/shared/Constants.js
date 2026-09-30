@@ -3,7 +3,6 @@
  *    ModifierCategoryValues,
  *    FlatParticleDataFormatConstants,
  *    EmissionSourceValues,
- *    LoopDirectionValues,
  *    LoopModeValues,
  * } from './Types.js'
  */
@@ -37,17 +36,6 @@ export const EmissionSource = Object.freeze({
  */
 export const FlatParticleDataFormat = Object.freeze({
     FLOATS_PER_PARTICLE: 8
-});
-
-/**
- * Constant mapping for tracking particle loop directions.
- * For the list of available directions, see {@link LoopDirectionValues}.
- * @ignore
- * @type {LoopDirectionValues}
- */
-export const LoopDirection = Object.freeze({
-    FORWARD: 1,
-    REVERSE: -1,
 });
 
 /**

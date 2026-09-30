@@ -1,6 +1,6 @@
 import { Emitter } from '../emitters/Emitter.js';
 import { Force } from '../forces/Force.js';
-import { LoopMode, LoopDirection } from '../shared/Constants.js';
+import { LoopMode } from '../shared/Constants.js';
 
 import { Particle } from './Particle.js';
 
@@ -334,6 +334,8 @@ export class Gnist {
      * @throws {Error}
      */
     #tickParticles(dt) {
+        const ERROR_INVALID_LOOP_MODE = '[Gnist] Invalid loop mode.';
+
         const globalForces = this.#globalForces;
         const globalForcesCount = globalForces.length;
         const particles = this.#activeParticles;
@@ -347,37 +349,56 @@ export class Gnist {
 
             particle.age += dt;
 
-            if (particle.age >= particle.lifespan) {
-                if (particle.loopLifecycle) {
-                    particle.age = dt;
-                    particle.toggleLoopDirection();
-                } else {
-                    particle.kill();
-                }
-            }
+            if (particle.persistent) {
+                const loopDuration = particle.loopDuration;
+                const doubleLoop = loopDuration * 2;
 
-            if (particle.alive) {
-                const normalizedAge = Math.min(particle.age / particle.lifespan, 1.0);
-
-                let normalizedModifierProgress = normalizedAge;
-
-                if (particle.loopLifecycle) {
+                if (loopDuration > 0) {
                     switch (particle.loopMode) {
                         case LoopMode.REPEAT:
-                            // Already the default.
+                            if (particle.age >= loopDuration) {
+                                particle.age %= loopDuration;
+                            }
                             break;
                         case LoopMode.OSCILLATE:
-                            normalizedModifierProgress = particle.loopDirection === LoopDirection.FORWARD
-                                ? normalizedAge
-                                : 1 - normalizedAge;
+                            if (particle.age >= doubleLoop) {
+                                particle.age %= doubleLoop;
+                            }
                             break;
                         case LoopMode.HOLD:
-                            if (particle.loopHasBeenReset) {
-                                normalizedModifierProgress = 1;
+                            if (particle.age > loopDuration) {
+                                particle.age = loopDuration;
                             }
                             break;
                         default:
-                            throw new Error('[Gnist] Invalid loop mode.');
+                            throw new Error(ERROR_INVALID_LOOP_MODE);
+                    }
+                }
+            } else if (particle.age >= particle.lifespan) {
+                particle.kill();
+            }
+
+            if (particle.alive) {
+                const loopDuration = particle.loopDuration;
+                let normalizedModifierProgress = 1.0;
+
+                if (loopDuration > 0) {
+                    const loopProgress = (particle.age % loopDuration) / loopDuration;
+
+                    switch (particle.loopMode) {
+                        case LoopMode.REPEAT:
+                            normalizedModifierProgress = loopProgress;
+                            break;
+                        case LoopMode.OSCILLATE: {
+                            const isReversed = Math.floor(particle.age / loopDuration) % 2 === 1;
+                            normalizedModifierProgress = isReversed ? 1.0 - loopProgress : loopProgress;
+                            break;
+                        }
+                        case LoopMode.HOLD:
+                            normalizedModifierProgress = Math.min(particle.age / loopDuration, 1.0);
+                            break;
+                        default:
+                            throw new Error(ERROR_INVALID_LOOP_MODE);
                     }
                 }
 

@@ -451,16 +451,17 @@ export class Sandbox {
 
             /** @type {ParticleBlueprint} */
             particleBlueprint: {
+                opacity: 0.75,
                 color: {
                     r: 154,
                     g: 160,
                     b: 166,
                 },
                 size: [1, 2],
-                lifespan: 5,
-                loopLifecycle: true,
+                persistent: true,
+                loopDuration: 3,
                 loopMode: LoopMode.OSCILLATE,
-                speed: [0.5, 1.5],
+                speed: [0.5, 2],
                 direction: [0, Math.PI * 2],
             }
         });

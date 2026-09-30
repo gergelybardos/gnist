@@ -71,10 +71,6 @@ export class ScaleTween extends Modifier {
      * @returns {void}
      */
     update(particle, normalizedProgress, _dt) {
-        if (particle.lifespan <= 0) {
-            return;
-        }
-
         const base = particle.baseSize ?? 1;
         const currentScale = this.startScale + (this.endScale - this.startScale) * (normalizedProgress);
 

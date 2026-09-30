@@ -1,6 +1,6 @@
 import { Force } from '../forces/Force.js';
 import { Modifier } from '../modifiers/Modifier.js';
-import { LoopMode, LoopDirection } from '../shared/Constants.js';
+import { LoopMode } from '../shared/Constants.js';
 
 /**
  * @import { Color, LoopModeValues } from '../shared/Types.js'
@@ -94,7 +94,7 @@ export class Particle {
     opacity;
 
     // =========================================================================
-    // LIFECYCLE STATE
+    // LIFECYCLE STATE & MODIFIER TIMING STATE
     // =========================================================================
 
     /**
@@ -104,16 +104,22 @@ export class Particle {
     age;
 
     /**
-     * Maximum allowed lifespan (in seconds).
+     * Maximum allowed lifespan baseline (in seconds). Must be a finite number.
      * @type {number}
      */
     lifespan;
 
     /**
-     * Flag indicating whether the particle's age resets to zero upon reaching its lifespan instead of dying, creating a continuous loop for modifiers.
+     * Flag indicating whether the particle bypasses death at `lifespan`.
      * @type {boolean}
      */
-    loopLifecycle;
+    persistent;
+
+    /**
+     * Duration (in seconds) for age-based modifiers to complete one cycle.
+     * @type {number}
+     */
+    loopDuration;
 
     /**
      * Determines how particle age is interpreted by modifiers when the particle loops.
@@ -123,7 +129,8 @@ export class Particle {
     loopMode;
 
     /**
-     * Flag indicating whether the particle is still alive. Dead particles are automatically removed from the simulation.
+     * Flag indicating whether the particle is still alive.
+     * Dead particles are recycled by the pool.
      * @type {boolean}
      */
     alive;
@@ -178,18 +185,6 @@ export class Particle {
     // =========================================================================
 
     /**
-     * Internal tracker for whether an oscillating particle loop is in its forward or reverse stage.
-     * @type {number}
-     */
-    #loopDirection;
-
-    /**
-     * Internal tracker for whether a looping particle has completed at least one lifecycle loop.
-     * @type {boolean}
-     */
-    #loopHasBeenReset;
-
-    /**
      * Accumulator tracking time until the next `onInterval` execution (in seconds).
      * @type {number}
      */
@@ -201,35 +196,6 @@ export class Particle {
      */
     constructor() {
         this.reset();
-    }
-
-    /**
-     * Tracks whether an oscillating particle loop is in its forward or reverse stage.
-     * For the list of available directions, see {@link LoopDirection}.
-     * @ignore
-     * @returns {number}
-     */
-    get loopDirection() {
-        return this.#loopDirection;
-    }
-
-    /**
-     * Tracks whether the particle has completed at least one lifecycle loop.
-     * @ignore
-     * @returns {boolean}
-     */
-    get loopHasBeenReset() {
-        return this.#loopHasBeenReset;
-    }
-
-    /**
-     * Toggles the progression direction of an oscillating particle loop and marks the lifecycle as reset.
-     * @ignore
-     * @returns {void}
-     */
-    toggleLoopDirection() {
-        this.#loopDirection *= -1;
-        this.#loopHasBeenReset = true;
     }
 
     /**
@@ -257,8 +223,9 @@ export class Particle {
 
         this.age = 0;
         this.lifespan = 0;
-        this.loopLifecycle = false;
-        this.loopMode = LoopMode.REPEAT;
+        this.persistent = false;
+        this.loopDuration = 0;
+        this.loopMode = LoopMode.HOLD;
         this.alive = false;
         this.interval = 0;
 
@@ -269,8 +236,6 @@ export class Particle {
         this.pathModifiers = null;
         this.scopedForces = null;
 
-        this.#loopDirection = LoopDirection.FORWARD;
-        this.#loopHasBeenReset = false;
         this.#intervalTimer = 0;
     }
 
