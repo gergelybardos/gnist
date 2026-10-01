@@ -1,10 +1,8 @@
 import { Force } from '../forces/Force.js';
 import { Modifier } from '../modifiers/Modifier.js';
-import type { Color } from '../shared/Types.js';
-import type { ParticleLifecycleCallback } from '../emitters/Emitter.js';
+import type { Color, ParticleLifecycleCallback } from '../shared/Types.js';
 /**
- * @import { Color, LoopModeValues } from '../shared/Types.js'
- * @import { ParticleLifecycleCallback } from '../emitters/Emitter.js'
+ * @import { Color, LoopModeValues, ParticleLifecycleCallback } from '../shared/Types.js'
  */
 /**
  * Represents a single particle within the simulation.

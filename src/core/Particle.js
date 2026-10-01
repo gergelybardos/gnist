@@ -3,8 +3,7 @@ import { Modifier } from '../modifiers/Modifier.js';
 import { LoopMode } from '../shared/Constants.js';
 
 /**
- * @import { Color, LoopModeValues } from '../shared/Types.js'
- * @import { ParticleLifecycleCallback } from '../emitters/Emitter.js'
+ * @import { Color, LoopModeValues, ParticleLifecycleCallback } from '../shared/Types.js'
  */
 
 /**
