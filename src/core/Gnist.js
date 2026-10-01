@@ -168,7 +168,7 @@ export class Gnist {
 
             emitter.bindEngineContext({
                 acquireParticle: this.#acquireParticleCallback,
-                enqueueParticle: (particle) => this.#pendingParticles.push(particle),
+                enqueueParticle: (particle) => { this.#pendingParticles.push(particle) },
             });
         }
 

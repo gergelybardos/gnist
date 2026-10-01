@@ -5,7 +5,7 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
 
 /**
  * @import { Gnist } from '../core/Gnist.js'
- * @import { Color, EmissionSourceValues } from '../shared/Types.js'
+ * @import { Color, EmissionSourceValues, ParticleLifecycleCallback } from '../shared/Types.js'
  * @import { PointEmitterConfigSpecifics } from './PointEmitter'
  * @import { LineEmitterConfigSpecifics } from './LineEmitter'
  * @import { RectEmitterConfigSpecifics } from './RectEmitter'
@@ -54,14 +54,6 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  */
 
 /**
- * Callback executed during particle lifecycle events.
- * @ignore
- * @callback ParticleLifecycleCallback
- * @param {Particle} particle The particle instance.
- * @returns {void}
- */
-
-/**
  * Callback to retrieve a particle instance from the reusable particles.
  * @ignore
  * @callback AcquireParticleCallback
@@ -69,11 +61,19 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  */
 
 /**
+ * Callback to queue a newly emitted particle into the pending particles.
+ * @ignore
+ * @callback EnqueueParticleCallback
+ * @param {Particle} particle The particle instance.
+ * @returns {void}
+ */
+
+/**
  * Engine context providing particle acquisition and queueing callbacks.
  * @ignore
  * @typedef {object} EngineContext
  * @property {AcquireParticleCallback} acquireParticle Callback to retrieve a particle instance from the reusable particles.
- * @property {ParticleLifecycleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
+ * @property {EnqueueParticleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
  */
 
 /**

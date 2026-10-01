@@ -1,4 +1,8 @@
 /**
+ * @import { Particle } from '../core/Particle.js'
+ */
+
+/**
  * Represents the color state of a particle. RGB color channels are stored independently for efficient interpolation.
  * @typedef {object} Color
  * @property {number} [r=255] Red color channel value (0 to 255).
@@ -37,6 +41,14 @@
  * @property {string} REPEAT - Resets modifier progress to the beginning when the particle loops.
  * @property {string} OSCILLATE - Alternates modifier progress between forward and reverse when the particle loops.
  * @property {string} HOLD - Holds modifier progress at the end when the particle first loops.
+ */
+
+/**
+ * Callback executed during particle lifecycle events.
+ * @ignore
+ * @callback ParticleLifecycleCallback
+ * @param {Particle} particle The particle instance.
+ * @returns {void}
  */
 
 export {};
