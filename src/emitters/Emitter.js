@@ -434,7 +434,7 @@ export class Emitter {
      * Sets up a particle's movement, visuals, and lifecycle state based on both the `particleBlueprint` object the emitter was configured with and optional temporary overrides.
      * @ignore
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
     _initParticle(particle, particleBlueprintOverrides = {}) {

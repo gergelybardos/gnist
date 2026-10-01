@@ -56,7 +56,7 @@ export class PointEmitter extends Emitter {
      * Extends the base initialization by positioning the particle at the coordinates of the emitter origin.
      * @override
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
     _initParticle(particle, particleBlueprintOverrides = {}) {

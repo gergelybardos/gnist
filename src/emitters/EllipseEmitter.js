@@ -73,7 +73,7 @@ export class EllipseEmitter extends Emitter {
      * Extends the base initialization by positioning the particle at a random point along or within the ellipse.
      * @override
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
     _initParticle(particle, particleBlueprintOverrides = {}) {
