@@ -17,7 +17,8 @@ export type SpinConfig = ModifierConfig & SpinConfigSpecifics;
  * @property {number} [angularVelocity] Optional spin rate in radians per second. If omitted, the particle's own angularVelocity value is used.
  */
 /**
- * Spin configuration options. Includes all properties from {@link ModifierConfig}.
+ * Spin configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & SpinConfigSpecifics} SpinConfig
  */
 /**
@@ -49,9 +50,9 @@ export declare class Spin extends Modifier {
      * Advances the particle's rotation angle based on angular velocity and frame time delta.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} _normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle: Particle, normalizedAge: number, dt: number): void;
+    update(particle: Particle, _normalizedProgress: number, dt: number): void;
 }

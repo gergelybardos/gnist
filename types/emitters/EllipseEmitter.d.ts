@@ -32,7 +32,8 @@ export type EllipseEmitterConfig = EmitterConfig & EllipseEmitterConfigSpecifics
  * @property {number} [radiusY=50] Vertical radius of the emission ellipse.
  */
 /**
- * EllipseEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * EllipseEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  * @typedef {EmitterConfig & EllipseEmitterConfigSpecifics} EllipseEmitterConfig
  */
 /**
@@ -72,7 +73,7 @@ export declare class EllipseEmitter extends Emitter {
      * Extends the base initialization by positioning the particle at a random point along or within the ellipse.
      * @override
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
     _initParticle(particle: Particle, particleBlueprintOverrides?: ParticleBlueprint): void;

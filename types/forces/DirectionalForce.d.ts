@@ -22,7 +22,8 @@ export type DirectionalForceConfig = ForceConfig & DirectionalForceConfigSpecifi
  * @property {number} [ay=0] Vertical acceleration component (in pixels per second²). Positive values accelerate particles downward, negative values upward.
  */
 /**
- * DirectionalForce configuration options. Includes all properties from {@link ForceConfig}.
+ * DirectionalForce configuration options.
+ * Includes all properties from {@link ForceConfig}.
  * @typedef {ForceConfig & DirectionalForceConfigSpecifics} DirectionalForceConfig
  */
 /**

@@ -22,7 +22,8 @@ export type ScaleTweenConfig = ModifierConfig & ScaleTweenConfigSpecifics;
  * @property {number} [endScale=0.1] Scale multiplier at particle death.
  */
 /**
- * ScaleTween configuration options. Includes all properties from {@link ModifierConfig}.
+ * ScaleTween configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & ScaleTweenConfigSpecifics} ScaleTweenConfig
  */
 /**
@@ -59,9 +60,9 @@ export declare class ScaleTween extends Modifier {
      * Scales the particle relative to its base size based on its normalized age.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle: Particle, normalizedAge: number, _dt: number): void;
+    update(particle: Particle, normalizedProgress: number, _dt: number): void;
 }

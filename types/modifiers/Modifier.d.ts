@@ -36,19 +36,20 @@ export declare class Modifier {
      */
     constructor(config?: ModifierConfig);
     /**
+     * Read-only.
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */
     get id(): string;
     /**
-     * Applies visual or lifecycle changes to a particle based on its normalized age.
+     * Applies changes to a particle based on its normalized lifecycle progress.
      * @ignore
      * @abstract
      * @param {Particle} _particle Particle instance to affect.
-     * @param {number} _normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} _normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      * @throws {TypeError}
      */
-    update(_particle: Particle, _normalizedAge: number, _dt: number): void;
+    update(_particle: Particle, _normalizedProgress: number, _dt: number): void;
 }

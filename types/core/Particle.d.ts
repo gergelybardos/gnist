@@ -3,7 +3,7 @@ import { Modifier } from '../modifiers/Modifier.js';
 import type { Color } from '../shared/Types.js';
 import type { ParticleLifecycleCallback } from '../emitters/Emitter.js';
 /**
- * @import { Color } from '../shared/Types.js'
+ * @import { Color, LoopModeValues } from '../shared/Types.js'
  * @import { ParticleLifecycleCallback } from '../emitters/Emitter.js'
  */
 /**
@@ -11,6 +11,7 @@ import type { ParticleLifecycleCallback } from '../emitters/Emitter.js';
  * @class
  */
 export declare class Particle {
+    #private;
     /**
      * Horizontal coordinate.
      * @type {number}
@@ -78,12 +79,29 @@ export declare class Particle {
      */
     age: number;
     /**
-     * Maximum allowed lifespan (in seconds).
+     * Maximum allowed lifespan baseline (in seconds). Must be a finite number.
      * @type {number}
      */
     lifespan: number;
     /**
-     * Flag indicating whether the particle is still alive. Dead particles are automatically removed from the simulation.
+     * Flag indicating whether the particle bypasses death at `lifespan`.
+     * @type {boolean}
+     */
+    persistent: boolean;
+    /**
+     * Duration (in seconds) for age-based modifiers to complete one cycle.
+     * @type {number}
+     */
+    loopDuration: number;
+    /**
+     * Determines how particle age is interpreted by modifiers when the particle loops.
+     * For the list of available modes, see {@link LoopModeValues}.
+     * @type {string}
+     */
+    loopMode: string;
+    /**
+     * Flag indicating whether the particle is still alive.
+     * Dead particles are recycled by the pool.
      * @type {boolean}
      */
     alive: boolean;
@@ -93,10 +111,16 @@ export declare class Particle {
      */
     interval: number;
     /**
-     * Accumulator tracking the time towards the next `onInterval` execution (in seconds).
-     * @type {number}
+     * Lifecycle callback executed at particle death.
+     * @type {ParticleLifecycleCallback}
      */
-    intervalTimer: number;
+    onDeath: ParticleLifecycleCallback;
+    /**
+     * Lifecycle callback executed periodically at particle update.
+     * The interval is specified by the `interval` property.
+     * @type {ParticleLifecycleCallback}
+     */
+    onInterval: ParticleLifecycleCallback;
     /**
      * Shared reference to the owner emitter's visual modifier array.
      * @type {Array<Modifier>|null}
@@ -112,16 +136,6 @@ export declare class Particle {
      * @type {Array<Force>|null}
      */
     scopedForces: Array<Force> | null;
-    /**
-     * Lifecycle callback executed at particle death.
-     * @type {ParticleLifecycleCallback}
-     */
-    onDeath: ParticleLifecycleCallback;
-    /**
-     * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
-     * @type {ParticleLifecycleCallback}
-     */
-    onInterval: ParticleLifecycleCallback;
     /**
      * Initializes a blank, inactive particle.
      * @constructor

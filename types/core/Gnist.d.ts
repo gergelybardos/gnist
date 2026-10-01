@@ -32,8 +32,7 @@ export type CullingBounds = {
  */
 /**
  * Defines a region beyond which particles are considered outside the simulation and are marked dead.
- * A safety margin is applied per particle based on its coordinates and size, preventing early removal while it is still
- * partially inside the region.
+ * A safety margin is applied per particle based on its coordinates and size, preventing early removal while it is still partially inside the region.
  * @typedef {object} CullingBounds
  * @property {number} xMin Left boundary of the region.
  * @property {number} yMin Top boundary of the region.
@@ -81,7 +80,7 @@ export declare class Gnist {
     /**
      * Sets the optional region used for particle culling.
      * @param {CullingBounds|null} cullingBounds The new region or null to disable culling.
-     * @throws {Error}
+     * @throws {RangeError}
      */
     set cullingBounds(cullingBounds: CullingBounds | null);
     /**

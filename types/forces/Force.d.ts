@@ -25,6 +25,7 @@ export declare class Force {
      */
     constructor(config?: ForceConfig);
     /**
+     * Read-only.
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */

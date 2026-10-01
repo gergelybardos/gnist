@@ -22,7 +22,8 @@ export type SineWaveConfig = ModifierConfig & SineWaveConfigSpecifics;
  * @property {number|number[]} [frequency=2] Cycles per second (Hz), or a [start, end] range array interpolated over lifespan.
  */
 /**
- * SineWave configuration options. Includes all properties from {@link ModifierConfig}.
+ * SineWave configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & SineWaveConfigSpecifics} SineWaveConfig
  */
 /**
@@ -69,9 +70,9 @@ export declare class SineWave extends Modifier {
      * Offsets the particle's coordinates along a wave axis perpendicular to the particle's movement direction.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} dt Frame time step in seconds.
      * @returns {void}
      */
-    update(particle: Particle, normalizedAge: number, dt: number): void;
+    update(particle: Particle, normalizedProgress: number, dt: number): void;
 }

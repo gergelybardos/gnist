@@ -19,4 +19,4 @@ export { OpacityFade } from './modifiers/visual/OpacityFade.js';
 export { RotationTween } from './modifiers/visual/RotationTween.js';
 export { ScaleTween } from './modifiers/visual/ScaleTween.js';
 export { Spin } from './modifiers/visual/Spin.js';
-export { FlatParticleDataFormat, EmissionSource, } from './shared/Constants.js';
+export { EmissionSource, FlatParticleDataFormat, LoopMode, } from './shared/Constants.js';

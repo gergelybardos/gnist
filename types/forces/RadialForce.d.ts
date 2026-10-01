@@ -37,7 +37,8 @@ export type RadialForceConfig = ForceConfig & RadialForceConfigSpecifics;
  * @property {number} [cullingRadius=0] Distance threshold from the center below which particles are marked dead. Set to 0 to disable. Stored internally as a squared value in {@link RadialForce#cullingRadiusSquared}.
  */
 /**
- * RadialForce configuration options. Includes all properties from {@link ForceConfig}.
+ * RadialForce configuration options.
+ * Includes all properties from {@link ForceConfig}.
  * @typedef {ForceConfig & RadialForceConfigSpecifics} RadialForceConfig
  */
 /**

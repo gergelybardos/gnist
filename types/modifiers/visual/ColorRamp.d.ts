@@ -17,7 +17,8 @@ export type ColorRampConfig = ModifierConfig & ColorRampConfigSpecifics;
  * @property {Array<Array<number>>} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
  */
 /**
- * ColorRamp configuration options. Includes all properties from {@link ModifierConfig}.
+ * ColorRamp configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & ColorRampConfigSpecifics} ColorRampConfig
  */
 /**
@@ -46,9 +47,9 @@ export declare class ColorRamp extends Modifier {
      * Blends a particle's color channels based on its normalized age.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle: Particle, normalizedAge: number, _dt: number): void;
+    update(particle: Particle, normalizedProgress: number, _dt: number): void;
 }

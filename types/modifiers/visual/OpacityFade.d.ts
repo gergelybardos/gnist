@@ -22,7 +22,8 @@ export type OpacityFadeConfig = ModifierConfig & OpacityFadeConfigSpecifics;
  * @property {number} [endOpacity=0.0] Opacity at particle death. Values range from 0.0 (fully transparent) to 1.0 (fully opaque).
  */
 /**
- * OpacityFade configuration options. Includes all properties from {@link ModifierConfig}.
+ * OpacityFade configuration options.
+ * Includes all properties from {@link ModifierConfig}.
  * @typedef {ModifierConfig & OpacityFadeConfigSpecifics} OpacityFadeConfig
  */
 /**
@@ -59,9 +60,9 @@ export declare class OpacityFade extends Modifier {
      * Blends a particle's opacity based on its normalized age.
      * @override
      * @param {Particle} particle Particle instance to affect.
-     * @param {number} normalizedAge Normalized age of the particle (0.0 = emitted, 1.0 = dead).
+     * @param {number} normalizedProgress Normalized lifecycle progress (0.0 = start, 1.0 = end).
      * @param {number} _dt Time elapsed since the last frame (in seconds).
      * @returns {void}
      */
-    update(particle: Particle, normalizedAge: number, _dt: number): void;
+    update(particle: Particle, normalizedProgress: number, _dt: number): void;
 }

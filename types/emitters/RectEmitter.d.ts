@@ -32,7 +32,8 @@ export type RectEmitterConfig = EmitterConfig & RectEmitterConfigSpecifics;
  * @property {number} [height=100] Height of the emission rectangle.
  */
 /**
- * RectEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * RectEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  * @typedef {EmitterConfig & RectEmitterConfigSpecifics} RectEmitterConfig
  */
 /**
@@ -72,7 +73,7 @@ export declare class RectEmitter extends Emitter {
      * Extends the base initialization by positioning the particle at a random point along or within the rectangle.
      * @override
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
     _initParticle(particle: Particle, particleBlueprintOverrides?: ParticleBlueprint): void;

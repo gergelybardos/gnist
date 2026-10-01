@@ -22,7 +22,8 @@ export type PointEmitterConfig = EmitterConfig & PointEmitterConfigSpecifics;
  * @property {number} [y=0] Vertical coordinate of the emission point.
  */
 /**
- * PointEmitter configuration options. Includes all properties from {@link EmitterConfig}.
+ * PointEmitter configuration options.
+ * Includes all properties from {@link EmitterConfig}.
  * @typedef {EmitterConfig & PointEmitterConfigSpecifics} PointEmitterConfig
  */
 /**
@@ -52,7 +53,7 @@ export declare class PointEmitter extends Emitter {
      * Extends the base initialization by positioning the particle at the coordinates of the emitter origin.
      * @override
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
     _initParticle(particle: Particle, particleBlueprintOverrides?: ParticleBlueprint): void;

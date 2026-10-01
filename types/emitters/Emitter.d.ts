@@ -1,7 +1,7 @@
 import { Force } from '../forces/Force.js';
 import { Modifier } from '../modifiers/Modifier.js';
 import { Particle } from '../core/Particle.js';
-import type { Color } from '../shared/Types.js';
+import type { Color, ParticleLifecycleCallback } from '../shared/Types.js';
 import type { PointEmitterConfigSpecifics } from './PointEmitter';
 import type { LineEmitterConfigSpecifics } from './LineEmitter';
 import type { RectEmitterConfigSpecifics } from './RectEmitter';
@@ -35,17 +35,15 @@ export type EmitterConfig = {
     particleBlueprint?: ParticleBlueprint;
 };
 export type EmitterOverrides = Partial<PointEmitterConfigSpecifics | LineEmitterConfigSpecifics | RectEmitterConfigSpecifics | EllipseEmitterConfigSpecifics>;
-export type ParticleLifecycleCallback = (particle: Particle) => void;
-export type AcquireParticleCallback = () => Particle;
 export type ParticleBlueprint = {
     /**
-     * Lifecycle callback executed at particle death.
+     * Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
      */
-    onDeath?: ParticleLifecycleCallback;
+    speed?: number | number[];
     /**
-     * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+     * Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
      */
-    onInterval?: ParticleLifecycleCallback;
+    direction?: number | number[];
     /**
      * Orientation angle (in radians).
      */
@@ -67,22 +65,36 @@ export type ParticleBlueprint = {
      */
     opacity?: number | number[];
     /**
-     * Maximum allowed lifespan (in seconds).
+     * Maximum allowed lifespan (in seconds). Must be a finite number.
      */
     lifespan?: number | number[];
     /**
-     * Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
+     * Flag indicating whether the particle bypasses death at `lifespan`.
      */
-    speed?: number | number[];
+    persistent?: boolean;
     /**
-     * Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
+     * Duration (in seconds) for age-based modifiers to complete one cycle.
      */
-    direction?: number | number[];
+    loopDuration?: number;
+    /**
+     * Determines how particle age is interpreted by modifiers when the particle loops.
+     */
+    loopMode?: string;
     /**
      * Time interval between `onInterval` callback executions (in seconds).
      */
     interval?: number | number[];
+    /**
+     * Lifecycle callback executed at particle death.
+     */
+    onDeath?: ParticleLifecycleCallback;
+    /**
+     * Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+     */
+    onInterval?: ParticleLifecycleCallback;
 };
+export type AcquireParticleCallback = () => Particle;
+export type EnqueueParticleCallback = (particle: Particle) => void;
 export type EngineContext = {
     /**
      * Callback to retrieve a particle instance from the reusable particles.
@@ -91,11 +103,11 @@ export type EngineContext = {
     /**
      * Callback to queue a newly emitted particle into the pending particles.
      */
-    enqueueParticle: ParticleLifecycleCallback;
+    enqueueParticle: EnqueueParticleCallback;
 };
 /**
  * @import { Gnist } from '../core/Gnist.js'
- * @import { Color, EmissionSourceValues } from '../shared/Types.js'
+ * @import { Color, EmissionSourceValues, ParticleLifecycleCallback } from '../shared/Types.js'
  * @import { PointEmitterConfigSpecifics } from './PointEmitter'
  * @import { LineEmitterConfigSpecifics } from './LineEmitter'
  * @import { RectEmitterConfigSpecifics } from './RectEmitter'
@@ -119,39 +131,45 @@ export type EngineContext = {
  * @typedef {Partial<PointEmitterConfigSpecifics | LineEmitterConfigSpecifics | RectEmitterConfigSpecifics | EllipseEmitterConfigSpecifics>} EmitterOverrides
  */
 /**
- * Callback executed during particle lifecycle events.
- * @callback ParticleLifecycleCallback
- * @param {Particle} particle The particle instance.
- * @returns {void}
- */
-/**
- * Callback to retrieve a particle instance from the reusable particles.
- * @callback AcquireParticleCallback
- * @returns {Particle} Reusable particle instance.
- */
-/**
  * Configuration options used by emitters to initialize particles at emission.
  * This object is not runtime Particle state and does not correspond directly to Particle properties.
  * Options are interpreted either directly or indirectly to derive Particle properties.
  * Most options may be specified as a single number or a [min, max] range array.
  * @typedef {object} ParticleBlueprint
- * @property {ParticleLifecycleCallback} [onDeath] Lifecycle callback executed at particle death.
- * @property {ParticleLifecycleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+ * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
+ * @property {number|number[]} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
  * @property {number|number[]} [rotation] Orientation angle (in radians).
  * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
  * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
  * @property {Color} [color] The particle color, defined by individual RGB channels.
  * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
- * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds).
- * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
- * @property {number|number[]} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
+ * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds). Must be a finite number.
+ * @property {boolean} [persistent] Flag indicating whether the particle bypasses death at `lifespan`.
+ * @property {number} [loopDuration] Duration (in seconds) for age-based modifiers to complete one cycle.
+ * @property {string} [loopMode] Determines how particle age is interpreted by modifiers when the particle loops.
  * @property {number|number[]} [interval] Time interval between `onInterval` callback executions (in seconds).
+ * @property {ParticleLifecycleCallback} [onDeath] Lifecycle callback executed at particle death.
+ * @property {ParticleLifecycleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
+ */
+/**
+ * Callback to retrieve a particle instance from the reusable particles.
+ * @ignore
+ * @callback AcquireParticleCallback
+ * @returns {Particle} Reusable particle instance.
+ */
+/**
+ * Callback to queue a newly emitted particle into the pending particles.
+ * @ignore
+ * @callback EnqueueParticleCallback
+ * @param {Particle} particle The particle instance.
+ * @returns {void}
  */
 /**
  * Engine context providing particle acquisition and queueing callbacks.
+ * @ignore
  * @typedef {object} EngineContext
  * @property {AcquireParticleCallback} acquireParticle Callback to retrieve a particle instance from the reusable particles.
- * @property {ParticleLifecycleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
+ * @property {EnqueueParticleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
  */
 /**
  * Abstract base class for particle emitters.
@@ -167,8 +185,7 @@ export declare class Emitter {
     particlesPerSecond: number;
     /**
      * Emission source mode, defining the geometric distribution and initial direction of emitted particles.
-     * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying
-     * `particleBlueprint.direction` in the emitter config.
+     * The default direction depends on both the emission source mode and the emitter type and can be overridden by specifying `particleBlueprint.direction` in the emitter config.
      * @see {@link EmissionSourceValues} for available configuration constants.
      * @type {string}
      */
@@ -187,11 +204,13 @@ export declare class Emitter {
      */
     constructor(config?: EmitterConfig);
     /**
+     * Read-only.
      * Unique identifier. Defaults to a generated UUID.
      * @type {string}
      */
     get id(): string;
     /**
+     * Read-only.
      * Flag indicating whether the emitter is running or not.
      * @type {boolean}
      */
@@ -286,10 +305,10 @@ export declare class Emitter {
      */
     unbindEngineContext(): void;
     /**
-     * Sets up a particle's movement, visuals, and lifecycle state.
+     * Sets up a particle's movement, visuals, and lifecycle state based on both the `particleBlueprint` object the emitter was configured with and optional temporary overrides.
      * @ignore
      * @param {Particle} particle Particle instance to initialize.
-     * @param {ParticleBlueprint} [particleBlueprintOverrides] Temporary overrides for the particle blueprint.
+     * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
      * @returns {void}
      */
     _initParticle(particle: Particle, particleBlueprintOverrides?: ParticleBlueprint): void;
