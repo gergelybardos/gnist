@@ -165,47 +165,61 @@ For additional development scripts, see [Contributing Guide](CONTRIBUTING.md).
 
 ## Benchmarks
 
-The benchmarks below measure CPU-side particle simulation performance only. Rendering overhead is excluded, as rendering performance depends on the chosen renderer.
+The benchmarks below measure Gnist's CPU-side particle simulation performance only. Since Gnist is renderer-agnostic, rendering performance is not included in the measured times.
 
-All values represent the average simulation update time measured over 100 frames, with browser developer tools closed.
+A minimal WebGL2 renderer was used during testing because offloading rendering work to the GPU leaves more CPU resources available for Gnist's simulation, allowing for significantly higher particle counts.
 
-### Test Environment
+Each measurement represents the average simulation update time over 100 frames. Reported values are the median of multiple measurements, with developer tools closed.
 
-- **CPU:** Intel Core i7-6700K (4 cores, 8 threads @ 3.4 GHz)
+**Test environment:**
+
+- **CPU:** Intel Core i7-6700 (4 cores, 8 threads @ 3.4 GHz)
+- **GPU:** NVIDIA GeForce RTX 4060 Ti
 - **RAM:** 16 GB
-- **Browser:** Chrome 150
-- **OS:** Windows 10
-- **Gnist version:** 0.2.0
+- **Browser:** Chrome 154
+- **Renderer:** WebGL2
+- **Gnist version:** 0.3.0
 
-### Scaling
+> For reference, a 60 FPS target allows 16.67 ms per frame, while a 144 FPS target allows 6.94 ms per frame. These budgets include rendering and other application work.
+
+### Baseline Scaling
 
 Particle update cost with no forces or modifiers applied.
 
-| Particles | Forces | Modifiers | Avg. update (ms/frame) |
-|-----------|--------|-----------|------------------------|
-| 1,000     | None   | None      | ~0.08 ms               |
-| 10,000    | None   | None      | ~0.7 ms                |
-| 50,000    | None   | None      | ~2.6 ms                |
-| 100,000   | None   | None      | ~5.0 ms                |
+- **Forces:** None
+- **Modifiers:** None
+
+| Particles | Update time (ms/frame) |
+|-----------|------------------------|
+| 1,000     | ~0.12 ms               |
+| 10,000    | ~0.84 ms               |
+| 50,000    | ~2.81 ms               |
+| 100,000   | ~5.33 ms               |
 
 ### Feature Cost
 
-Realistic workload with forces and visual modifiers applied. ColorRamp uses a four-stop gradient.
+Particle update cost with forces and visual modifiers applied.
 
-| Particles | Forces                        | Modifiers                            | Avg. update (ms/frame) |
-|-----------|-------------------------------|--------------------------------------|------------------------|
-| 1,000     | DirectionalForce + LinearDrag | ColorRamp + OpacityFade + ScaleTween | ~0.2 ms                |
-| 10,000    | DirectionalForce + LinearDrag | ColorRamp + OpacityFade + ScaleTween | ~1.5 ms                |
-| 50,000    | DirectionalForce + LinearDrag | ColorRamp + OpacityFade + ScaleTween | ~7.0 ms                |
-| 100,000   | DirectionalForce + LinearDrag | ColorRamp + OpacityFade + ScaleTween | ~14.0 ms               |
+- **Forces:** `DirectionalForce` + `LinearDrag`
+- **Modifiers:** `ColorRamp` + `OpacityFade` + `ScaleTween`
+
+| Particles | Update time (ms/frame) |
+|-----------|------------------------|
+| 1,000     | ~0.22 ms               |
+| 10,000    | ~1.24 ms               |
+| 50,000    | ~5.10 ms               |
+| 100,000   | ~10.13 ms              |
 
 ### Stress Test
 
 Performance under an extreme particle count without forces or modifiers.
 
-| Particles | Forces | Modifiers | Avg. update (ms/frame) |
-|-----------|--------|-----------|------------------------|
-| 500,000   | None   | None      | ~31 ms                 |
+- **Forces:** None
+- **Modifiers:** None
+
+| Particles | Update time (ms/frame) |
+|-----------|------------------------|
+| 500,000   | ~36.26 ms              |
 
 ## Documentation
 
