@@ -170,19 +170,19 @@ export class Particle {
 
     /**
      * Shared reference to the owner emitter's visual modifier array.
-     * @type {Array<Modifier>|[]|null}
+     * @type {Array<Modifier>|null}
      */
     visualModifiers;
 
     /**
      * Shared reference to the owner emitter's path modifier array.
-     * @type {Array<Modifier>|[]|null}
+     * @type {Array<Modifier>|null}
      */
     pathModifiers;
 
     /**
      * Shared reference to the owner emitter's scoped emitter-specific force array.
-     * @type {Array<Force>|[]|null}
+     * @type {Array<Force>|null}
      */
     scopedForces;
 
