@@ -298,16 +298,6 @@ export class Gnist {
     }
 
     /**
-     * Resets a particle and returns it to the pool.
-     * @param {Particle} particle
-     * @returns {void}
-     */
-    #releaseParticle(particle) {
-        particle.reset();
-        this.#reusableParticles.push(particle);
-    }
-
-    /**
      * Iterates through registered emitters to emit new particles.
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @returns {void}
