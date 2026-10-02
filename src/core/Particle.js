@@ -140,6 +140,13 @@ export class Particle {
      */
     interval;
 
+    /**
+     * Accumulator tracking time until the next `onInterval` execution (in seconds).
+     * @ignore
+     * @type {number}
+     */
+    intervalTimer;
+
     // =========================================================================
     // LIFECYCLE HOOKS
     // =========================================================================
@@ -163,31 +170,25 @@ export class Particle {
 
     /**
      * Shared reference to the owner emitter's visual modifier array.
-     * @type {Array<Modifier>|null}
+     * @type {Array<Modifier>|[]|null}
      */
     visualModifiers;
 
     /**
      * Shared reference to the owner emitter's path modifier array.
-     * @type {Array<Modifier>|null}
+     * @type {Array<Modifier>|[]|null}
      */
     pathModifiers;
 
     /**
      * Shared reference to the owner emitter's scoped emitter-specific force array.
-     * @type {Array<Force>|null}
+     * @type {Array<Force>|[]|null}
      */
     scopedForces;
 
     // =========================================================================
     // INTERNALS
     // =========================================================================
-
-    /**
-     * Accumulator tracking time until the next `onInterval` execution (in seconds).
-     * @type {number}
-     */
-    #intervalTimer;
 
     /**
      * Initializes a blank, inactive particle.
@@ -221,12 +222,13 @@ export class Particle {
         this.opacity = 1.0;
 
         this.age = 0;
-        this.lifespan = 0;
+        this.lifespan = 2;
         this.persistent = false;
         this.loopDuration = 0;
         this.loopMode = LoopMode.HOLD;
         this.alive = false;
         this.interval = 0;
+        this.intervalTimer = 0;
 
         this.onDeath = null;
         this.onInterval = null;
@@ -234,32 +236,10 @@ export class Particle {
         this.visualModifiers = null;
         this.pathModifiers = null;
         this.scopedForces = null;
-
-        this.#intervalTimer = 0;
-    }
-
-    /**
-     * Periodically triggers the `onInterval` hook.
-     * @ignore
-     * @param {number} dt Time elapsed since the last frame (in seconds).
-     * @returns {void}
-     */
-    update(dt) {
-        if (!this.alive || this.onInterval === null || this.interval <= 0) {
-            return;
-        }
-
-        this.#intervalTimer += dt;
-
-        while (this.#intervalTimer >= this.interval) {
-            this.#intervalTimer -= this.interval;
-            this.onInterval(this);
-        }
     }
 
     /**
      * Marks the particle as dead and eligible for pool recycling, triggers the `onDeath` hook.
-     * @ignore
      * @returns {void}
      */
     kill() {
@@ -267,10 +247,10 @@ export class Particle {
             return;
         }
 
+        this.alive = false;
+
         if (this.onDeath) {
             this.onDeath(this);
         }
-
-        this.alive = false;
     }
 }

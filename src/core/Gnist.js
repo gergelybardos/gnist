@@ -31,7 +31,7 @@ export class Gnist {
      * @returns {string}
      */
     static get VERSION() {
-        return '0.2.0';
+        return '0.3.0';
     }
 
     /**
@@ -342,6 +342,7 @@ export class Gnist {
         const globalForcesCount = globalForces.length;
         const particles = this.#activeParticles;
         const particleCount = particles.length;
+        const reusableParticles = this.#reusableParticles;
         const cullingBounds = this.#cullingBounds;
 
         let aliveCount = 0;
@@ -349,120 +350,141 @@ export class Gnist {
         for (let i = 0; i < particleCount; i++) {
             const particle = particles[i];
 
-            particle.age += dt;
+            const age = (particle.age += dt);
+            const lifespan = particle.lifespan;
 
-            if (particle.persistent) {
-                const loopDuration = particle.loopDuration;
-                const doubleLoop = loopDuration * 2;
+            if (!particle.persistent && age >= lifespan) {
+                particle.alive = false;
 
-                if (loopDuration > 0) {
-                    switch (particle.loopMode) {
-                        case LoopMode.REPEAT:
-                            if (particle.age >= loopDuration) {
-                                particle.age %= loopDuration;
-                            }
-                            break;
-                        case LoopMode.OSCILLATE:
-                            if (particle.age >= doubleLoop) {
-                                particle.age %= doubleLoop;
-                            }
-                            break;
-                        case LoopMode.HOLD:
-                            if (particle.age > loopDuration) {
-                                particle.age = loopDuration;
-                            }
-                            break;
-                        default:
-                            throw new Error(ERROR_INVALID_LOOP_MODE);
-                    }
+                if (particle.onDeath !== null) {
+                    particle.onDeath(particle);
                 }
-            } else if (particle.age >= particle.lifespan) {
-                particle.kill();
             }
 
             if (particle.alive) {
-                const loopDuration = particle.loopDuration;
+                const pathModifiers = particle.pathModifiers;
+                const pathModifiersCount = pathModifiers.length;
+                const visualModifiers = particle.visualModifiers;
+                const visualModifiersCount = visualModifiers.length;
+
                 let normalizedModifierProgress = 1.0;
 
-                if (loopDuration > 0) {
-                    const loopProgress = (particle.age % loopDuration) / loopDuration;
+                if (pathModifiersCount > 0 || visualModifiersCount > 0) {
+                    const loopDuration = particle.loopDuration;
 
                     switch (particle.loopMode) {
-                        case LoopMode.REPEAT:
-                            normalizedModifierProgress = loopProgress;
-                            break;
-                        case LoopMode.OSCILLATE: {
-                            const isReversed = Math.floor(particle.age / loopDuration) % 2 === 1;
-                            normalizedModifierProgress = isReversed ? 1.0 - loopProgress : loopProgress;
+                        case LoopMode.HOLD: {
+                            if (particle.persistent && age > loopDuration) {
+                                particle.age = loopDuration;
+                            }
+
+                            normalizedModifierProgress = age >= loopDuration ? 1.0 : age / loopDuration;
                             break;
                         }
-                        case LoopMode.HOLD:
-                            normalizedModifierProgress = Math.min(particle.age / loopDuration, 1.0);
+                        case LoopMode.REPEAT: {
+                            if (particle.persistent && age >= loopDuration) {
+                                particle.age %= loopDuration;
+                            }
+
+                            const loopAge = particle.persistent ? particle.age : age % loopDuration;
+
+                            normalizedModifierProgress = loopAge / loopDuration;
                             break;
+                        }
+                        case LoopMode.OSCILLATE: {
+                            const cycleDuration = loopDuration * 2;
+
+                            if (particle.persistent && age >= cycleDuration) {
+                                particle.age %= cycleDuration;
+                            }
+
+                            const cycleAge = particle.persistent ? particle.age : age % cycleDuration;
+
+                            normalizedModifierProgress = cycleAge < loopDuration
+                                ? cycleAge / loopDuration
+                                : 2.0 - (cycleAge / loopDuration);
+                            break;
+                        }
                         default:
                             throw new Error(ERROR_INVALID_LOOP_MODE);
                     }
                 }
 
-                // 1. Environmental forces
+                // Environmental forces
 
                 for (let j = 0; j < globalForcesCount; j++) {
                     globalForces[j].apply(particle, dt);
                 }
 
+                // Scoped forces
+
                 const scopedForces = particle.scopedForces;
                 const scopedForcesCount = scopedForces.length;
+
                 for (let j = 0; j < scopedForcesCount; j++) {
                     scopedForces[j].apply(particle, dt);
                 }
 
-                // 2. Path modifiers (must run BEFORE kinematic integration so vx/vy changes apply immediately)
+                // Path modifiers (must run BEFORE kinematic integration so velocity changes apply immediately)
 
-                const pathModifiers = particle.pathModifiers;
-                const pathModifiersCount = pathModifiers.length;
                 for (let j = 0; j < pathModifiersCount; j++) {
                     pathModifiers[j].update(particle, normalizedModifierProgress, dt);
                 }
 
-                // 3. Kinematic integration
+                // Kinematic integration
 
                 particle.x += particle.vx * dt;
                 particle.y += particle.vy * dt;
                 particle.rotation += particle.angularVelocity * dt;
 
-                // 4. Visual Modifiers (must run AFTER kinematic integration)
+                // Visual Modifiers (must run AFTER kinematic integration)
 
-                const visualModifiers = particle.visualModifiers;
-                const visualModifiersCount = visualModifiers.length;
                 for (let j = 0; j < visualModifiersCount; j++) {
                     visualModifiers[j].update(particle, normalizedModifierProgress, dt);
                 }
 
-                particle.update(dt);
+                if (particle.onInterval !== null && particle.interval > 0) {
+                    particle.intervalTimer += dt;
 
-                // 5. Culling
+                    while (particle.intervalTimer >= particle.interval) {
+                        particle.intervalTimer -= particle.interval;
+                        particle.onInterval(particle);
 
-                if (cullingBounds !== null) {
-                    const safetyMargin = particle.size || 0;
+                        if (!particle.alive) {
+                            break;
+                        }
+                    }
+                }
 
-                    if (particle.x < cullingBounds.xMin - safetyMargin ||
+                // Culling
+
+                if (particle.alive && cullingBounds !== null) {
+                    const safetyMargin = particle.size;
+
+                    if (
+                        particle.x < cullingBounds.xMin - safetyMargin ||
                         particle.x > cullingBounds.xMax + safetyMargin ||
                         particle.y < cullingBounds.yMin - safetyMargin ||
                         particle.y > cullingBounds.yMax + safetyMargin
                     ) {
-                        particle.kill();
+                        particle.alive = false;
+
+                        if (particle.onDeath !== null) {
+                            particle.onDeath(particle);
+                        }
                     }
                 }
             }
 
-            // In-place dual-pointer compaction (avoids Array.filter allocations and garbage collection spikes)
+            // In-place dual-pointer compaction
             if (particle.alive) {
                 if (aliveCount !== i) {
                     particles[aliveCount] = particle;
                 }
                 aliveCount++;
             } else {
-                this.#releaseParticle(particle);
+                particle.reset();
+                reusableParticles.push(particle);
             }
         }
 

@@ -90,7 +90,11 @@ export class RadialForce extends Force {
         const distanceSquared = dx * dx + dy * dy;
 
         if (this.cullingRadiusSquared > 0 && distanceSquared < this.cullingRadiusSquared) {
-            particle.kill();
+            particle.alive = false;
+            if (particle.onDeath) {
+                particle.onDeath(particle);
+            }
+
             return;
         }
 
