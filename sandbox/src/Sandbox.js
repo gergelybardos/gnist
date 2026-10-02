@@ -15,34 +15,24 @@ import {
     Spin,
 } from 'gnist';
 
+const MODE_CANVAS_2D = 'canvas';
+const MODE_WEBGL2 = 'webgl';
+const CULLING_BOUNDS_MARGIN = 50;
+const PERFORMANCE_HISTORY_MAX_SIZE = 50;
+const PARTICLE_COUNT_LIMIT = 550000;
+const SAMPLE_WINDOW = 100;
+const WARMUP_DURATIONS = 10;
+
 /**
  * @class
  */
 export class Sandbox {
-    /** @type {string} */
-    static get #MODE_CANVAS_2D() {
-        return 'canvas';
-    }
-
-    /** @type {string} */
-    static get #MODE_WEBGL2() {
-        return 'webgl';
-    }
-
-    /** @type {number} */
-    static get #CULLING_BOUNDS_MARGIN() {
-        return 50;
-    }
-
     // =========================================================================
     // CORE
     // =========================================================================
 
     /** @type {Array} */
     #avgGnistUpdateTimeSamplesMs;
-
-    /** @type {number} */
-    #performanceHistoryMaxSize;
 
     /** @type {Gnist|null} */
     #gnistEngine;
@@ -52,15 +42,6 @@ export class Sandbox {
 
     /** @type {boolean} */
     #useCullingBounds;
-
-    /** @type {number} */
-    #particleCountLimit;
-
-    /** @type {number} */
-    #sampleWindow;
-
-    /** @type {number} */
-    #warmupDurationS;
 
     /** @type {PointEmitter|null} */
     #mainEmitter;
@@ -154,16 +135,12 @@ export class Sandbox {
      * @param {string} [mode='canvas']
      * @param {boolean} [useCullingBounds=true]
      */
-    constructor(mode = Sandbox.#MODE_CANVAS_2D, useCullingBounds = true) {
+    constructor(mode = MODE_CANVAS_2D, useCullingBounds = true) {
         // Core
         this.#avgGnistUpdateTimeSamplesMs = [];
-        this.#performanceHistoryMaxSize = 200;
         this.#gnistEngine = null;
         this.#previousTime = 0;
         this.#useCullingBounds = useCullingBounds;
-        this.#particleCountLimit = 500000;
-        this.#sampleWindow = 100;
-        this.#warmupDurationS = 10;
         this.#mainEmitter = null;
         this.#repulsion = null;
 
@@ -222,7 +199,7 @@ export class Sandbox {
         this.#initShowcaseSimulation();
         //this.#initBenchmarkSimulation();
 
-        if (this.#renderMode === Sandbox.#MODE_WEBGL2) {
+        if (this.#renderMode === MODE_WEBGL2) {
             this.#initWebGL();
         }
 
@@ -255,10 +232,10 @@ export class Sandbox {
         this.#overlayCtx = this.#getContext(this.#overlayCanvas, '2d');
 
         switch (this.#renderMode) {
-            case Sandbox.#MODE_CANVAS_2D:
+            case MODE_CANVAS_2D:
                 this.#canvas2dCtx = this.#getContext(this.#simulationCanvas, '2d');
                 break;
-            case Sandbox.#MODE_WEBGL2:
+            case MODE_WEBGL2:
                 this.#webgl2Ctx = this.#getContext(this.#simulationCanvas, 'webgl2', {
                     alpha: false,
                     premultipliedAlpha: false,
@@ -399,7 +376,7 @@ export class Sandbox {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.#glQuadBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, quadVertices, gl.STATIC_DRAW);
 
-        this.#glBufferData = new Float32Array(this.#particleCountLimit * FlatParticleDataFormat.FLOATS_PER_PARTICLE);
+        this.#glBufferData = new Float32Array(PARTICLE_COUNT_LIMIT * FlatParticleDataFormat.FLOATS_PER_PARTICLE);
     }
 
     /**
@@ -442,10 +419,10 @@ export class Sandbox {
         });
 
         const webEmitter = new RectEmitter({
-            x: Sandbox.#CULLING_BOUNDS_MARGIN + 10,
-            y: Sandbox.#CULLING_BOUNDS_MARGIN + 10,
-            width: this.#simulationCanvas.width - (Sandbox.#CULLING_BOUNDS_MARGIN - 20) * 2,
-            height: this.#simulationCanvas.height - (Sandbox.#CULLING_BOUNDS_MARGIN - 20) * 2,
+            x: CULLING_BOUNDS_MARGIN + 10,
+            y: CULLING_BOUNDS_MARGIN + 10,
+            width: this.#simulationCanvas.width - (CULLING_BOUNDS_MARGIN - 20) * 2,
+            height: this.#simulationCanvas.height - (CULLING_BOUNDS_MARGIN - 20) * 2,
             particlesPerSecond: 1500,
             duration: 1,
 
@@ -524,13 +501,10 @@ export class Sandbox {
             50000:   [10000,  5.0, 120],
             100000:  [20000,  5.0, 180],
             500000:  [100000, 5.0, 200],
-            1000000: [200000, 5.0, 200],
         };
 
-        const TARGET_PARTICLE_COUNT = 1000;
-        const [particlesPerSecond, lifespan, speed] = EMITTER_PRESETS[TARGET_PARTICLE_COUNT];
+        const [particlesPerSecond, lifespan, speed] = EMITTER_PRESETS[1000];
 
-        this.#particleCountLimit = TARGET_PARTICLE_COUNT;
         this.#useCullingBounds = false;
 
         const lineEmitter = new LineEmitter({
@@ -615,25 +589,27 @@ export class Sandbox {
         this.#frameCount++;
         this.#totalSimulationTimeS += safeDt;
 
-        if (this.#frameCount >= this.#sampleWindow) {
-            this.#avgGnistUpdateTimeMs = this.#totalExecutionTimeMs / this.#sampleWindow;
+        if (this.#frameCount >= SAMPLE_WINDOW) {
+            this.#avgGnistUpdateTimeMs = this.#totalExecutionTimeMs / SAMPLE_WINDOW;
 
-            this.#avgGnistUpdateTimeSamplesMs.push(this.#avgGnistUpdateTimeMs);
+            if (Math.floor(this.#totalSimulationTimeS) > WARMUP_DURATIONS) {
+                this.#avgGnistUpdateTimeSamplesMs.push(this.#avgGnistUpdateTimeMs);
 
-            if (this.#avgGnistUpdateTimeSamplesMs.length > this.#performanceHistoryMaxSize) {
-                this.#avgGnistUpdateTimeSamplesMs.shift();
+                if (this.#avgGnistUpdateTimeSamplesMs.length > PERFORMANCE_HISTORY_MAX_SIZE) {
+                    this.#avgGnistUpdateTimeSamplesMs.shift();
+                }
             }
 
             this.#peakAvgGnistUpdateTimeMs = Math.max(this.#peakAvgGnistUpdateTimeMs, this.#avgGnistUpdateTimeMs);
 
-            if (   this.#totalSimulationTimeS > this.#warmupDurationS
+            if (   this.#totalSimulationTimeS > WARMUP_DURATIONS
                 && this.#troughAvgGnistUpdateTimeMs > 0
                 && this.#avgGnistUpdateTimeMs > 0
             ) {
                 this.#troughAvgGnistUpdateTimeMs = Math.min(this.#troughAvgGnistUpdateTimeMs, this.#avgGnistUpdateTimeMs);
             }
 
-            this.#fps = Math.round(this.#sampleWindow / this.#totalFrameTimeS);
+            this.#fps = Math.round(SAMPLE_WINDOW / this.#totalFrameTimeS);
             this.#totalExecutionTimeMs = 0;
             this.#totalFrameTimeS = 0;
             this.#frameCount = 0;
@@ -650,10 +626,10 @@ export class Sandbox {
         const particleCount = particles.length;
 
         switch (this.#renderMode) {
-            case Sandbox.#MODE_CANVAS_2D:
+            case MODE_CANVAS_2D:
                 this.#renderCanvas2D(particles, particleCount, width, height);
                 break;
-            case Sandbox.#MODE_WEBGL2:
+            case MODE_WEBGL2:
                 this.#renderWebGL(particles, particleCount, width, height);
                 break;
         }
@@ -869,8 +845,8 @@ export class Sandbox {
             `  Particle count: ${particleCount}`,
             '',
             'Measurement:',
-            `  Warm-up:        ${this.#warmupDurationS} s`,
-            `  Sample window:  ${this.#sampleWindow} frames`,
+            `  Warm-up:        ${WARMUP_DURATIONS} s`,
+            `  Sample window:  ${SAMPLE_WINDOW} frames`,
             `  Samples:        ${this.#avgGnistUpdateTimeSamplesMs.length}`,
             '',
             'Performance:',
@@ -896,7 +872,7 @@ export class Sandbox {
      * @returns {string}
      */
     #getRenderMode() {
-        return this.#renderMode === Sandbox.#MODE_CANVAS_2D ? 'Canvas 2D' : 'WebGL2';
+        return this.#renderMode === MODE_CANVAS_2D ? 'Canvas 2D' : 'WebGL2';
     }
 
     /**
@@ -937,7 +913,7 @@ export class Sandbox {
             `User agent:              ${this.#userAgentInfo}`,
             `Render mode:             ${this.#getRenderMode()}`,
             `Particles:               ${this.#gnistEngine.particles.length}`,
-            `Sample window:           ${this.#sampleWindow} frames`,
+            `Sample window:           ${SAMPLE_WINDOW} frames`,
             `Samples:                 ${this.#avgGnistUpdateTimeSamplesMs.length}`,
             `Median avg. update time: ${this.#median(this.#avgGnistUpdateTimeSamplesMs)} ms`,
         ].join('\n');
@@ -1049,10 +1025,10 @@ export class Sandbox {
         }
 
         this.#gnistEngine.cullingBounds = {
-            xMin: Sandbox.#CULLING_BOUNDS_MARGIN,
-            yMin: Sandbox.#CULLING_BOUNDS_MARGIN,
-            xMax: this.#simulationCanvas.width - Sandbox.#CULLING_BOUNDS_MARGIN,
-            yMax: this.#simulationCanvas.height - Sandbox.#CULLING_BOUNDS_MARGIN,
+            xMin: CULLING_BOUNDS_MARGIN,
+            yMin: CULLING_BOUNDS_MARGIN,
+            xMax: this.#simulationCanvas.width - CULLING_BOUNDS_MARGIN,
+            yMax: this.#simulationCanvas.height - CULLING_BOUNDS_MARGIN,
         };
     }
 
