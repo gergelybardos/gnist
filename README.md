@@ -20,7 +20,7 @@
 - [Contributing](#contributing)
 - [License](#license)
 
-## About Gnist <a name="about-gnist"></a>
+## About Gnist
 
 Gnist is a lightweight particle simulation engine.
 
@@ -34,14 +34,14 @@ Key characteristics:
 - **Renderer-agnostic:** The engine is decoupled from timing and rendering loops, making it reusable across different runtimes and rendering systems.
 - **Developer-friendly API:** Gnist provides an intuitive, object-oriented, configuration-driven API rather than a data-oriented architecture. Particle data can still be exported as GPU-friendly flat typed arrays for high-performance rendering pipelines.
 
-## Requirements <a name="requirements"></a>
+## Requirements
 
 To install and integrate the NPM package into your own project, your environment should support:
 
 - [Node.js](https://nodejs.org/): >=20.0.0
 - [npm](https://www.npmjs.com/): >=9.6.4
 
-## Installation <a name="installation"></a>
+## Installation
 
 ```bash
 npm i @gergelybardos/gnist
@@ -49,7 +49,7 @@ npm i @gergelybardos/gnist
 
 > **💡 Note:** Gnist is distributed as native ECMAScript Modules (ESM) with no build step, preserving a fully readable source in `node_modules` and enabling consumer bundlers to optimize tree-shaking and minification.
 
-## Basic Example <a name="basic-example"></a>
+## Basic Example
 
 Gnist is renderer-agnostic; the client is responsible for implementing the main update loop and rendering using their chosen rendering system. The example below shows the minimal code required to run Gnist with Canvas 2D rendering.
 
@@ -142,7 +142,7 @@ requestAnimationFrame(loop);
 
 This is a minimal example; real applications typically extend it with additional rendering and control logic.
 
-## Sandbox <a name="sandbox"></a>
+## Sandbox
 
 The repository includes a sandbox for experimenting with Gnist and testing rendering integrations. It is intended as a development and demo tool and is not included in the npm package.
 
@@ -157,13 +157,13 @@ By default, the sandbox uses Canvas 2D rendering. Use `npm run dev:webgl` for th
 
 For additional development scripts, see [Contributing Guide](CONTRIBUTING.md).
 
-## Core Features <a name="core-features"></a>
+## Core Features
 
 - **Flexible emitters:** Create particle sources from common shapes including points, lines, rectangles, and ellipses, with configurable emission behavior.
 - **Composable forces:** Combine environmental forces such as directional force, drag, radial attraction/repulsion, and vortex motion globally or per emitter.
 - **Visual modifiers:** Animate particle appearance over its lifetime with color gradients, opacity transitions, and size interpolation.
 
-## Benchmarks <a name="benchmarks"></a>
+## Benchmarks
 
 The benchmarks below measure CPU-side particle simulation performance only. Rendering overhead is excluded, as rendering performance depends on the chosen renderer.
 
@@ -207,21 +207,21 @@ Performance under an extreme particle count without forces or modifiers.
 |-----------|--------|-----------|------------------------|
 | 500,000   | None   | None      | ~31 ms                 |
 
-## Documentation <a name="documentation"></a>
+## Documentation
 
 Gnist provides comprehensive resources to help you get started and master the engine:
 
 - [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) — Step-by-step tutorials on how to use Gnist in real projects.
 - [API Reference](https://gergelybardos.github.io/gnist/api/index.html) — Technical specification of the public-facing API, including core classes, components, and configuration interfaces.
 
-## Changelog <a name="changelog"></a>
+## Changelog
 
 See [Changelog](./CHANGELOG.md) for details.
 
-## Contributing <a name="contributing"></a>
+## Contributing
 
 See [Contributing Guide](./CONTRIBUTING.md) for details.
 
-## License <a name="license"></a>
+## License
 
 Gnist is open-source software licensed under the [MIT license](./LICENSE).
