@@ -74,7 +74,7 @@ export class RectEmitter extends Emitter {
      * @override
      * @param {Particle} particle Particle instance to initialize.
      * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
-     * @returns {void}
+     * @returns {boolean}
      */
     _initParticle(particle, particleBlueprintOverrides = {}) {
         if (this.emissionSource === EmissionSource.VOLUME) {
@@ -103,7 +103,7 @@ export class RectEmitter extends Emitter {
             }
         }
 
-        super._initParticle(particle, particleBlueprintOverrides);
+        return super._initParticle(particle, particleBlueprintOverrides);
     }
 
     /**

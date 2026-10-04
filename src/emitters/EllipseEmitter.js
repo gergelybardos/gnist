@@ -74,7 +74,7 @@ export class EllipseEmitter extends Emitter {
      * @override
      * @param {Particle} particle Particle instance to initialize.
      * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
-     * @returns {void}
+     * @returns {boolean}
      */
     _initParticle(particle, particleBlueprintOverrides = {}) {
         const angle = Math.random() * Math.PI * 2;
@@ -86,7 +86,7 @@ export class EllipseEmitter extends Emitter {
         particle.x = this.x + Math.cos(angle) * this.radiusX * factor;
         particle.y = this.y + Math.sin(angle) * this.radiusY * factor;
 
-        super._initParticle(particle, particleBlueprintOverrides);
+        return super._initParticle(particle, particleBlueprintOverrides);
     }
 
     /**

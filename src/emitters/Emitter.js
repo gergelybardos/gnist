@@ -10,6 +10,7 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  * @import { LineEmitterConfigSpecifics } from './LineEmitter'
  * @import { RectEmitterConfigSpecifics } from './RectEmitter'
  * @import { EllipseEmitterConfigSpecifics } from './EllipseEmitter'
+ * @import { ImageEmitterConfigSpecifics } from './ImageEmitter'
  */
 
 /**
@@ -54,17 +55,25 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  */
 
 /**
- * Callback to retrieve a particle instance from the reusable particles.
+ * Callback that either retrieves a particle from the pool of reusable particles or creates a new one.
  * @ignore
  * @callback AcquireParticleCallback
  * @returns {Particle} Reusable particle instance.
  */
 
 /**
- * Callback to queue a newly emitted particle into the pending particles.
+ * Callback that adds a particle to the internal staging queue.
  * @ignore
  * @callback EnqueueParticleCallback
- * @param {Particle} particle The particle instance.
+ * @param {Particle} particle The particle to be enqueued.
+ * @returns {void}
+ */
+
+/**
+ * Callback that returns a particle to the pool of reusable particles.
+ * @ignore
+ * @callback ReleaseParticleCallback
+ * @param {Particle} particle The particle to be released.
  * @returns {void}
  */
 
@@ -72,8 +81,9 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  * Engine context providing particle acquisition and queueing callbacks.
  * @ignore
  * @typedef {object} EngineContext
- * @property {AcquireParticleCallback} acquireParticle Callback to retrieve a particle instance from the reusable particles.
- * @property {EnqueueParticleCallback} enqueueParticle Callback to queue a newly emitted particle into the pending particles.
+ * @property {AcquireParticleCallback} acquireParticle Callback that either retrieves a particle from the pool of reusable particles or creates a new one.
+ * @property {EnqueueParticleCallback} enqueueParticle Callback that adds a particle to the internal staging queue.
+ * @property {ReleaseParticleCallback} releaseParticle Callback that returns a particle to the pool of reusable particles.
  */
 
 /**
@@ -158,7 +168,7 @@ export class Emitter {
     #scopedForces;
 
     /**
-     * Engine context providing particle acquisition and queueing callbacks.
+     * Engine context providing higher-level engine functionality to lower-level components.
      * @type {EngineContext|null}
      */
     #engineContext = null;
@@ -333,10 +343,16 @@ export class Emitter {
      * @ignore
      * @param {number} dt Time elapsed since the last frame (in seconds).
      * @param {Array<Particle>} particles Reference to the internal collection of active particles in {@link Gnist}.
-     * @param {function(): Particle} acquireParticle Callback to retrieve a particle instance from the reusable particles.
+     * @param {function(): Particle} acquireParticle Callback that either retrieves a particle from the pool of reusable particles or creates a new one.
+     * @param {function(Particle): void} releaseParticle Callback that returns a particle to the pool of reusable particles.
      * @returns {void}
      */
-    update(dt, particles, acquireParticle) {
+    update(
+        dt,
+        particles,
+        acquireParticle,
+        releaseParticle,
+    ) {
         if (!this.#enabled) {
             return;
         }
@@ -355,14 +371,17 @@ export class Emitter {
 
         for (let i = 0; i < particleCount; i++) {
             const particle = acquireParticle();
+            const keepParticle = this._initParticle(particle);
 
-            this._initParticle(particle);
+            if (keepParticle) {
+                particle.visualModifiers = this.#visualModifiers;
+                particle.pathModifiers = this.#pathModifiers;
+                particle.scopedForces = this.#scopedForces;
 
-            particle.visualModifiers = this.#visualModifiers;
-            particle.pathModifiers = this.#pathModifiers;
-            particle.scopedForces = this.#scopedForces;
-
-            particles.push(particle);
+                particles.push(particle);
+            } else {
+                releaseParticle(particle);
+            }
         }
     }
 
@@ -392,18 +411,21 @@ export class Emitter {
             }
         }
 
-        const { acquireParticle, enqueueParticle } = this.#engineContext;
+        const { acquireParticle, enqueueParticle, releaseParticle } = this.#engineContext;
 
         for (let i = 0; i < particleCount; i++) {
             const particle = acquireParticle();
+            const keepParticle = this._initParticle(particle, particleBlueprintOverrides);
 
-            this._initParticle(particle, particleBlueprintOverrides);
+            if (keepParticle) {
+                particle.visualModifiers = this.#visualModifiers;
+                particle.pathModifiers = this.#pathModifiers;
+                particle.scopedForces = this.#scopedForces;
 
-            particle.visualModifiers = this.#visualModifiers;
-            particle.pathModifiers = this.#pathModifiers;
-            particle.scopedForces = this.#scopedForces;
-
-            enqueueParticle(particle);
+                enqueueParticle(particle);
+            } else {
+                releaseParticle(particle);
+            }
         }
 
         for (const key in originalEmitterState) {
@@ -435,7 +457,7 @@ export class Emitter {
      * @ignore
      * @param {Particle} particle Particle instance to initialize.
      * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
-     * @returns {void}
+     * @returns {boolean}
      */
     _initParticle(particle, particleBlueprintOverrides = {}) {
         // Keep this allocation-free as this is a hot path executed for every particle, including sub-emitter particles.
@@ -477,6 +499,8 @@ export class Emitter {
 
         particle.onDeath = particleBlueprintOverrides?.onDeath ?? blueprint.onDeath ?? null;
         particle.onInterval = particleBlueprintOverrides?.onInterval ?? blueprint.onInterval ?? null;
+
+        return true;
     }
 
     /**

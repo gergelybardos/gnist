@@ -57,13 +57,13 @@ export class PointEmitter extends Emitter {
      * @override
      * @param {Particle} particle Particle instance to initialize.
      * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
-     * @returns {void}
+     * @returns {boolean}
      */
     _initParticle(particle, particleBlueprintOverrides = {}) {
         particle.x = this.x;
         particle.y = this.y;
 
-        super._initParticle(particle, particleBlueprintOverrides);
+        return super._initParticle(particle, particleBlueprintOverrides);
     }
 
     /**

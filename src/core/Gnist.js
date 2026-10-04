@@ -67,10 +67,22 @@ export class Gnist {
     #reusableParticles;
 
     /**
-     * Callback used internally to provide particle acquisition for object pooling to other components.
+     * Callback that either retrieves a particle from the pool of reusable particles or creates a new one.
      * @type {function(): Particle}
      */
     #acquireParticleCallback;
+
+    /**
+     * Callback that adds a particle to the internal staging queue.
+     * @type {function(Particle): void}
+     */
+    #enqueueParticleCallback;
+
+    /**
+     * Callback that returns a particle to the pool of reusable particles.
+     * @type {function(Particle): void}
+     */
+    #releaseParticleCallback;
 
     /**
      * Internal state of the optional region used for particle culling.
@@ -90,6 +102,8 @@ export class Gnist {
         this.#pendingParticles = [];
         this.#reusableParticles = [];
         this.#acquireParticleCallback = () => this.#acquireParticle();
+        this.#enqueueParticleCallback = (particle) => this.#enqueueParticle(particle);
+        this.#releaseParticleCallback = (particle) => this.#releaseParticle(particle);
         this.cullingBounds = config.cullingBounds;
     }
 
@@ -168,9 +182,8 @@ export class Gnist {
 
             emitter.bindEngineContext({
                 acquireParticle: this.#acquireParticleCallback,
-                enqueueParticle: (particle) => {
-                    this.#pendingParticles.push(particle);
-                },
+                enqueueParticle: this.#enqueueParticleCallback,
+                releaseParticle: this.#releaseParticleCallback,
             });
         }
 
@@ -290,11 +303,30 @@ export class Gnist {
     }
 
     /**
-     * Retrieves a reusable particle from the pool or creates a new one.
+     * Either retrieves a particle from the pool of reusable particles or creates a new one.
      * @returns {Particle}
      */
     #acquireParticle() {
         return this.#reusableParticles.pop() ?? new Particle();
+    }
+
+    /**
+     * Adds a particle to the internal staging queue.
+     * @param {Particle} particle The particle to be enqueued.
+     * @returns {void}
+     */
+    #enqueueParticle(particle) {
+        this.#pendingParticles.push(particle);
+    }
+
+    /**
+     * Returns a particle to the pool of reusable particles.
+     * @param {Particle} particle The particle to be released.
+     * @returns {void}
+     */
+    #releaseParticle(particle) {
+        particle.reset();
+        this.#reusableParticles.push(particle);
     }
 
     /**
@@ -314,6 +346,7 @@ export class Gnist {
                     dt,
                     particles,
                     this.#acquireParticleCallback,
+                    this.#releaseParticleCallback,
                 );
             }
         }
@@ -332,7 +365,6 @@ export class Gnist {
         const globalForcesCount = globalForces.length;
         const particles = this.#activeParticles;
         const particleCount = particles.length;
-        const reusableParticles = this.#reusableParticles;
         const cullingBounds = this.#cullingBounds;
 
         let aliveCount = 0;
@@ -473,8 +505,7 @@ export class Gnist {
                 }
                 aliveCount++;
             } else {
-                particle.reset();
-                reusableParticles.push(particle);
+                this.#releaseParticle(particle);
             }
         }
 

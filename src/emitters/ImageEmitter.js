@@ -93,7 +93,7 @@ export class ImageEmitter extends Emitter {
      * @override
      * @param {Particle} particle Particle instance to initialize.
      * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
-     * @returns {void}
+     * @returns {boolean}
      */
     _initParticle(particle, particleBlueprintOverrides = {}) {
         const x = Math.random() * this.width;
@@ -123,7 +123,9 @@ export class ImageEmitter extends Emitter {
 
         particle.size = brightness;
 
-        super._initParticle(particle, particleBlueprintOverrides);
+        // TODO: return early and skip init if particle should be rejected due to opacity or color filtering
+
+        return super._initParticle(particle, particleBlueprintOverrides);
     }
 
     /**

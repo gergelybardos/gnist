@@ -74,7 +74,7 @@ export class LineEmitter extends Emitter {
      * @override
      * @param {Particle} particle Particle instance to initialize.
      * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
-     * @returns {void}
+     * @returns {boolean}
      */
     _initParticle(particle, particleBlueprintOverrides = {}) {
         const t = Math.random();
@@ -82,7 +82,7 @@ export class LineEmitter extends Emitter {
         particle.x = this.x1 + (this.x2 - this.x1) * t;
         particle.y = this.y1 + (this.y2 - this.y1) * t;
 
-        super._initParticle(particle, particleBlueprintOverrides);
+        return super._initParticle(particle, particleBlueprintOverrides);
     }
 
     /**
