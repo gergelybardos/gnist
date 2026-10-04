@@ -28,7 +28,7 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
 /**
  * Temporary emitter configuration option overrides for an `emit()` call.
  * Allows overriding emitter-specific geometry (e.g., `x`, `y`, `width`, `height`).
- * @typedef {Partial<PointEmitterConfigSpecifics | LineEmitterConfigSpecifics | RectEmitterConfigSpecifics | EllipseEmitterConfigSpecifics>} EmitterOverrides
+ * @typedef {Partial<PointEmitterConfigSpecifics | LineEmitterConfigSpecifics | RectEmitterConfigSpecifics | EllipseEmitterConfigSpecifics | ImageEmitterConfigSpecifics>} EmitterOverrides
  */
 
 /**
@@ -455,9 +455,9 @@ export class Emitter {
 
         const pColor = particle.color;
         const bColor = particleBlueprintOverrides?.color ?? blueprint.color;
-        pColor.r = Math.max(0, Math.min(255, bColor?.r ?? 255));
-        pColor.g = Math.max(0, Math.min(255, bColor?.g ?? 255));
-        pColor.b = Math.max(0, Math.min(255, bColor?.b ?? 255));
+        pColor.r = Math.max(0, Math.min(255, bColor?.r ?? pColor.r));
+        pColor.g = Math.max(0, Math.min(255, bColor?.g ?? pColor.g));
+        pColor.b = Math.max(0, Math.min(255, bColor?.b ?? pColor.b));
 
         particle.opacity = Math.max(0, Math.min(1, this.#resolveNumber(particleBlueprintOverrides?.opacity ?? blueprint.opacity, particle.opacity)));
 

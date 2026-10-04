@@ -53,7 +53,7 @@ export class LineEmitter extends Emitter {
     y2;
 
     /**
-     * Initializes a line emitter with two endpoints defining a line segment.
+     * Initializes a line emitter.
      * Particles are emitted randomly along the segment using a uniform distribution.
      * @constructor
      * @param {LineEmitterConfig} [config={}] LineEmitter configuration options.

@@ -38,7 +38,7 @@ export class PointEmitter extends Emitter {
     y;
 
     /**
-     * Initializes a point emitter with given coordinates.
+     * Initializes a point emitter.
      * Particles are emitted from the point at the specified coordinates.
      * @constructor
      * @param {PointEmitterConfig} [config={}] PointEmitter configuration options.

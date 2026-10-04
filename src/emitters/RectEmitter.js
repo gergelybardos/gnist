@@ -1,5 +1,5 @@
 import { Particle } from '../core/Particle.js';
-import {EmissionSource} from '../shared/Constants.js';
+import { EmissionSource } from '../shared/Constants.js';
 
 import { Emitter } from './Emitter.js';
 
@@ -53,7 +53,7 @@ export class RectEmitter extends Emitter {
     height;
 
     /**
-     * Initializes a rectangle emitter with given top-left origin coordinates, width, and height.
+     * Initializes a rectangle emitter.
      * Particles are emitted randomly from the rectangular area using a uniform distribution.
      * @constructor
      * @param {RectEmitterConfig} [config={}] RectEmitter configuration options.

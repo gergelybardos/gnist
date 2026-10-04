@@ -53,7 +53,7 @@ export class EllipseEmitter extends Emitter {
     radiusY;
 
     /**
-     * Initializes an ellipse emitter with given coordinates and radius.
+     * Initializes an ellipse emitter.
      * Particles are emitted randomly from the elliptical area using a uniform distribution.
      * @constructor
      * @param {EllipseEmitterConfig} [config={}] EllipseEmitter configuration options.
