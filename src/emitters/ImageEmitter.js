@@ -22,6 +22,7 @@ import { Emitter } from './Emitter.js';
  * @property {number} [width=100] Width of the emission rectangle.
  * @property {number} [height=100] Height of the emission rectangle.
  * @property {ImageData} imageData Image data used to determine particle properties.
+ * @property {number} [opacityThreshold=0] Minimum pixel opacity required for emission (0 to 1).
  */
 
 /**
@@ -68,6 +69,12 @@ export class ImageEmitter extends Emitter {
     imageData;
 
     /**
+     * Minimum pixel opacity required for emission (0 to 1).
+     * @type {number}
+     */
+    opacityThreshold;
+
+    /**
      * Initializes an image-based emitter.
      * Particles are emitted randomly from the rectangular area using a uniform distribution.
      * ImageEmitter always uses {@link EmissionSource.VOLUME} as `emissionSource`.
@@ -84,8 +91,9 @@ export class ImageEmitter extends Emitter {
         this.width = config.width ?? 100;
         this.height = config.height ?? 100;
         this.imageData = config.imageData;
+        this.opacityThreshold = config.opacityThreshold ?? 0;
 
-        this._overridableFields.push('x', 'y', 'width', 'height');
+        this._overridableFields.push('x', 'y', 'width', 'height', 'opacityThreshold');
     }
 
     /**
@@ -113,17 +121,20 @@ export class ImageEmitter extends Emitter {
         const b = data[index + 2];
         const a = data[index + 3];
 
+        const opacity = a / 255;
+
+        if (opacity <= this.opacityThreshold) {
+            return false;
+        }
+
         particle.color.r = r;
         particle.color.g = g;
         particle.color.b = b;
-
-        particle.opacity = a / 255;
+        particle.opacity = opacity;
 
         const brightness = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
 
         particle.size = brightness;
-
-        // TODO: return early and skip init if particle should be rejected due to opacity or color filtering
 
         return super._initParticle(particle, particleBlueprintOverrides);
     }
