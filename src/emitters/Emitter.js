@@ -47,7 +47,7 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
  * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds). Must be a finite number.
  * @property {boolean} [persistent] Flag indicating whether the particle bypasses death at `lifespan`.
- * @property {number} [loopDuration] Duration (in seconds) for age-based modifiers to complete one cycle.
+ * @property {number|number[]} [loopDuration] Duration (in seconds) for age-based modifiers to complete one cycle.
  * @property {string} [loopMode] Determines how particle age is interpreted by modifiers when the particle loops.
  * @property {number|number[]} [interval] Time interval between `onInterval` callback executions (in seconds).
  * @property {ParticleLifecycleCallback} [onDeath] Lifecycle callback executed at particle death.

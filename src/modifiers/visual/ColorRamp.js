@@ -125,9 +125,10 @@ export class ColorRamp extends Modifier {
         const segmentIndex = Math.min(Math.floor(scaledAge), segmentCount - 1);
         const interpolationFactor = scaledAge - segmentIndex;
         const segment = this.#segments[segmentIndex];
+        const brightness = particle.brightness;
 
-        particle.color.r = segment.r + segment.dr * interpolationFactor;
-        particle.color.g = segment.g + segment.dg * interpolationFactor;
-        particle.color.b = segment.b + segment.db * interpolationFactor;
+        particle.color.r = (segment.r + segment.dr * interpolationFactor) * brightness;
+        particle.color.g = (segment.g + segment.dg * interpolationFactor) * brightness;
+        particle.color.b = (segment.b + segment.db * interpolationFactor) * brightness;
     }
 }

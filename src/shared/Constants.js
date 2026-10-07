@@ -4,6 +4,7 @@
  *    FlatParticleDataFormatConstants,
  *    EmissionSourceValues,
  *    LoopModeValues,
+ *    ColorModeValues,
  * } from './Types.js'
  */
 
@@ -47,4 +48,14 @@ export const LoopMode = Object.freeze({
     REPEAT: 'repeat',
     OSCILLATE: 'oscillate',
     HOLD: 'hold',
+});
+
+/**
+ * Constant mapping for ImageEmitter color modes.
+ * For the list of available color modes, see {@link ColorModeValues}.
+ * @type {ColorModeValues}
+ */
+export const ColorMode = Object.freeze({
+    IMAGE: 'image',
+    COLORIZE: 'colorize',
 });

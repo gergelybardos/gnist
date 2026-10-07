@@ -92,6 +92,14 @@ export class Particle {
      */
     opacity;
 
+    /**
+     * Brightness multiplier applied to the particle's color (0.0 to 1.0).
+     * Typically derived from an image source and used internally by visual modifiers.
+     * @ignore
+     * @type {number}
+     */
+    brightness;
+
     // =========================================================================
     // LIFECYCLE STATE & MODIFIER TIMING STATE
     // =========================================================================
@@ -220,6 +228,7 @@ export class Particle {
         this.color.g = 255;
         this.color.b = 255;
         this.opacity = 1.0;
+        this.brightness = 1.0;
 
         this.age = 0;
         this.lifespan = 2;

@@ -51,4 +51,11 @@
  * @returns {void}
  */
 
+/**
+ * Available color modes that determine how pixel colors are applied to particles by an ImageEmitter.
+ * @typedef {object} ColorModeValues
+ * @property {string} IMAGE - Uses the source image pixel color directly.
+ * @property {string} COLORIZE - Uses the source image pixel brightness to modulate the particle color.
+ */
+
 export {};

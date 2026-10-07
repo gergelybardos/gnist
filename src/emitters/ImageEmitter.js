@@ -1,7 +1,12 @@
 import { Particle } from '../core/Particle.js';
-import { EmissionSource } from '../shared/Constants.js';
+import { ColorMode, EmissionSource } from '../shared/Constants.js';
 
 import { Emitter } from './Emitter.js';
+
+
+/**
+ * @import { Color } from '../shared/Types.js'
+ */
 
 /**
  * @import { EmitterConfig, ParticleBlueprint } from './Emitter.js'
@@ -22,7 +27,10 @@ import { Emitter } from './Emitter.js';
  * @property {number} [width=100] Width of the emission rectangle.
  * @property {number} [height=100] Height of the emission rectangle.
  * @property {ImageData} imageData Image data used to determine particle properties.
- * @property {number} [opacityThreshold=0] Minimum pixel opacity required for emission (0 to 1).
+ * @property {number} [opacityThreshold=0] Minimum pixel opacity required for emission (0.0 to 1.0).
+ * @property {Color} [ignoreColor] RGB color to exclude from particle emission.
+ * @property {number} [ignoreColorTolerance=0] Allowed color difference when matching the ignored color (0 to 255).
+ * @property {string} [colorMode] Color mode that determines how pixel colors are applied to particles by an ImageEmitter.
  */
 
 /**
@@ -69,10 +77,28 @@ export class ImageEmitter extends Emitter {
     imageData;
 
     /**
-     * Minimum pixel opacity required for emission (0 to 1).
+     * Minimum pixel opacity required for emission (0.0 to 1.0).
      * @type {number}
      */
     opacityThreshold;
+
+    /**
+     * RGB color to exclude from particle emission.
+     * @type {Color}
+     */
+    ignoreColor;
+
+    /**
+     * Allowed color difference when matching the ignored color (0 to 255).
+     * @type {number}
+     */
+    ignoreColorTolerance;
+
+    /**
+     * Color mode that determines how pixel colors are applied to particles by an ImageEmitter.
+     * @type {string}
+     */
+    colorMode;
 
     /**
      * Initializes an image-based emitter.
@@ -92,6 +118,9 @@ export class ImageEmitter extends Emitter {
         this.height = config.height ?? 100;
         this.imageData = config.imageData;
         this.opacityThreshold = config.opacityThreshold ?? 0;
+        this.ignoreColor = config.ignoreColor;
+        this.ignoreColorTolerance = config.ignoreColorTolerance ?? 0;
+        this.colorMode = config.colorMode ?? ColorMode.IMAGE;
 
         this._overridableFields.push('x', 'y', 'width', 'height', 'opacityThreshold');
     }
@@ -127,16 +156,39 @@ export class ImageEmitter extends Emitter {
             return false;
         }
 
-        particle.color.r = r;
-        particle.color.g = g;
-        particle.color.b = b;
-        particle.opacity = opacity;
+        if (this.ignoreColor) {
+            const ignoreColor = this.ignoreColor;
+            const ignoreTolerance = this.ignoreColorTolerance;
 
+            if (
+                Math.abs(r - ignoreColor.r) <= ignoreTolerance &&
+                Math.abs(g - ignoreColor.g) <= ignoreTolerance &&
+                Math.abs(b - ignoreColor.b) <= ignoreTolerance
+            ) {
+                return false;
+            }
+        }
+
+        // Standard sRGB relative luminance coefficients based on the CIE 1931 colorimetric model.
+        // Green contributes most to perceived brightness, followed by red and then blue.
         const brightness = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
 
-        particle.size = brightness;
+        super._initParticle(particle, particleBlueprintOverrides);
 
-        return super._initParticle(particle, particleBlueprintOverrides);
+        if (this.colorMode === ColorMode.COLORIZE) {
+            particle.color.r *= brightness;
+            particle.color.g *= brightness;
+            particle.color.b *= brightness;
+        } else {
+            particle.color.r = r;
+            particle.color.g = g;
+            particle.color.b = b;
+        }
+
+        particle.opacity = opacity;
+        particle.brightness = brightness;
+
+        return true;
     }
 
     /**
