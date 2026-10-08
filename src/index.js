@@ -6,6 +6,7 @@ export { EllipseEmitter } from './emitters/EllipseEmitter.js';
 export { LineEmitter } from './emitters/LineEmitter.js';
 export { PointEmitter } from './emitters/PointEmitter.js';
 export { RectEmitter } from './emitters/RectEmitter.js';
+export { ImageEmitter } from './emitters/ImageEmitter.js';
 
 export { Force } from './forces/Force.js';
 export { DirectionalForce } from './forces/DirectionalForce.js';
@@ -24,6 +25,7 @@ export { ScaleTween } from './modifiers/visual/ScaleTween.js';
 export { Spin } from './modifiers/visual/Spin.js';
 
 export {
+    ColorMode,
     EmissionSource,
     FlatParticleDataFormat,
     LoopMode,
