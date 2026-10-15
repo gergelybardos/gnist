@@ -3,7 +3,6 @@ import { ColorMode, EmissionSource } from '../shared/Constants.js';
 
 import { Emitter } from './Emitter.js';
 
-
 /**
  * @import { Color } from '../shared/Types.js'
  */

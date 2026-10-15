@@ -113,17 +113,16 @@ export class Vortex extends Force {
             return;
         }
 
-        // Inside dead zone check
+        // Culling radius check
         if (this.cullingRadiusSquared > 0 && distanceSq <= this.cullingRadiusSquared) {
             particle.alive = false;
             if (particle.onDeath) {
                 particle.onDeath(particle);
             }
-
             return;
         }
 
-        // Singularity gate check
+        // Prevent unstable calculations near the center
         if (distanceSq < 0.01) {
             return;
         }

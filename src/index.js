@@ -13,6 +13,7 @@ export { DirectionalForce } from './forces/DirectionalForce.js';
 export { LinearDrag } from './forces/LinearDrag.js';
 export { RadialForce } from './forces/RadialForce.js';
 export { Vortex } from './forces/Vortex.js';
+export { OrbitalForce } from './forces/OrbitalForce.js';
 
 export { Modifier } from './modifiers/Modifier.js';
 export { ElasticAnchor } from './modifiers/path/ElasticAnchor.js';
