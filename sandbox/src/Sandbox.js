@@ -1,6 +1,7 @@
 import {
     ColorMode,
     ColorRamp,
+    DirectionalForce,
     ElasticAnchor,
     EllipseEmitter,
     EmissionSource,
@@ -8,6 +9,7 @@ import {
     Gnist,
     ImageEmitter,
     LineEmitter,
+    LinearDrag,
     LoopMode,
     OpacityFade,
     OrbitalForce,
@@ -23,7 +25,7 @@ import {
 } from './config.js';
 
 const CULLING_BOUNDS_MARGIN = 50;
-const PERFORMANCE_HISTORY_MAX_SIZE = 50;
+const PERFORMANCE_HISTORY_MAX_SIZE = 40;
 const SAMPLE_WINDOW = 100;
 const WARMUP_DURATIONS = 10;
 
@@ -737,11 +739,19 @@ export class Sandbox {
     }
 
     /**
-     * param {string}
-     * param {boolean}
+     * @param {string} [preset='preset_1000']
+     * @param {boolean} [applyModifiers=false]
+     * @param {boolean} [applyForces=false]
      * @returns {void}
      */
-    #initBenchmarkDemo(preset = 'preset_1000', applyModifiers = false) {
+    #initBenchmarkDemo(
+        preset = 'preset_1000',
+        applyModifiers = true,
+        applyForces = true
+    ) {
+        this.#useGradientBackground = false;
+        this.#displayHud = true;
+
         const presets = {
             preset_1000:   [1000,   1.0, 200],
             preset_10000:  [5000,   2.0, 150],
@@ -767,12 +777,12 @@ export class Sandbox {
         });
 
         if (applyModifiers) {
-            const fadeOut = new OpacityFade({
+            const opacityFade = new OpacityFade({
                 startOpacity: 1.0,
                 endOpacity: 0.0,
             });
 
-            const enlarge = new ScaleTween({
+            const scaleTween = new ScaleTween({
                 startScale: 1,
                 endScale: 5,
             });
@@ -786,9 +796,23 @@ export class Sandbox {
                 ],
             });
 
-            lineEmitter.addModifier(fadeOut);
-            lineEmitter.addModifier(enlarge);
+            lineEmitter.addModifier(opacityFade);
+            lineEmitter.addModifier(scaleTween);
             lineEmitter.addModifier(colorRamp);
+        }
+
+        if (applyForces) {
+            const directionalForce = new DirectionalForce({
+                ax: 50,
+                ay: 50,
+            });
+
+            const linearDrag = new LinearDrag({
+                drag: 0.5,
+            });
+
+            lineEmitter.addScopedForce(directionalForce);
+            lineEmitter.addScopedForce(linearDrag);
         }
 
         this.#gnistEngine.addEmitter(lineEmitter);
@@ -1247,26 +1271,26 @@ export class Sandbox {
             : '-';
 
         const rows = [
-            `Gnist version:    ${Gnist.VERSION}`,
-            `User agent:       ${this.#userAgentInfo}`,
+            `Gnist version:     ${Gnist.VERSION}`,
+            `User agent:        ${this.#userAgentInfo}`,
             '',
             'Simulation:',
-            `  Elapsed time:   ${Math.floor(this.#totalSimulationTimeS)} s`,
-            `  Particles:      ${particleCount}`,
+            `  Elapsed time:    ${Math.floor(this.#totalSimulationTimeS)} s`,
+            `  Particles:       ${particleCount}`,
             '',
             'Measurement:',
-            `  Warm-up:        ${WARMUP_DURATIONS} s`,
-            `  Sample window:  ${SAMPLE_WINDOW} frames`,
-            `  Samples:        ${this.#avgUpdateTimeSamples.length}`,
+            `  Warm-up:         ${WARMUP_DURATIONS} s`,
+            `  Sample window:   ${SAMPLE_WINDOW} frames`,
+            `  Recent samples:  ${this.#avgUpdateTimeSamples.length}/${PERFORMANCE_HISTORY_MAX_SIZE}`,
             '',
             'Performance:',
-            `  Avg. update:    ${this.#avgUpdateTimeMs.toFixed(4)} ms`,
-            `  Highest avg.:   ${this.#highestAvgUpdateTimeMs.toFixed(4)} ms`,
-            `  Lowest avg.:    ${lowestAvgUpdateTimeMs}`,
+            `  Avg. update:     ${this.#avgUpdateTimeMs.toFixed(4)} ms`,
+            `  Highest avg.:    ${this.#highestAvgUpdateTimeMs.toFixed(4)} ms`,
+            `  Lowest avg.:     ${lowestAvgUpdateTimeMs}`,
             '',
             'Rendering:',
-            `  Mode:           ${renderMode}`,
-            `  FPS:            ${this.#fps}`,
+            `  Mode:            ${renderMode}`,
+            `  FPS:             ${this.#fps}`,
         ];
 
         this.#overlayCtx.fillText(this.#selectedDemo.name, marginLeft, marginTop);
@@ -1413,7 +1437,7 @@ export class Sandbox {
             `Render mode:                     ${this.#getRenderMode()}`,
             `Particle count:                  ${this.#gnistEngine.particles.length}`,
             `Sample window:                   ${SAMPLE_WINDOW} frames`,
-            `Number of samples:               ${this.#avgUpdateTimeSamples.length}`,
+            `Recent samples:                  ${this.#avgUpdateTimeSamples.length}/${PERFORMANCE_HISTORY_MAX_SIZE}`,
             `Median of average update times:  ${formattedMedianUpdateTime}`,
             '',
             'Note: Update times cover Gnist\'s simulation only; rendering time is excluded.',
