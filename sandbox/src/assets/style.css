@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #141419;
+  font-family: system-ui, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+#demo-nav {
+  display: flex;
+  flex: 0 0 42px;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 2px solid #202531;
+  background: #11141B;
+  color: #9AA0A6;
+  font-size: 13px;
+}
+
+#demo-label {
+  margin-right: 16px;
+  color: #9AA0A6;
+  font-weight: 600;
+}
+
+#demo-list {
+  display: flex;
+  gap: 4px;
+  height: 100%;
+}
+
+#demo-list button {
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: #9AA0A6;
+  font: inherit;
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+#demo-list button:hover,
+#demo-list button.active {
+  color: #D8DCE4;
+}
+
+#demo-list button.active {
+  background: #202531;
+}
+
+#container {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#particle-canvas,
+#overlay-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#overlay-canvas {
+  z-index: 2;
+  background-color: transparent;
+  cursor: crosshair;
+  pointer-events: none;
+}
+
+#particle-canvas {
+  cursor: crosshair;
+  image-rendering: pixelated;
+}
+
+#shortcuts-overlay,
+#footer-overlay {
+  position: absolute;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 36px;
+  padding: 0 16px;
+  color: #9AA0A6;
+  font-size: 12px;
+}
+
+#shortcuts-overlay {
+  top: 0;
+  gap: 36px;
+  opacity: 0.8;
+}
+
+#shortcuts-overlay kbd {
+  display: inline-block;
+  margin: 2px;
+  padding: 2px 5px;
+  border: 1px solid #292e38;
+  border-radius: 3px;
+  background: #15181f;
+  color: #9AA0A6;
+  font: inherit;
+}
+
+#footer-overlay {
+  bottom: 8px;
+  opacity: 0.6;
+}
+
+#footer-overlay span {
+  margin: 2px;
+  padding: 2px 5px;
+}
+
+#footer-overlay a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: #555B66;
+  text-underline-offset: 3px;
+}
+
+#footer-overlay a:hover {
+  text-decoration-color: currentColor;
+}
