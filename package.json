@@ -46,6 +46,8 @@
     "dev": "vite",
     "dev:canvas": "vite --mode canvas",
     "dev:webgl": "vite --mode webgl",
+    "build:sandbox": "vite build --config vite.sandbox.config.js",
+    "preview:sandbox": "vite preview --config vite.sandbox.config.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "types": "tsc",

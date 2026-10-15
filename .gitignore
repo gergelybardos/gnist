@@ -13,8 +13,9 @@ node_modules/
 dist/
 build/
 
-# Generated documentation
+# Generated documentation and live demo
 docs/site/api/
+docs/site/showcase/
 coverage/
 CHANGELOG.raw.md
 
