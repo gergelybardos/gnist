@@ -46,6 +46,7 @@
     "dev": "vite",
     "dev:canvas": "vite --mode canvas",
     "dev:webgl": "vite --mode webgl",
+    "dev:benchmark": "vite --mode benchmark",
     "build:sandbox": "vite build --config vite.sandbox.config.js",
     "preview:sandbox": "vite preview --config vite.sandbox.config.js",
     "lint": "eslint .",
