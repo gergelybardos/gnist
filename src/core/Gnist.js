@@ -36,33 +36,33 @@ export class Gnist {
 
     /**
      * Internal collection of registered emitters.
-     * @type {Array<Emitter>}
+     * @type {Emitter[]}
      */
     #emitters;
 
     /**
      * Internal collection of registered global environmental forces.
-     * @type {Array<Force>}
+     * @type {Force[]}
      */
     #globalForces;
 
     /**
      * Internal collection of active particles.
-     * @type {Array<Particle>}
+     * @type {Particle[]}
      */
     #activeParticles;
 
     /**
      * Internal staging queue of particles created mid-frame during sub-emission.
      * Prevents mid-frame array mutation issues.
-     * @type {Array<Particle>}
+     * @type {Particle[]}
      */
     #pendingParticles;
 
     /**
      * Internal collection of reusable particles.
      * Used for object pooling to reduce the overhead of memory allocation and garbage collection.
-     * @type {Array<Particle>}
+     * @type {Particle[]}
      */
     #reusableParticles;
 
@@ -109,7 +109,7 @@ export class Gnist {
 
     /**
      * Registered emitters emitting active particles.
-     * @type {Array<Emitter>}
+     * @type {Emitter[]}
      */
     get emitters() {
         return this.#emitters;
@@ -117,7 +117,7 @@ export class Gnist {
 
     /**
      * Registered global environmental forces affecting all active particles.
-     * @type {Array<Force>}
+     * @type {Force[]}
      */
     get globalForces() {
         return this.#globalForces;
@@ -125,7 +125,7 @@ export class Gnist {
 
     /**
      * Common pool of active particles.
-     * @type {Array<Particle>}
+     * @type {Particle[]}
      */
     get particles() {
         return this.#activeParticles;

@@ -38,18 +38,18 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  * Options are interpreted either directly or indirectly to derive Particle properties.
  * Most options may be specified as a single number or a [min, max] range array.
  * @typedef {object} ParticleBlueprint
- * @property {number|number[]} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
- * @property {number|number[]} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
- * @property {number|number[]} [rotation] Orientation angle (in radians).
- * @property {number|number[]} [angularVelocity] Angular rotation speed (in radians per second).
- * @property {number|number[]} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
+ * @property {number|number[]|{oneOf: number[]}} [speed] Speed (in pixels per second) used to derive the particle's initial horizontal and vertical velocity.
+ * @property {number|number[]|{oneOf: number[]}} [direction] Movement direction angle (in radians) used to derive the particle's initial horizontal and vertical velocity.
+ * @property {number|number[]|{oneOf: number[]}} [rotation] Orientation angle (in radians).
+ * @property {number|number[]|{oneOf: number[]}} [angularVelocity] Angular rotation speed (in radians per second).
+ * @property {number|number[]|{oneOf: number[]}} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
  * @property {Color} [color] The particle color, defined by individual RGB channels.
- * @property {number|number[]} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
- * @property {number|number[]} [lifespan] Maximum allowed lifespan (in seconds). Must be a finite number.
+ * @property {number|number[]|{oneOf: number[]}} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
+ * @property {number|number[]|{oneOf: number[]}} [lifespan] Maximum allowed lifespan (in seconds). Must be a finite number.
  * @property {boolean} [persistent] Flag indicating whether the particle bypasses death at `lifespan`.
- * @property {number|number[]} [loopDuration] Duration (in seconds) for age-based modifiers to complete one cycle.
+ * @property {number|number[]|{oneOf: number[]}} [loopDuration] Duration (in seconds) for age-based modifiers to complete one cycle.
  * @property {string} [loopMode] Determines how particle age is interpreted by modifiers when the particle loops.
- * @property {number|number[]} [interval] Time interval between `onInterval` callback executions (in seconds).
+ * @property {number|number[]|{oneOf: number[]}} [interval] Time interval between `onInterval` callback executions (in seconds).
  * @property {ParticleLifecycleCallback} [onDeath] Lifecycle callback executed at particle death.
  * @property {ParticleLifecycleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.
  */
@@ -109,7 +109,7 @@ export class Emitter {
     /**
      * List of property names on the emitter instance that can be temporarily overridden.
      * @ignore
-     * @type {Array<string>}
+     * @type {string[]}
      */
     _overridableFields;
 
@@ -151,19 +151,19 @@ export class Emitter {
 
     /**
      * Shared reference to the emitter's visual modifier array.
-     * @type {Array<Modifier>}
+     * @type {Modifier[]}
      */
     #visualModifiers;
 
     /**
      * Shared reference to the emitter's path modifier array.
-     * @type {Array<Modifier>}
+     * @type {Modifier[]}
      */
     #pathModifiers;
 
     /**
      * Shared reference to the emitter's scoped emitter-specific force array.
-     * @type {Array<Force>}
+     * @type {Force[]}
      */
     #scopedForces;
 
@@ -350,7 +350,7 @@ export class Emitter {
      * Updates the emitter's internal timer and enqueues newly emitted particles into the active particles.
      * @ignore
      * @param {number} dt Time elapsed since the last frame (in seconds).
-     * @param {Array<Particle>} particles Reference to the internal collection of active particles in {@link Gnist}.
+     * @param {Particle[]} particles Reference to the internal collection of active particles in {@link Gnist}.
      * @param {function(): Particle} acquireParticle Callback that either retrieves a particle from the pool of reusable particles or creates a new one.
      * @param {function(Particle): void} releaseParticle Callback that returns a particle to the pool of reusable particles.
      * @returns {void}
@@ -544,7 +544,7 @@ export class Emitter {
     /**
      * Resolves an input into a single number.
      * Supports static values, [min, max] ranges, random selection from arrays, and explicit { oneOf: [...] } wrappers.
-     * @param {number|Array<number>|{oneOf: Array<number>}} input Input to resolve.
+     * @param {number|number[]|{oneOf: number[]}} input Input to resolve.
      * @param {number} defaultValue Fallback value if resolution fails.
      * @returns {number} Resolved numeric value.
      */

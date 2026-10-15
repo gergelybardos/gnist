@@ -10,7 +10,7 @@ import { Modifier } from '../Modifier.js';
 /**
  * ColorRamp-specific configuration options.
  * @typedef {object} ColorRampConfigSpecifics
- * @property {Array<Array<number>>} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
+ * @property {number[][]} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
  */
 
 /**
