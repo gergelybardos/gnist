@@ -542,37 +542,45 @@ export class Emitter {
     }
 
     /**
-     * Resolves an input - usually a property - into a single number, picking a random value if a [min, max] range array is provided.
-     * @param {number|Array<number>} value Number or [min, max] range array to resolve.
-     * @param {number} defaultValue Fallback value to use if the property is neither a number nor a valid [min, max] range array.
+     * Resolves an input into a single number.
+     * Supports static values, [min, max] ranges, random selection from arrays, and explicit { oneOf: [...] } wrappers.
+     * @param {number|Array<number>|{oneOf: Array<number>}} input Input to resolve.
+     * @param {number} defaultValue Fallback value if resolution fails.
      * @returns {number} Resolved numeric value.
-     * @throws {Error}
      */
-    #resolveNumber(value, defaultValue) {
-        const ERROR_INFINITE_VALUE = '[Gnist] Infinite numeric values are not supported.';
-
-        if (!Number.isFinite(defaultValue)) {
-            throw new Error(ERROR_INFINITE_VALUE);
+    #resolveNumber(input, defaultValue) {
+        if (typeof input === 'number') {
+            return input;
         }
 
-        if (typeof value === 'number') {
-            if (!Number.isFinite(value)) {
-                throw new Error(ERROR_INFINITE_VALUE);
+        if (Array.isArray(input)) {
+            if (input.length === 2) {
+                const min = input[0];
+                const max = input[1];
+
+                if (typeof min === 'number' && typeof max === 'number') {
+                    return min + Math.random() * (max - min);
+                }
+            } else if (input.length > 0) {
+                const choice = input[Math.floor(Math.random() * input.length)];
+
+                if (typeof choice === 'number') {
+                    return choice;
+                }
             }
 
-            return value;
+            return defaultValue;
         }
 
-        if (Array.isArray(value) && value.length === 2) {
-            const min = value[0];
-            const max = value[1];
+        if (input && typeof input === 'object' && Array.isArray(input.oneOf)) {
+            if (input.oneOf.length === 0) {
+                return defaultValue;
+            }
 
-            if (typeof min === 'number' && typeof max === 'number') {
-                if (!Number.isFinite(min) || !Number.isFinite(max)) {
-                    throw new Error(ERROR_INFINITE_VALUE);
-                }
+            const choice = input.oneOf[Math.floor(Math.random() * input.oneOf.length)];
 
-                return min + Math.random() * (max - min);
+            if (typeof choice === 'number') {
+                return choice;
             }
         }
 
