@@ -328,6 +328,14 @@ export class Emitter {
     }
 
     /**
+     * Pauses or resumes particle emission and internal tracking.
+     * @returns {void}
+     */
+    toggle() {
+        this.#enabled = !this.#enabled;
+    }
+
+    /**
      * Halts particle emission and resets internal tracking.
      * The emitter is deactivated but remains ready to be started again.
      * @returns {void}
