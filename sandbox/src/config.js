@@ -75,7 +75,7 @@ export const Demos = Object.freeze({
         id: 'benchmark',
         name: 'Benchmark',
         public: false,
-        useCullingBounds: true,
+        useCullingBounds: false,
         particleCountLimit: 510000,
         forceRenderMode: RenderModes.WEBGL2,
         features: [],
