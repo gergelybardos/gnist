@@ -25,9 +25,12 @@ The following commands are available for local development and documentation gen
 
 | Command                     | Description                                                                                        |
 |-----------------------------|----------------------------------------------------------------------------------------------------|
-| `npm run dev`               | Same as `npm run dev:canvas`                                                                       |
-| `npm run dev:canvas`        | Start the dev server and the Sandbox demo with Canvas 2D rendering                                 |
-| `npm run dev:webgl`         | Start the dev server and the Sandbox demo with WebGL2 rendering                                    |
+| `npm run dev`               | Same as `npm run dev:webgl`                                                                        |
+| `npm run dev:canvas`        | Start the dev server and the Sandbox with Canvas 2D rendering                                      |
+| `npm run dev:webgl`         | Start the dev server and the Sandbox with WebGL2 rendering                                         |
+| `npm run dev:benchmark`     | Start the dev server and the Sandbox with WebGL2 rendering loading the benchmarking demo           |
+| `npm run build:sandbox`     | Build the Sandbox for static hosting in docs/site/showcase                                         |
+| `npm run preview:sandbox`   | Preview the built Sandbox locally                                                                  |
 | `npm run lint`              | Run ESLint to check the codebase for syntax, style, and formatting issues                          |
 | `npm run lint:fix`          | Automatically fix fixable linting issues                                                           |
 | `npm run types`             | Run the TypeScript compiler to generate type declaration files into the `types/` directory         |

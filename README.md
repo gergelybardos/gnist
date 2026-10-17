@@ -9,6 +9,7 @@
 ## Table of Contents
 
 - [About Gnist](#about-gnist)
+- [Live Showcase](#live-showcase)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Basic Example](#basic-example)
@@ -22,17 +23,27 @@
 
 ## About Gnist
 
-Gnist is a lightweight particle simulation engine.
+Gnist is a lightweight 2D particle simulation engine. Built for real-time particle effects rather than physically accurate simulations, it uses a simplified kinematic model that prioritizes performance. Particles bypass mass and momentum calculations; instead, forces directly influence velocity.
 
-Designed for real-time visual effects rather than physically accurate simulations, it uses a simplified kinematic model that prioritizes performance over strict Newtonian mechanics. Particles bypass mass and momentum calculations; instead, forces directly influence their velocity.
+Gnist performs particle simulations on a single CPU thread. Its performance naturally differs from that of GPU-based particle systems. See [Benchmarks](#benchmarks).
 
-Gnist performs particle simulation calculations on the CPU, relying on single-thread performance.
+**Zero-dependency**
 
-Key characteristics:
+Gnist is written in vanilla JavaScript with no external runtime dependencies. TypeScript support is provided through declaration files.
 
-- **Zero-dependency:** Gnist is written in vanilla JavaScript with no external runtime dependencies. **Full TypeScript support** is provided via declaration files.
-- **Renderer-agnostic:** The engine is decoupled from timing and rendering loops, making it reusable across different runtimes and rendering systems.
-- **Developer-friendly API:** Gnist provides an intuitive, object-oriented, configuration-driven API rather than a data-oriented architecture. Particle data can still be exported as GPU-friendly flat typed arrays for high-performance rendering pipelines.
+**Renderer-agnostic**
+
+The engine decouples simulation from timing and rendering loops, exposing raw state data that can be rendered with Canvas 2D, WebGL, or any custom rendering system. You can even use Gnist directly on web pages and render particles as HTML elements such as `<div>` or `<img>` tags.
+
+Gnist handles particle behavior and lifecycle, while rendering advanced visual effects, such as glow and distortion, remains outside its scope and up to the renderer.
+
+**Developer-friendly API**
+
+Gnist provides an intuitive, object-oriented, configuration-driven API. Particle data can also be exported as GPU-friendly flat typed arrays for efficient rendering.
+
+## Live Showcase
+
+[Explore the demos](https://gergelybardos.github.io/gnist/showcase/index.html) to see Gnist in action.
 
 ## Requirements
 
@@ -51,9 +62,11 @@ npm i @gergelybardos/gnist
 
 ## Basic Example
 
-Gnist is renderer-agnostic; the client is responsible for implementing the main update loop and rendering using their chosen rendering system. The example below shows the minimal code required to run Gnist with Canvas 2D rendering.
+Gnist is renderer-agnostic; the client is responsible for implementing the main update loop and rendering. The example below demonstrates the minimal setup required to run Gnist with Canvas 2D rendering.
 
 > **⚠️ Important:** This example assumes an existing project with module resolution provided by a build tool. If you are starting from scratch, check out the [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) first.
+
+First, create an HTML page with a canvas and load the JavaScript entry point.
 
 ```html
 <!-- index.html -->
@@ -65,6 +78,8 @@ Gnist is renderer-agnostic; the client is responsible for implementing the main 
   </body>
 </html>
 ```
+
+The next step is to create the main loop, which updates the elapsed time and schedules the next frame.
 
 ```javascript
 // main.js
@@ -88,7 +103,9 @@ function loop(currentTime) {
 requestAnimationFrame(loop);
 ```
 
-The complete version looks like this:
+Finally, implement the simulation by importing Gnist, creating an emitter, updating the engine on each frame, and adding the rendering logic.
+
+The complete implementation looks like this:
 
 ```javascript
 // main.js
@@ -144,7 +161,7 @@ This is a minimal example; real applications typically extend it with additional
 
 ## Sandbox
 
-The repository includes a sandbox for experimenting with Gnist and testing rendering integrations. It is intended as a development and demo tool and is not included in the npm package.
+The repository includes a sandbox for experimenting with Gnist. It is intended as a development and demo tool and is not included in the npm package.
 
 To run the sandbox locally:
 
@@ -153,34 +170,34 @@ npm install
 npm run dev
 ```
 
-By default, the sandbox uses Canvas 2D rendering. Use `npm run dev:webgl` for the WebGL version.
+By default, the sandbox uses WebGL2 rendering. Use `npm run dev:canvas` for the Canvas 2D version.
 
 For additional development scripts, see [Contributing Guide](CONTRIBUTING.md).
 
 ## Core Features
 
-- **Flexible emitters:** Create particle sources from common shapes including points, lines, rectangles, and ellipses, with configurable emission behavior.
-- **Composable forces:** Combine environmental forces such as directional force, drag, radial attraction/repulsion, and vortex motion globally or per emitter.
-- **Visual modifiers:** Animate particle appearance over its lifetime with color gradients, opacity transitions, and size interpolation.
+- **Particle emission:** Emit particles from points, lines, rectangles, ellipses, or images, with configurable behavior.
+- **Forces:** Combine directional forces, drag, radial forces, vortex motion, and orbital motion to influence particle movement globally or per-emitter.
+- **Path modifiers:** Add movement patterns such as sine-wave motion, turbulence, and elastic anchoring, alongside forces.
+- **Visual modifiers:** Animate particle appearance over time with color gradients, opacity transitions, scaling, and rotation.
+- **Lifecycle hooks and sub-emissions:** Respond to particle events with custom callbacks and spawn additional particles from existing emitters.
 
 ## Benchmarks
 
-The benchmarks below measure Gnist's CPU-side particle simulation performance only. Since Gnist is renderer-agnostic, rendering performance is not included in the measured times.
+These benchmarks measure Gnist's CPU-side particle simulation performance only. Rendering time is excluded because Gnist is renderer-agnostic.
 
-A minimal WebGL2 renderer was used during testing because offloading rendering work to the GPU leaves more CPU resources available for Gnist's simulation, allowing for significantly higher particle counts.
+A minimal WebGL2 renderer was used to keep rendering overhead low and focus measurements on simulation performance.
 
-Each measurement represents the average simulation update time over 100 frames. Reported values are the median of multiple measurements, with developer tools closed.
+Each reported value is the median of multiple measurements, with each measurement averaging simulation update times over 100 frames. For reference, a 60 FPS target allows 16.67 ms per frame, while a 144 FPS target allows 6.94 ms per frame. These budgets include rendering and other application work.
 
 **Test environment:**
 
 - **CPU:** Intel Core i7-6700 (4 cores, 8 threads @ 3.4 GHz)
 - **GPU:** NVIDIA GeForce RTX 4060 Ti
 - **RAM:** 16 GB
-- **Browser:** Chrome 154
+- **Browser:** Chrome 155
 - **Renderer:** WebGL2
 - **Gnist version:** 0.3.0
-
-> For reference, a 60 FPS target allows 16.67 ms per frame, while a 144 FPS target allows 6.94 ms per frame. These budgets include rendering and other application work.
 
 ### Baseline Scaling
 
@@ -191,10 +208,10 @@ Particle update cost with no forces or modifiers applied.
 
 | Particles | Update time (ms/frame) |
 |-----------|------------------------|
-| 1,000     | ~0.12 ms               |
-| 10,000    | ~0.84 ms               |
-| 50,000    | ~2.81 ms               |
-| 100,000   | ~5.33 ms               |
+| 1,000     | ~0.13 ms               |
+| 10,000    | ~0.79 ms               |
+| 50,000    | ~2.69 ms               |
+| 100,000   | ~5.20 ms               |
 
 ### Feature Cost
 
@@ -205,10 +222,10 @@ Particle update cost with forces and visual modifiers applied.
 
 | Particles | Update time (ms/frame) |
 |-----------|------------------------|
-| 1,000     | ~0.22 ms               |
-| 10,000    | ~1.24 ms               |
-| 50,000    | ~5.10 ms               |
-| 100,000   | ~10.13 ms              |
+| 1,000     | ~0.23 ms               |
+| 10,000    | ~1.75 ms               |
+| 50,000    | ~7.19 ms               |
+| 100,000   | ~14.94 ms              |
 
 ### Stress Test
 
@@ -219,14 +236,14 @@ Performance under an extreme particle count without forces or modifiers.
 
 | Particles | Update time (ms/frame) |
 |-----------|------------------------|
-| 500,000   | ~36.26 ms              |
+| 500,000   | ~35.53 ms              |
 
 ## Documentation
 
-Gnist provides comprehensive resources to help you get started and master the engine:
+Gnist provides comprehensive resources to help you get started and learn how to use the engine:
 
-- [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) — Step-by-step tutorials on how to use Gnist in real projects.
-- [API Reference](https://gergelybardos.github.io/gnist/api/index.html) — Technical specification of the public-facing API, including core classes, components, and configuration interfaces.
+- [How-To Guides](https://gergelybardos.github.io/gnist/guides/index.html) — Step-by-step tutorials for creating and controlling particle behavior with Gnist.
+- [API Reference](https://gergelybardos.github.io/gnist/api/index.html) — Technical specification of the public-facing API.
 
 ## Changelog
 
