@@ -66,40 +66,54 @@
 
             <h2 id="overview-what-is-gnist">What is Gnist?</h2>
 
-            <p>Gnist is a lightweight, easy-to-use 2D particle simulation engine written in vanilla JavaScript with zero dependencies.</p>
+            <p>Gnist is a lightweight 2D particle simulation engine. Built for real-time particle effects rather than physically accurate simulations, it uses a simplified kinematic model that prioritizes performance. Particles bypass mass and momentum calculations; instead, forces directly influence velocity.</p>
 
-            <p>Built for real-time visual effects rather than physically accurate simulation, it uses a simplified kinematic model that prioritizes performance. Forces directly influence particle velocity, bypassing mass and momentum calculations.</p>
+            <p>Gnist performs particle simulations on a single CPU thread. Its performance naturally differs from that of GPU-based particle systems.</p>
 
-            <p>Gnist is renderer-agnostic. It decouples simulation from timing and rendering, exposing raw state data that can be rendered with Canvas 2D, WebGL, or any custom JavaScript runtime.</p>
+            <h3>Zero-dependency</h3>
 
-            <p>While running the simulation on the GPU could improve raw performance, it would also significantly increase API complexity. Gnist instead performs simulation on the CPU, prioritizing a simple and intuitive programming model. The engine is designed around an object-oriented, configuration-driven API, while keeping rendering separate from simulation. For custom rendering pipelines, particle data can still be exported as flat typed arrays for efficient GPU-based rendering.</p>
+            <p>Gnist is written in vanilla JavaScript with no external runtime dependencies. TypeScript support is provided through declaration files.</p>
 
-            <h2 id="overview-architecture-concepts">Architecture Concepts</h2>
+            <h3>Renderer-agnostic</h3>
 
-            <p>The simulation pipeline revolves around four primary building blocks.</p>
+            <p>The engine decouples simulation from timing and rendering loops, exposing raw state data that can be rendered with Canvas 2D, WebGL, or any custom rendering system. You can even use Gnist directly on web pages and render particles as HTML elements such as <code>&lt;div&gt;</code> or <code>&lt;img&gt;</code> tags.</p>
+
+            <p>Gnist handles particle behavior and lifecycle, while rendering advanced visual effects, such as glow and distortion, remains outside its scope and up to the renderer.</p>
+
+            <h3>Developer-friendly API</h3>
+
+            <p>Gnist provides an intuitive, object-oriented, configuration-driven API. Particle data can also be exported as GPU-friendly flat typed arrays for efficient rendering.</p>
+
+            <h2 id="overview-building-blocks">Building Blocks</h2>
+
+            <p>Gnist's simulation pipeline consists of a few core components.</p>
 
             <h4>The Engine</h4>
 
             <p>The central simulation manager. It owns the shared particle pool, updates particle lifecycles, applies forces and modifiers, and advances the simulation frame by frame using a time delta (<var>dt</var>).</p>
 
+            <h4>Particles</h4>
+
+            <p>Particles can have either finite or infinite lifespans. Optional loop duration and loop mode settings control how their modifiers behave over time. Lifecycle hooks, including <code>onDeath</code> and <code>onInterval</code> callbacks, allow code to run at specific points in a particle's lifecycle.
+
             <h4>Emitters</h4>
 
-            <p>Particle generators that spawn particles into the particle pool. Emitters are defined by 2D primitives such as points, lines, rectangles, and ellipses, which determine where particles are born. Configurations and blueprints provide fine-grained control over emission behavior and initial particle properties, with randomized ranges available to create natural variation.</p>
+            <p>Particle generators that spawn particles into the shared particle pool. Emitters are defined by 2D primitives such as points, lines, rectangles, and ellipses, which determine where particles are born. Configurations and blueprints provide fine-grained control over emission behavior and initial particle properties, with randomized values available to create natural variation.</p>
 
             <h4>Forces</h4>
 
-            <p>Environmental influences that directly modify particle velocity over time. Forces can be <strong>global</strong>, affecting every particle in the simulation (such as gravity or wind) or <strong>scoped</strong> to particles emitted by a specific emitter.</p>
+            <p>Environmental influences that directly modify particle velocity over time. Forces can be registered as <strong>global</strong>, affecting every particle in the simulation (such as gravity or wind), or as <strong>scoped</strong> to particles emitted by a specific emitter.</p>
 
             <h4>Modifiers</h4>
 
-            <p>Rules that update particle properties over their lifetime based on their normalized age.</p>
+            <p>Transformations that update particle properties over time based on their normalized age or loop duration. Modifiers affect either particle movement or visual appearance:</p>
 
             <ul>
               <li>
-                <strong>Path Modifiers</strong><span> alter particle trajectories independently of environmental forces.</span>
+                <strong>Path Modifiers</strong><span> introduce additional movement patterns that complement forces.</span>
               </li>
               <li>
-                <strong>Visual Modifiers</strong><span> alter visual properties such as scale, opacity, and color over a particle's lifetime.</span>
+                <strong>Visual Modifiers</strong><span> alter visual properties such as scale, opacity, and color.</span>
               </li>
             </ul>
 
@@ -2596,7 +2610,7 @@
         <nav id="sub-overview" class="sub-toc-group">
           <ul>
             <li><a href="#overview-what-is-gnist">What is Gnist?</a></li>
-            <li><a href="#overview-architecture-concepts">Architecture Concepts</a></li>
+            <li><a href="#overview-building-blocks">Building Blocks</a></li>
           </ul>
         </nav>
 

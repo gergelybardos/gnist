@@ -536,6 +536,7 @@ body.start-page main {
 body.start-page main .logo {
   width: 145px;
   height: 145px;
+  margin: 0 auto 1.25rem;
 }
 
 body.start-page main h1 {
