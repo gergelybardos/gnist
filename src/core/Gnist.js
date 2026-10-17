@@ -124,7 +124,10 @@ export class Gnist {
     }
 
     /**
+     * Read-only.
      * Common pool of active particles.
+     * Note that elements of the returned array are intended for read-only access.
+     * Particle data can be retrieved for rendering, but should not be modified.
      * @type {Particle[]}
      */
     get particles() {

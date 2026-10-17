@@ -1837,7 +1837,7 @@
 
             <p>The <code>particles</code> array provided by <code>Gnist</code> instances exposes particle data as objects, which is convenient for general-purpose usage. However, renderers that communicate directly with the GPU, such as WebGL renderers, typically require particle attributes in flat typed arrays that can be uploaded directly to GPU buffers.</p>
 
-            <p>For this purpose, <code>Gnist</code> instances provide the <code>fillFlatArray()</code> method. It writes the current particle state into a preallocated <code>Float32Array</code> using a fixed layout, removing the need for custom conversion code before uploading the data to the GPU.</p>
+            <p>For this purpose, <code>Gnist</code> instances provide the <code>fillFlatArray()</code> method. It writes the current particle state into a pre-allocated <code>Float32Array</code> using a fixed layout, removing the need for custom conversion code before uploading the data to the GPU. Note that elements of the returned array are intended for read-only access. Particle data can be retrieved for rendering, but should not be modified.</p>
 
             <p>This guide describes the data format of the array returned by <code>fillFlatArray()</code>.</p>
 
