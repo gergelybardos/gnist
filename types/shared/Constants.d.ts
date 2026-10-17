@@ -4,9 +4,10 @@
  *    FlatParticleDataFormatConstants,
  *    EmissionSourceValues,
  *    LoopModeValues,
+ *    ColorModeValues,
  * } from './Types.js'
  */
-import type { ModifierCategoryValues, FlatParticleDataFormatConstants, EmissionSourceValues, LoopModeValues } from './Types.js';
+import type { ModifierCategoryValues, FlatParticleDataFormatConstants, EmissionSourceValues, LoopModeValues, ColorModeValues } from './Types.js';
 /**
  * Constant mapping for modifier categories.
  * For the list of available categories, see {@link ModifierCategoryValues}.
@@ -31,3 +32,9 @@ export declare const FlatParticleDataFormat: FlatParticleDataFormatConstants;
  * @type {LoopModeValues}
  */
 export declare const LoopMode: LoopModeValues;
+/**
+ * Constant mapping for ImageEmitter color modes.
+ * For the list of available color modes, see {@link ColorModeValues}.
+ * @type {ColorModeValues}
+ */
+export declare const ColorMode: ColorModeValues;

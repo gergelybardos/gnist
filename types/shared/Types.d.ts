@@ -65,6 +65,16 @@ export type LoopModeValues = {
     HOLD: string;
 };
 export type ParticleLifecycleCallback = (particle: Particle) => void;
+export type ColorModeValues = {
+    /**
+     * - Uses the source image pixel color directly.
+     */
+    IMAGE: string;
+    /**
+     * - Uses the source image pixel brightness to modulate the particle color.
+     */
+    COLORIZE: string;
+};
 /**
  * Represents the color state of a particle. RGB color channels are stored independently for efficient interpolation.
  * @typedef {object} Color
@@ -107,5 +117,11 @@ export type ParticleLifecycleCallback = (particle: Particle) => void;
  * @callback ParticleLifecycleCallback
  * @param {Particle} particle The particle instance.
  * @returns {void}
+ */
+/**
+ * Available color modes that determine how pixel colors are applied to particles by an ImageEmitter.
+ * @typedef {object} ColorModeValues
+ * @property {string} IMAGE - Uses the source image pixel color directly.
+ * @property {string} COLORIZE - Uses the source image pixel brightness to modulate the particle color.
  */
 export {};

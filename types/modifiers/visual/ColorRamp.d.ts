@@ -5,7 +5,7 @@ export type ColorRampConfigSpecifics = {
     /**
      * Array of RGB color arrays.
      */
-    colors?: Array<Array<number>>;
+    colors?: number[][];
 };
 export type ColorRampConfig = ModifierConfig & ColorRampConfigSpecifics;
 /**
@@ -14,7 +14,7 @@ export type ColorRampConfig = ModifierConfig & ColorRampConfigSpecifics;
 /**
  * ColorRamp-specific configuration options.
  * @typedef {object} ColorRampConfigSpecifics
- * @property {Array<Array<number>>} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
+ * @property {number[][]} [colors=[[255, 255, 255], [0, 0, 0]]] Array of RGB color arrays.
  */
 /**
  * ColorRamp configuration options.

@@ -63,7 +63,7 @@ export declare class LineEmitter extends Emitter {
      */
     y2: number;
     /**
-     * Initializes a line emitter with two endpoints defining a line segment.
+     * Initializes a line emitter.
      * Particles are emitted randomly along the segment using a uniform distribution.
      * @constructor
      * @param {LineEmitterConfig} [config={}] LineEmitter configuration options.
@@ -74,9 +74,9 @@ export declare class LineEmitter extends Emitter {
      * @override
      * @param {Particle} particle Particle instance to initialize.
      * @param {ParticleBlueprint} [particleBlueprintOverrides = {}] Temporary overrides for the particle blueprint.
-     * @returns {void}
+     * @returns {boolean}
      */
-    _initParticle(particle: Particle, particleBlueprintOverrides?: ParticleBlueprint): void;
+    _initParticle(particle: Particle, particleBlueprintOverrides?: ParticleBlueprint): boolean;
     /**
      * Calculates the default emission direction angle based on the emitter geometry and emission source mode.
      * @override

@@ -9,7 +9,6 @@ import type { Color, ParticleLifecycleCallback } from '../shared/Types.js';
  * @class
  */
 export declare class Particle {
-    #private;
     /**
      * Horizontal coordinate.
      * @type {number}
@@ -72,6 +71,13 @@ export declare class Particle {
      */
     opacity: number;
     /**
+     * Brightness multiplier applied to the particle's color (0.0 to 1.0).
+     * Typically derived from an image source and used internally by visual modifiers.
+     * @ignore
+     * @type {number}
+     */
+    brightness: number;
+    /**
      * Time elapsed since the particle was emitted (in seconds).
      * @type {number}
      */
@@ -109,6 +115,12 @@ export declare class Particle {
      */
     interval: number;
     /**
+     * Accumulator tracking time until the next `onInterval` execution (in seconds).
+     * @ignore
+     * @type {number}
+     */
+    intervalTimer: number;
+    /**
      * Lifecycle callback executed at particle death.
      * @type {ParticleLifecycleCallback}
      */
@@ -121,19 +133,19 @@ export declare class Particle {
     onInterval: ParticleLifecycleCallback;
     /**
      * Shared reference to the owner emitter's visual modifier array.
-     * @type {Array<Modifier>|null}
+     * @type {Modifier[]|null}
      */
-    visualModifiers: Array<Modifier> | null;
+    visualModifiers: Modifier[] | null;
     /**
      * Shared reference to the owner emitter's path modifier array.
-     * @type {Array<Modifier>|null}
+     * @type {Modifier[]|null}
      */
-    pathModifiers: Array<Modifier> | null;
+    pathModifiers: Modifier[] | null;
     /**
      * Shared reference to the owner emitter's scoped emitter-specific force array.
-     * @type {Array<Force>|null}
+     * @type {Force[]|null}
      */
-    scopedForces: Array<Force> | null;
+    scopedForces: Force[] | null;
     /**
      * Initializes a blank, inactive particle.
      * @constructor
@@ -146,15 +158,7 @@ export declare class Particle {
      */
     reset(): void;
     /**
-     * Periodically triggers the `onInterval` hook.
-     * @ignore
-     * @param {number} dt Time elapsed since the last frame (in seconds).
-     * @returns {void}
-     */
-    update(dt: number): void;
-    /**
      * Marks the particle as dead and eligible for pool recycling, triggers the `onDeath` hook.
-     * @ignore
      * @returns {void}
      */
     kill(): void;
