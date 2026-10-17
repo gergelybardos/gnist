@@ -33,12 +33,6 @@ body {
   font-size: 13px;
 }
 
-#demo-label {
-  margin-right: 16px;
-  color: #9AA0A6;
-  font-weight: 600;
-}
-
 #demo-list {
   display: flex;
   gap: 4px;
