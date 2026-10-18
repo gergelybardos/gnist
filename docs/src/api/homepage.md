@@ -1,18 +1,16 @@
 # Gnist API Reference
 
-Welcome to the technical reference for the Gnist API.
+## Version Information
 
----
+This reference documents the **latest stable version** of Gnist (**v0.3.0**). Previous versions are not documented online. See the [CHANGELOG](https://github.com/gergelybardos/gnist/blob/main/CHANGELOG.md) for release history.
 
-## Important Information
+## Scope
 
-- **Versioning:** This reference documents the **current stable version** of Gnist. Documentation for previous versions is not kept online. Version history is available through Git tags and the project's `CHANGELOG.md`.
-- **Scope:** This reference covers only the **public-facing API** of Gnist. Symbols that are not intended for use by application code are intentionally omitted.
+This reference documents the **public API** of Gnist. Symbols that are not intended for use by application code are intentionally omitted.
 
----
+## Related Resources
 
-## Getting Started
-
-Use the sidebar to browse the available classes, interfaces, global types, and constants.
-
----
+- [Guides](https://gergelybardos.github.io/gnist/guides/index.html)
+- [Showcase](https://gergelybardos.github.io/gnist/showcase/index.html)
+- [GitHub](https://github.com/gergelybardos/gnist)
+- [npm](https://www.npmjs.com/package/@gergelybardos/gnist)
