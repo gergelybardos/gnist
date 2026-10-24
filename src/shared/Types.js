@@ -36,7 +36,7 @@
  */
 
 /**
- * Available particle loop modes that determine how particle age is interpreted by modifiers.
+ * Available particle loop modes that determine how modifier progress behaves when a particle loops.
  * @typedef {object} LoopModeValues
  * @property {string} REPEAT - Resets modifier progress to the beginning when the particle loops.
  * @property {string} OSCILLATE - Alternates modifier progress between forward and reverse when the particle loops.

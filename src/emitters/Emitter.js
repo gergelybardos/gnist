@@ -45,10 +45,10 @@ import { ModifierCategory, EmissionSource } from '../shared/Constants.js';
  * @property {number|number[]|{oneOf: number[]}} [size] The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.
  * @property {Color} [color] The particle color, defined by individual RGB channels.
  * @property {number|number[]|{oneOf: number[]}} [opacity] Transparency (0.0 = fully transparent, 1.0 = fully opaque).
- * @property {number|number[]|{oneOf: number[]}} [lifespan] Maximum allowed lifespan (in seconds). Must be a finite number.
+ * @property {number|number[]|{oneOf: number[]}} [lifespan] Maximum lifespan (in seconds) of non-persistent particles. Must be a finite number.
  * @property {boolean} [persistent] Flag indicating whether the particle bypasses death at `lifespan`.
  * @property {number|number[]|{oneOf: number[]}} [loopDuration] Duration (in seconds) for age-based modifiers to complete one cycle.
- * @property {string} [loopMode] Determines how particle age is interpreted by modifiers when the particle loops.
+ * @property {string} [loopMode] Determines how modifier progress behaves when a particle loops.
  * @property {number|number[]|{oneOf: number[]}} [interval] Time interval between `onInterval` callback executions (in seconds).
  * @property {ParticleLifecycleCallback} [onDeath] Lifecycle callback executed at particle death.
  * @property {ParticleLifecycleCallback} [onInterval] Lifecycle callback executed periodically at particle update. The interval is specified by the `interval` property.

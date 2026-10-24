@@ -1,5 +1,5 @@
 const DEFAULT_PAGE = 'overview';
-const DEFAULT_TITLE = 'Gnist Guide';
+const DEFAULT_TITLE = 'Gnist Guides';
 
 function getActivePageFromHash() {
     const hash = window.location.hash.replace('#', '');
