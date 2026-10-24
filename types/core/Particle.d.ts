@@ -83,7 +83,7 @@ export declare class Particle {
      */
     age: number;
     /**
-     * Maximum allowed lifespan baseline (in seconds). Must be a finite number.
+     * Maximum lifespan (in seconds) of non-persistent particles. Must be a finite number.
      * @type {number}
      */
     lifespan: number;
