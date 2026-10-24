@@ -1,8 +1,9 @@
 {
   "name": "@gergelybardos/gnist",
   "version": "0.2.0",
-  "description": "Lightweight, renderer-agnostic particle simulation engine built with vanilla JavaScript for real-time visual effects",
+  "description": "Lightweight, renderer-agnostic 2D particle simulation engine built with vanilla JavaScript for real-time visual effects",
   "keywords": [
+    "2d",
     "animation",
     "canvas",
     "esm",
@@ -16,7 +17,7 @@
     "visual-effects",
     "webgl"
   ],
-  "author": "Gergely BÁRDOS (https://github.com/gergelybardos)",
+  "author": "Gergely Bárdos (https://github.com/gergelybardos)",
   "license": "MIT",
   "homepage": "https://github.com/gergelybardos/gnist#readme",
   "repository": {
