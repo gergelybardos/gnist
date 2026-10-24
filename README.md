@@ -10,11 +10,11 @@
 
 - [About Gnist](#about-gnist)
 - [Live Showcase](#live-showcase)
+- [Core Features](#core-features)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Basic Example](#basic-example)
 - [Sandbox](#sandbox)
-- [Core Features](#core-features)
 - [Benchmarks](#benchmarks) 
 - [Documentation](#documentation)
 - [Changelog](#changelog)
@@ -33,7 +33,7 @@ Gnist is written in vanilla JavaScript with no external runtime dependencies. Ty
 
 **Renderer-agnostic**
 
-The engine decouples simulation from timing and rendering loops, exposing raw state data that can be rendered with Canvas 2D, WebGL, or any custom rendering system. You can even use Gnist directly on web pages and render particles as HTML elements such as `<div>` or `<img>` tags.
+The engine decouples simulation from timing and rendering loops, exposing raw state data that can be rendered with Canvas 2D, WebGL, or any custom rendering system. You can even use Gnist directly on web pages and render particles as HTML elements.
 
 Gnist handles particle behavior and lifecycle, while rendering advanced visual effects, such as glow and distortion, remains outside its scope and up to the renderer.
 
@@ -44,6 +44,14 @@ Gnist provides an intuitive, object-oriented, configuration-driven API. Particle
 ## Live Showcase
 
 [Explore the demos](https://gergelybardos.github.io/gnist/showcase/index.html) to see Gnist in action.
+
+## Core Features
+
+- **Particle emission:** Emit particles from 2D primitives or images, with configurable emission behavior and initial particle properties.
+- **Forces:** Combine directional forces, drag, radial forces, vortex motion, and orbital motion to influence particle movement, with support for global and emitter-specific forces.
+- **Path modifiers:** Add movement patterns such as wave, turbulence, and elastic anchoring to complement forces.
+- **Visual modifiers:** Alter particle appearance over time with color gradients, opacity transitions, scaling, and rotation.
+- **Event-driven emission:** Run custom logic in response to particle events and trigger additional emissions programmatically.
 
 ## Requirements
 
@@ -173,14 +181,6 @@ npm run dev
 By default, the sandbox uses WebGL2 rendering. Use `npm run dev:canvas` for the Canvas 2D version.
 
 For additional development scripts, see [Contributing Guide](CONTRIBUTING.md).
-
-## Core Features
-
-- **Particle emission:** Emit particles from points, lines, rectangles, ellipses, or images, with configurable behavior.
-- **Forces:** Combine directional forces, drag, radial forces, vortex motion, and orbital motion to influence particle movement globally or per-emitter.
-- **Path modifiers:** Add movement patterns such as sine-wave motion, turbulence, and elastic anchoring, alongside forces.
-- **Visual modifiers:** Animate particle appearance over time with color gradients, opacity transitions, scaling, and rotation.
-- **Lifecycle hooks and sub-emissions:** Respond to particle events with custom callbacks and spawn additional particles from existing emitters.
 
 ## Benchmarks
 
