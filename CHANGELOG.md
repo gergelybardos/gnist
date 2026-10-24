@@ -31,7 +31,7 @@
 
 ### Documentation
 
-- Added a comprehensive how-to guide with step-by-step tutorials and practical examples covering Gnist concepts and usage.
+- Added comprehensive how-to guides with step-by-step tutorials and practical examples covering Gnist concepts and usage.
 - Added new sections to `README.md`: Sandbox, Benchmark, and Changelog.
 
 ## 0.1.1 (2026-07-01)
