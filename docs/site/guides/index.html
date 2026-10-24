@@ -685,7 +685,6 @@
                 <thead>
                   <tr>
                     <th>Configuration Property</th>
-                    <th>Type</th>
                     <th>Default</th>
                     <th>Instance Property</th>
                     <th>Description</th>
@@ -694,42 +693,36 @@
                 <tbody>
                   <tr>
                     <td><code>id</code></td>
-                    <td><code>string</code></td>
                     <td>Auto-generated UUID</td>
                     <td>readonly</td>
                     <td>A unique identifier for the emitter.</td>
                   </tr>
                   <tr>
                     <td><code>enabled</code></td>
-                    <td><code>boolean</code></td>
                     <td><code>true</code></td>
                     <td>readonly</td>
                     <td>Whether the emitter is currently active.</td>
                   </tr>
                   <tr>
                     <td><code>particlesPerSecond</code></td>
-                    <td><code>number</code></td>
                     <td><code>100</code></td>
                     <td>✔</td>
                     <td>The number of particles to emit per second.</td>
                   </tr>
                   <tr>
                     <td><code>duration</code></td>
-                    <td><code>number</code></td>
                     <td><code>Infinity</code></td>
                     <td>-</td>
                     <td>The duration of the emitter's emission in seconds, or <code>Infinity</code> for infinite emission.</td>
                   </tr>
                   <tr>
                     <td><code>emissionSource</code></td>
-                    <td><code>EmissionSource</code></td>
                     <td><code>EmissionSource.VOLUME</code></td>
                     <td>✔</td>
                     <td>The emission source mode of particles within the emitter's shape.</td>
                   </tr>
                   <tr>
                     <td><code>particleBlueprint</code></td>
-                    <td><code>object</code></td>
                     <td><code>{}</code></td>
                     <td>-</td>
                     <td>The blueprint used to define the initial properties of emitted particles.</td>
@@ -744,7 +737,7 @@
 
             <p>The <code>particleBlueprint</code> property of the emitter configuration object holds an object used by emitters to initialize particle properties at emission.</p>
 
-            <p>Numeric properties of the blueprint - except for <code>color</code> - are evaluated for each particle and can be specified as a single value, a range, or a list of possible values:</p>
+            <p>Numeric properties of the blueprint — except for <code>color</code> — are evaluated for each particle and can be specified as a single value, a range, or a list of possible values:</p>
 
             <ul>
               <li><code>x</code> — Every particle uses <code>x</code> as its property value.</li>
@@ -760,7 +753,6 @@
                 <thead>
                   <tr>
                     <th>Property</th>
-                    <th>Type</th>
                     <th>Default</th>
                     <th>Description</th>
                   </tr>
@@ -768,85 +760,71 @@
                 <tbody>
                   <tr>
                     <td><code>rotation</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Orientation angle (in radians).</td>
                   </tr>
                   <tr>
                     <td><code>angularVelocity</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Angular rotation speed (in radians per second).</td>
                   </tr>
                   <tr>
                     <td><code>size</code></td>
-                    <td><code>number</code></td>
                     <td><code>1</code></td>
                     <td>The visual size or scale factor. Interpreted by the renderer as pixels, radius, or a transform scale.</td>
                   </tr>
                   <tr>
                     <td><code>color</code></td>
-                    <td><code>object</code></td>
-                    <td><code>{ r: 255, g: 255, b: 255 }</code></td>
+                    <td><code>{ r:255, g:255, b:255 }</code></td>
                     <td>The particle color, defined by individual RGB channels.</td>
                   </tr>
                   <tr>
                     <td><code>opacity</code></td>
-                    <td><code>number</code></td>
                     <td><code>1</code></td>
                     <td>The visual opacity, from 0.0 (fully transparent) to 1.0 (fully opaque).</td>
                   </tr>
                   <tr>
                     <td><code>speed</code></td>
-                    <td><code>number</code></td>
                     <td><code>1</code></td>
                     <td>Speed (in pixels per second), used to derive the particle's initial horizontal and vertical velocity.</td>
                   </tr>
                   <tr>
                     <td><code>direction</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Movement direction angle (in radians), used to derive the particle's initial horizontal and vertical velocity.</td>
                   </tr>
                   <tr>
                     <td><code>persistent</code></td>
-                    <td><code>boolean</code></td>
                     <td><code>false</code></td>
                     <td>Flag indicating whether the particle bypasses death at <code>lifespan</code>.</td>
                   </tr>
                   <tr>
                     <td><code>lifespan</code></td>
-                    <td><code>number</code></td>
                     <td><code>1</code></td>
                     <td>Maximum lifespan (in seconds) of non-persistent particles.</td>
                   </tr>
                   <tr>
                     <td><code>loopDuration</code></td>
-                    <td><code>number</code></td>
-                    <td>Defaults to whatever <code>lifespan</code> was set.</td>
+                    <td>Defaults to the value set for <code>lifespan</code>.</td>
                     <td>Duration (in seconds) for age-based modifiers to complete one cycle.</td>
                   </tr>
                   <tr>
                     <td><code>loopMode</code></td>
-                    <td><code>LoopMode</code></td>
                     <td><code>LoopMode.HOLD</code></td>
                     <td>Determines how particle age is interpreted by modifiers when the particle loops.</td>
                   </tr>
                   <tr>
                     <td><code>interval</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Time interval between <code>onInterval</code> callback executions (in seconds).</td>
                   </tr>
                   <tr>
                     <td><code>onInterval</code></td>
-                    <td><code>callback</code></td>
                     <td><code>null</code></td>
                     <td>Lifecycle callback executed periodically at particle update.</td>
                   </tr>
                   <tr>
                     <td><code>onDeath</code></td>
-                    <td><code>callback</code></td>
                     <td><code>null</code></td>
                     <td>Lifecycle callback executed at particle death.</td>
                   </tr>
@@ -918,7 +896,7 @@
 
             <p>The <code>particleBlueprint.direction</code> property of an emitter configuration object overrides the default emission direction determined by the emitter type (shape) and the selected emission source mode.</p>
 
-            <p>Note that <code>direction</code> can be specified either as a single value or as a <code>[min, max]</code> range, allowing particles to be emitted in a range of directions rather than a single one. This can produce less uniform and more natural-looking movement. Below are some examples that illustrate the difference.</p>
+            <p>As described in <a href="#emitters-particle-blueprint">Particle Blueprint</a>, blueprint properties — including <code>direction</code> — can be specified not only as a single value, but also as a range, or a list of possible values, allowing particles to be emitted in a range of directions.</p>
 
             <div class="table-container">
               <table>
@@ -1234,7 +1212,6 @@
                 <thead>
                   <tr>
                     <th>Property</th>
-                    <th>Type</th>
                     <th>Default</th>
                     <th>Description</th>
                   </tr>
@@ -1242,13 +1219,11 @@
                 <tbody>
                   <tr>
                     <td><code>ax</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Horizontal acceleration component (pixels per second²). Positive values accelerate particles to the right, negative values to the left.</td>
                   </tr>
                   <tr>
                     <td><code>ay</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Vertical acceleration component (pixels per second²). Positive values accelerate particles downward, negative values upward.</td>
                   </tr>
@@ -1288,7 +1263,6 @@
                 <thead>
                   <tr>
                     <th>Property</th>
-                    <th>Type</th>
                     <th>Default</th>
                     <th>Description</th>
                   </tr>
@@ -1296,7 +1270,6 @@
                 <tbody>
                   <tr>
                     <td><code>drag</code></td>
-                    <td><code>number</code></td>
                     <td><code>0.99</code></td>
                     <td>Friction coefficient where <code>0</code> means no drag and higher values slow particles down faster.</td>
                   </tr>
@@ -1338,7 +1311,6 @@
                 <thead>
                   <tr>
                     <th>Property</th>
-                    <th>Type</th>
                     <th>Default</th>
                     <th>Description</th>
                   </tr>
@@ -1346,31 +1318,26 @@
                 <tbody>
                   <tr>
                     <td><code>x</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Horizontal coordinate of the force center.</td>
                   </tr>
                   <tr>
                     <td><code>y</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Vertical coordinate of the force center.</td>
                   </tr>
                   <tr>
                     <td><code>strength</code></td>
-                    <td><code>number</code></td>
                     <td><code>50000</code></td>
                     <td>Magnitude of the force. Positive values create attraction, negative values create repulsion.</td>
                   </tr>
                   <tr>
                     <td><code>epsilon</code></td>
-                    <td><code>number</code></td>
                     <td><code>10</code></td>
                     <td>Smoothing factor that prevents extreme acceleration values when particles are close to the force center. Only the squared epsilon is stored internally and exposed as <code>epsilonSquared</code>.</td>
                   </tr>
                   <tr>
                     <td><code>cullingRadius</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Distance from the force center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Only the squared radius is stored internally and exposed as <code>cullingRadiusSquared</code>.</td>
                   </tr>
@@ -1424,7 +1391,6 @@
                 <thead>
                   <tr>
                     <th>Property</th>
-                    <th>Type</th>
                     <th>Default</th>
                     <th>Description</th>
                   </tr>
@@ -1432,37 +1398,31 @@
                 <tbody>
                   <tr>
                     <td><code>x</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Horizontal coordinate of the vortex center.</td>
                   </tr>
                   <tr>
                     <td><code>y</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Vertical coordinate of the vortex center.</td>
                   </tr>
                   <tr>
                     <td><code>rotationSpeed</code></td>
-                    <td><code>number</code></td>
                     <td><code>100</code></td>
                     <td>Strength of the rotational force. Positive values rotate clockwise, negative values rotate counter-clockwise.</td>
                   </tr>
                   <tr>
                     <td><code>suctionSpeed</code></td>
-                    <td><code>number</code></td>
                     <td><code>50</code></td>
                     <td>Strength of the radial attraction/repulsion. Positive values pull inward, negative values push outward.</td>
                   </tr>
                   <tr>
                     <td><code>radius</code></td>
-                    <td><code>number</code></td>
                     <td><code>Infinity</code></td>
                     <td>Radius of influence. Particles outside this distance are unaffected.</td>
                   </tr>
                   <tr>
                     <td><code>cullingRadius</code></td>
-                    <td><code>number</code></td>
                     <td><code>0</code></td>
                     <td>Distance from the vortex center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Stored internally and exposed as <code>epsilon</code> and as a squared value as <code>epsilonSquared</code>.</td>
                   </tr>
