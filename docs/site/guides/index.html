@@ -159,9 +159,9 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-<pre><code><span class="name">mkdir</span> <span class="attr">example-simulation</span>
-<span class="name">cd</span> <span class="attr">example-simulation</span>
-<span class="name">npm</span> <span class="kw">init</span></code></pre>
+<pre><code><span class="name">mkdir</span> <span class="arg">example-simulation</span>
+<span class="name">cd</span> <span class="arg">example-simulation</span>
+<span class="name">npm</span> <span class="name">init</span></code></pre>
             </div>
 
             <p>When prompted, set the package type to <code>module</code>. CommonJS projects are not supported.</p>
@@ -174,7 +174,7 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="name">npm</span> <span class="kw">i</span> <span class="attr">--save-dev</span> <span class="str">vite</span></code></pre>
+              <pre><code><span class="name">npm</span> <span class="name">i</span> <span class="attr">--save-dev</span> <span class="arg">vite</span></code></pre>
             </div>
 
             <p>Then add the start script to <code>package.json</code>:</p>
@@ -194,7 +194,7 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="name">npm</span> <span class="kw">i</span> <span class="attr">@gergelybardos/gnist</span></code></pre>
+              <pre><code><span class="name">npm</span> <span class="name">i</span> <span class="arg">@gergelybardos/gnist</span></code></pre>
             </div>
 
             <h2 id="yfpe-creating-the-application-skeleton">Creating the Application Skeleton</h2>
@@ -210,7 +210,7 @@
   <span class="punct">&lt;</span><span class="tag">head</span><span class="punct">&gt;</span>
     <span class="punct">&lt;</span><span class="tag">meta</span> <span class="attr">charset</span><span class="punct">=</span><span class="str">"UTF-8"</span><span class="punct">&gt;</span>
     <span class="punct">&lt;</span><span class="tag">meta</span> <span class="attr">name</span><span class="punct">=</span><span class="str">"viewport"</span> <span class="attr">content</span><span class="punct">=</span><span class="str">"width=device-width, initial-scale=1.0"</span><span class="punct">&gt;</span>
-    <span class="punct">&lt;</span><span class="tag">title</span><span class="punct">&gt;</span>Example Simulation<span class="punct">&lt;/</span><span class="tag">title</span><span class="punct">&gt;</span>
+    <span class="punct">&lt;</span><span class="tag">title</span><span class="punct">&gt;</span><span class="lit">Example Simulation</span><span class="punct">&lt;/</span><span class="tag">title</span><span class="punct">&gt;</span>
   <span class="punct">&lt;/</span><span class="tag">head</span><span class="punct">&gt;</span>
   <span class="punct">&lt;</span><span class="tag">body</span><span class="punct">&gt;</span>
     <span class="punct">&lt;</span><span class="tag">canvas</span> <span class="attr">id</span><span class="punct">=</span><span class="str">"canvas"</span><span class="punct">&gt;&lt;/</span><span class="tag">canvas</span><span class="punct">&gt;</span>
@@ -247,7 +247,7 @@
   <span class="kw">const</span> <span class="name">dt</span> <span class="punct">=</span> <span class="punct">(</span><span class="name">currentTime</span> <span class="punct">-</span> <span class="name">lastTime</span><span class="punct">)</span> <span class="punct">/</span> <span class="lit">1000</span><span class="punct">;</span>
   <span class="name">lastTime</span> <span class="punct">=</span> <span class="name">currentTime</span><span class="punct">;</span>
 
-  <span class="name">engine</span><span class="punct">.</span><span class="title">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">);</span>
+  <span class="name">engine</span><span class="punct">.</span><span class="name">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">);</span>
 
   <span class="comm">// Render particles</span>
 <span class="punct">}</span>
@@ -282,7 +282,7 @@
     <span class="name">xMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
     <span class="name">yMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
     <span class="name">xMax</span><span class="punct">:</span> <span class="lit">800</span><span class="punct">,</span>
-    <span class="name">yMax</span><span class="punct">:</span> <span class="lit">600</span>
+    <span class="name">yMax</span><span class="punct">:</span> <span class="lit">600</span><span class="punct">,</span>
   <span class="punct">}</span>
 <span class="punct">});</span></code></pre>
             </div>
@@ -296,25 +296,25 @@
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="name">ctx</span><span class="punct">.</span><span class="name">fillStyle</span> <span class="punct">=</span> <span class="str">'#171228'</span><span class="punct">;</span>
-<span class="name">ctx</span><span class="punct">.</span><span class="title">fillRect</span><span class="punct">(</span><span class="num">0</span><span class="punct">,</span> <span class="num">0</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span><span class="punct">);</span>
+<span class="name">ctx</span><span class="punct">.</span><span class="name">fillRect</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span><span class="punct">);</span>
 
-<span class="kwd">const</span> <span class="name">particles</span> <span class="punct">=</span> <span class="name">engine</span><span class="punct">.</span><span class="name">particles</span><span class="punct">;</span>
-<span class="kwd">for</span> <span class="punct">(</span><span class="kwd">let</span> <span class="name">i</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">;</span> <span class="name">i</span> <span class="punct">&lt;</span> <span class="name">particles</span><span class="punct">.</span><span class="name">length</span><span class="punct">;</span> <span class="name">i</span><span class="punct">++) {</span>
-    <span class="kwd">const</span> <span class="name">p</span> <span class="punct">=</span> <span class="name">particles</span><span class="punct">[</span><span class="name">i</span><span class="punct">];</span>
-    <span class="kwd">const</span> <span class="punct">{</span> <span class="name">r</span><span class="punct">,</span> <span class="name">g</span><span class="punct">,</span> <span class="name">b</span> <span class="punct">}</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">;</span>
-    <span class="kwd">const</span> <span class="name">a</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">opacity</span><span class="punct">;</span>
-    <span class="kwd">const</span> <span class="name">size</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">size</span><span class="punct">;</span>
-    <span class="kwd">const</span> <span class="name">halfSize</span> <span class="punct">=</span> <span class="name">size</span> <span class="punct">/</span> <span class="num">2</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">particles</span> <span class="punct">=</span> <span class="name">engine</span><span class="punct">.</span><span class="name">particles</span><span class="punct">;</span>
+<span class="kw">for</span> <span class="punct">(</span><span class="kw">let</span> <span class="name">i</span> <span class="punct">=</span> <span class="lit">0</span><span class="punct">;</span> <span class="name">i</span> <span class="punct">&lt;</span> <span class="name">particles</span><span class="punct">.</span><span class="name">length</span><span class="punct">;</span> <span class="name">i</span><span class="punct">++) {</span>
+    <span class="kw">const</span> <span class="name">p</span> <span class="punct">=</span> <span class="name">particles</span><span class="punct">[</span><span class="name">i</span><span class="punct">];</span>
+    <span class="kw">const</span> <span class="punct">{</span> <span class="name">r</span><span class="punct">,</span> <span class="name">g</span><span class="punct">,</span> <span class="name">b</span> <span class="punct">}</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">color</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">a</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">opacity</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">size</span> <span class="punct">=</span> <span class="name">p</span><span class="punct">.</span><span class="name">size</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">halfSize</span> <span class="punct">=</span> <span class="name">size</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">;</span>
 
-    <span class="name">ctx</span><span class="punct">.</span><span class="title">save</span><span class="punct">();</span>
+    <span class="name">ctx</span><span class="punct">.</span><span class="name">save</span><span class="punct">();</span>
 
-    <span class="name">ctx</span><span class="punct">.</span><span class="title">translate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">x</span><span class="punct">,</span> <span class="name">p</span><span class="punct">.</span><span class="name">y</span><span class="punct">);</span>
-    <span class="name">ctx</span><span class="punct">.</span><span class="title">rotate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">rotation</span><span class="punct">);</span>
+    <span class="name">ctx</span><span class="punct">.</span><span class="name">translate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">x</span><span class="punct">,</span> <span class="name">p</span><span class="punct">.</span><span class="name">y</span><span class="punct">);</span>
+    <span class="name">ctx</span><span class="punct">.</span><span class="name">rotate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">rotation</span><span class="punct">);</span>
 
     <span class="name">ctx</span><span class="punct">.</span><span class="name">fillStyle</span> <span class="punct">=</span> <span class="str">`rgba(${</span><span class="name">r</span><span class="str">}, ${</span><span class="name">g</span><span class="str">}, ${</span><span class="name">b</span><span class="str">}, ${</span><span class="name">a</span><span class="str">})`</span><span class="punct">;</span>
-    <span class="name">ctx</span><span class="punct">.</span><span class="title">fillRect</span><span class="punct">(-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="punct">-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="name">size</span><span class="punct">,</span> <span class="name">size</span><span class="punct">);</span>
+    <span class="name">ctx</span><span class="punct">.</span><span class="name">fillRect</span><span class="punct">(-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="punct">-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="name">size</span><span class="punct">,</span> <span class="name">size</span><span class="punct">);</span>
 
-    <span class="name">ctx</span><span class="punct">.</span><span class="title">restore</span><span class="punct">();</span>
+    <span class="name">ctx</span><span class="punct">.</span><span class="name">restore</span><span class="punct">();</span>
 <span class="punct">}</span></code></pre>
             </div>
 
@@ -367,7 +367,7 @@
 
 <span class="kw">const</span> <span class="name">noise</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Turbulence</span><span class="punct">({</span>
     <span class="name">strength</span><span class="punct">: [</span><span class="lit">200</span><span class="punct">,</span> <span class="lit">750</span><span class="punct">],</span>
-    <span class="name">scale</span><span class="punct">:</span> <span class="lit">1</span>
+    <span class="name">scale</span><span class="punct">:</span> <span class="lit">1</span><span class="punct">,</span>
 <span class="punct">});</span>
 
 <span class="name">flames</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">flameColors</span><span class="punct">);</span>
@@ -516,7 +516,7 @@
         <span class="name">xMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
         <span class="name">yMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
         <span class="name">xMax</span><span class="punct">:</span> <span class="lit">800</span><span class="punct">,</span>
-        <span class="name">yMax</span><span class="punct">:</span> <span class="lit">600</span>
+        <span class="name">yMax</span><span class="punct">:</span> <span class="lit">600</span><span class="punct">,</span>
     <span class="punct">}</span>
 <span class="punct">});</span>
 
@@ -551,7 +551,7 @@
 
 <span class="kw">const</span> <span class="name">noise</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Turbulence</span><span class="punct">({</span>
     <span class="name">strength</span><span class="punct">: [</span><span class="lit">200</span><span class="punct">,</span> <span class="lit">750</span><span class="punct">],</span>
-    <span class="name">scale</span><span class="punct">:</span> <span class="lit">1</span>
+    <span class="name">scale</span><span class="punct">:</span> <span class="lit">1</span><span class="punct">,</span>
 <span class="punct">});</span>
 
 <span class="name">flames</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">flameColors</span><span class="punct">);</span>
@@ -657,7 +657,7 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="name">npm</span> <span class="kw">run</span> <span class="str">dev</span></code></pre>
+              <pre><code><span class="name">npm</span> <span class="name">run</span> <span class="arg">dev</span></code></pre>
             </div>
           </section>
         </article>
@@ -1008,22 +1008,22 @@
 
             <div class="code-snippet">
               <button class="copy-button" aria-label="Copy code" title="Copy code"></button>
-              <pre><code><span class="kw">const</span> <span class="name">enlarge</span> = <span class="kw">new</span> <span class="name">ScaleTween</span>({
-    <span class="name">startScale</span>: <span class="lit">1</span>,
-    <span class="name">endScale</span>: <span class="lit">5</span>,
-});
+              <pre><code><span class="kw">const</span> <span class="name">enlarge</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ScaleTween</span><span class="punct">({</span>
+    <span class="name">startScale</span><span class="punct">:</span> <span class="lit">1</span><span class="punct">,</span>
+    <span class="name">endScale</span><span class="punct">:</span> <span class="lit">5</span><span class="punct">,</span>
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">fadeOut</span> = <span class="kw">new</span> <span class="name">OpacityFade</span>({
-    <span class="name">startOpacity</span>: <span class="lit">1.0</span>,
-    <span class="name">endOpacity</span>: <span class="lit">0.0</span>,
-});
+<span class="kw">const</span> <span class="name">fadeOut</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">OpacityFade</span><span class="punct">({</span>
+    <span class="name">startOpacity</span><span class="punct">:</span> <span class="lit">1.0</span><span class="punct">,</span>
+    <span class="name">endOpacity</span><span class="punct">:</span> <span class="lit">0.0</span><span class="punct">,</span>
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
-    ...
-});
+<span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">PointEmitter</span><span class="punct">({</span>
+    <span class="comm">...</span>
+<span class="punct">});</span>
 
-<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">enlarge</span>);
-<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">fadeOut</span>);</code></pre>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">enlarge</span><span class="punct">);</span>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">fadeOut</span><span class="punct">);</span></code></pre>
             </div>
 
             <h3 id="emitters-applying-scoped-forces">Applying Scoped Forces</h3>
@@ -1044,15 +1044,15 @@
 
             <div class="code-snippet">
               <button class="copy-button" aria-label="Copy code" title="Copy code"></button>
-              <pre><code><span class="kw">const</span> <span class="name">gravity</span> = <span class="kw">new</span> <span class="name">DirectionalForce</span>({ <span class="name">ax</span>: <span class="lit">0</span>, <span class="name">ay</span>: <span class="lit">200</span> });
-<span class="kw">const</span> <span class="name">friction</span> = <span class="kw">new</span> <span class="name">LinearDrag</span>({ <span class="name">drag</span>: <span class="lit">0.4</span> });
+              <pre><code><span class="kw">const</span> <span class="name">gravity</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">DirectionalForce</span><span class="punct">({</span> <span class="name">ax</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span> <span class="name">ay</span><span class="punct">:</span> <span class="lit">200</span> <span class="punct">});</span>
+<span class="kw">const</span> <span class="name">friction</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LinearDrag</span><span class="punct">({</span> <span class="name">drag</span><span class="punct">:</span> <span class="lit">0.4</span> <span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
-    ...
-});
+<span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">PointEmitter</span><span class="punct">({</span>
+    <span class="comm">...</span>
+<span class="punct">});</span>
 
-<span class="name">emitter</span>.<span class="name">addScopedForce</span>(<span class="name">gravity</span>);
-<span class="name">emitter</span>.<span class="name">addScopedForce</span>(<span class="name">friction</span>);</code></pre>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">gravity</span><span class="punct">);</span>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">friction</span><span class="punct">);</span></code></pre>
             </div>
 
             <h3 id="emitters-applying-global-forces">Applying Global Forces</h3>
@@ -1235,15 +1235,13 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">wind</span> = <span class="kw">new</span> <span class="name">DirectionalForce</span>({
-    <span class="name">ax</span>: <span class="lit">100</span>
-});
+              <pre><code><span class="kw">const</span> <span class="name">wind</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">DirectionalForce</span><span class="punct">({</span>
+    <span class="name">ax</span><span class="punct">:</span> <span class="lit">100</span>
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">lineEmitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
-    <span class="comm">...</span>
-});
+<span class="kw">const</span> <span class="name">lineEmitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span> <span class="comm">...</span> <span class="punct">});</span>
 
-<span class="name">lineEmitter</span>.<span class="name">addScopedForce</span>(<span class="name">wind</span>);</code></pre>
+<span class="name">lineEmitter</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">wind</span><span class="punct">);</span></code></pre>
             </div>
 
             <img alt="Directional force demo." src="img/forces/directional_force.webp" width="495" height="340" loading="lazy"/>
@@ -1281,19 +1279,14 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">friction</span> = <span class="kw">new</span> <span class="name">LinearDrag</span>({
-    <span class="name">drag</span>: <span class="lit">0.7</span>,
-});
+              <pre><code><span class="kw">const</span> <span class="name">friction</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LinearDrag</span><span class="punct">({</span>
+    <span class="name">drag</span><span class="punct">:</span> <span class="lit">0.7</span><span class="punct">,</span>
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">emitterWithDrag</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
-    <span class="comm">...</span>
-});
+<span class="kw">const</span> <span class="name">emitterWithDrag</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span> <span class="comm">...</span> <span class="punct">});</span>
+<span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span> <span class="comm">...</span> <span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
-    <span class="comm">...</span>
-});
-
-<span class="name">emitterWithDrag</span>.<span class="name">addScopedForce</span>(<span class="name">friction</span>);</code></pre>
+<span class="name">emitterWithDrag</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">friction</span><span class="punct">);</span></code></pre>
             </div>
 
             <img alt="Linear drag force demo." src="img/forces/linear_drag.webp" width="495" height="340" loading="lazy"/>
@@ -1357,20 +1350,18 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">lineEmitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
-    <span class="comm">...</span>
-});
+              <pre><code><span class="kw">const</span> <span class="name">radialForce</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">RadialForce</span><span class="punct">({</span>
+    <span class="name">x</span><span class="punct">:</span> <span class="lit">250</span><span class="punct">,</span>
+    <span class="name">y</span><span class="punct">:</span> <span class="lit">190</span><span class="punct">,</span>
+    <span class="name">strength</span><span class="punct">:</span> <span class="lit">50000</span><span class="punct">,</span>
+    <span class="name">radius</span><span class="punct">:</span> <span class="lit">100</span><span class="punct">,</span>
+    <span class="name">epsilon</span><span class="punct">:</span> <span class="lit">10</span><span class="punct">,</span>
+    <span class="name">cullingRadius</span><span class="punct">:</span> <span class="lit">60</span><span class="punct">,</span>
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">radialForce</span> = <span class="kw">new</span> <span class="name">RadialForce</span>({
-    <span class="name">x</span>: <span class="lit">250</span>,
-    <span class="name">y</span>: <span class="lit">190</span>,
-    <span class="name">strength</span>: <span class="lit">50000</span>,
-    <span class="name">radius</span>: <span class="lit">100</span>,
-    <span class="name">epsilon</span>: <span class="lit">10</span>,
-    <span class="name">cullingRadius</span>: <span class="lit">60</span>,
-});
+<span class="kw">const</span> <span class="name">lineEmitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span> <span class="comm">...</span> <span class="punct">});</span>
 
-<span class="name">lineEmitter</span>.<span class="name">addScopedForce</span>(<span class="name">radialForce</span>);</code></pre>
+<span class="name">lineEmitter</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">radialForce</span><span class="punct">);</span></code></pre>
             </div>
 
             <div class="image-gallery">
@@ -1545,16 +1536,16 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">PointEmitter</span><span class="punct">({</span>
     <span class="comm">...</span>
-});
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">wave</span> = <span class="kw">new</span> <span class="name">SineWave</span>({
-    <span class="name">amplitude</span>: [<span class="lit">10</span>, <span class="lit">20</span>],
-    <span class="name">frequency</span>: [<span class="lit">0.1</span>, <span class="lit">1</span>],
-});
+<span class="kw">const</span> <span class="name">wave</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">SineWave</span><span class="punct">({</span>
+    <span class="name">amplitude</span><span class="punct">:</span> <span class="punct">[</span><span class="lit">10</span><span class="punct">,</span> <span class="lit">20</span><span class="punct">],</span>
+    <span class="name">frequency</span><span class="punct">:</span> <span class="punct">[</span><span class="lit">0.1</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">],</span>
+<span class="punct">});</span>
 
-<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">wave</span>);</code></pre>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">wave</span><span class="punct">);</span></code></pre>
             </div>
 
             <img alt="Sine wave modifier demo." src="img/modifiers/sine_wave.webp" width="400" height="150" loading="lazy"/>
@@ -1598,16 +1589,16 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">PointEmitter</span><span class="punct">({</span>
     <span class="comm">...</span>
-});
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">noise</span> = <span class="kw">new</span> <span class="name">Turbulence</span>({
-    <span class="name">strength</span>: [<span class="lit">50</span>, <span class="lit">150</span>],
-    <span class="name">scale</span>: <span class="lit">1</span>,
-});
+<span class="kw">const</span> <span class="name">noise</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Turbulence</span><span class="punct">({</span>
+    <span class="name">strength</span><span class="punct">:</span> <span class="punct">[</span><span class="lit">50</span><span class="punct">,</span> <span class="lit">150</span><span class="punct">],</span>
+    <span class="name">scale</span><span class="punct">:</span> <span class="lit">1</span><span class="punct">,</span>
+<span class="punct">});</span>
 
-<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">noise</span>);</code></pre>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">noise</span><span class="punct">);</span></code></pre>
             </div>
 
             <img alt="Turbulence modifier demo." src="img/modifiers/turbulence.webp" width="400" height="150" loading="lazy"/>
@@ -1647,20 +1638,20 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">PointEmitter</span><span class="punct">({</span>
     <span class="comm">...</span>
-});
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">gnistColorRamp</span> = <span class="kw">new</span> <span class="name">ColorRamp</span>({
-    <span class="name">colors</span>: [
-        [<span class="lit">0</span>, <span class="lit">242</span>, <span class="lit">254</span>],
-        [<span class="lit">143</span>, <span class="lit">0</span>, <span class="lit">255</span>],
-        [<span class="lit">255</span>, <span class="lit">0</span>, <span class="lit">127</span>],
-        [<span class="lit">255</span>, <span class="lit">102</span>, <span class="lit">0</span>],
-    ],
-});
+<span class="kw">const</span> <span class="name">gnistColorRamp</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ColorRamp</span><span class="punct">({</span>
+    <span class="name">colors</span><span class="punct">:</span> <span class="punct">[</span>
+        <span class="punct">[</span><span class="lit">0</span><span class="punct">,</span> <span class="lit">242</span><span class="punct">,</span> <span class="lit">254</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">143</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">,</span> <span class="lit">255</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">,</span> <span class="lit">127</span><span class="punct">],</span>
+        <span class="punct">[</span><span class="lit">255</span><span class="punct">,</span> <span class="lit">102</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">],</span>
+    <span class="punct">],</span>
+<span class="punct">});</span>
 
-<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">gnistColorRamp</span>);</code></pre>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">gnistColorRamp</span><span class="punct">);</span></code></pre>
             </div>
 
             <img alt="Color ramp modifier demo." src="img/modifiers/color_ramp.webp" width="400" height="150" loading="lazy"/>
@@ -1704,16 +1695,16 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">PointEmitter</span><span class="punct">({</span>
     <span class="comm">...</span>
-});
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">fadeOut</span> = <span class="kw">new</span> <span class="name">OpacityFade</span>({
-    <span class="name">startOpacity</span>: <span class="lit">1.0</span>,
-    <span class="name">endOpacity</span>: <span class="lit">0.0</span>,
-});
+<span class="kw">const</span> <span class="name">fadeOut</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">OpacityFade</span><span class="punct">({</span>
+    <span class="name">startOpacity</span><span class="punct">:</span> <span class="lit">1.0</span><span class="punct">,</span>
+    <span class="name">endOpacity</span><span class="punct">:</span> <span class="lit">0.0</span><span class="punct">,</span>
+<span class="punct">});</span>
 
-<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">fadeOut</span>);</code></pre>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">fadeOut</span><span class="punct">);</span></code></pre>
             </div>
 
             <img alt="Opacity fade modifier demo." src="img/modifiers/opacity_fade.webp" width="400" height="150" loading="lazy"/>
@@ -1757,16 +1748,16 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">PointEmitter</span><span class="punct">({</span>
     <span class="comm">...</span>
-});
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">rotation</span> = <span class="kw">new</span> <span class="name">RotationTween</span>({
-    <span class="name">startRotation</span>: <span class="lit">0</span>,
-    <span class="name">endRotation</span>: <span class="name">Math</span>.<span class="name">PI</span>,
-});
+<span class="kw">const</span> <span class="name">rotation</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">RotationTween</span><span class="punct">({</span>
+    <span class="name">startRotation</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
+    <span class="name">endRotation</span><span class="punct">:</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span><span class="punct">,</span>
+<span class="punct">});</span>
 
-<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">rotation</span>);</code></pre>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">rotation</span><span class="punct">);</span></code></pre>
             </div>
 
             <img alt="Rotation tween modifier demo." src="img/modifiers/rotation_tween.webp" width="400" height="150" loading="lazy"/>
@@ -1810,16 +1801,16 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">PointEmitter</span><span class="punct">({</span>
     <span class="comm">...</span>
-});
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">enlarge</span> = <span class="kw">new</span> <span class="name">ScaleTween</span>({
-    <span class="name">startScale</span>: <span class="lit">1</span>,
-    <span class="name">endScale</span>: <span class="lit">12</span>,
-});
+<span class="kw">const</span> <span class="name">enlarge</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ScaleTween</span><span class="punct">({</span>
+    <span class="name">startScale</span><span class="punct">:</span> <span class="lit">1</span><span class="punct">,</span>
+    <span class="name">endScale</span><span class="punct">:</span> <span class="lit">12</span><span class="punct">,</span>
+<span class="punct">});</span>
 
-<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">enlarge</span>);</code></pre>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">enlarge</span><span class="punct">);</span></code></pre>
             </div>
 
             <img alt="Scale tween modifier demo." src="img/modifiers/scale_tween.webp" width="400" height="150" loading="lazy"/>
@@ -1857,15 +1848,15 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">emitter</span> = <span class="kw">new</span> <span class="name">PointEmitter</span>({
+              <pre><code><span class="kw">const</span> <span class="name">emitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">PointEmitter</span><span class="punct">({</span>
     <span class="comm">...</span>
-});
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">spin</span> = <span class="kw">new</span> <span class="name">Spin</span>({
-    <span class="name">angularVelocity</span>: <span class="lit">2</span>
-});
+<span class="kw">const</span> <span class="name">spin</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Spin</span><span class="punct">({</span>
+    <span class="name">angularVelocity</span><span class="punct">:</span> <span class="lit">2</span>
+<span class="punct">});</span>
 
-<span class="name">emitter</span>.<span class="name">addModifier</span>(<span class="name">spin</span>);</code></pre>
+<span class="name">emitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">spin</span><span class="punct">);</span></code></pre>
             </div>
 
             <img alt="Spin modifier demo." src="img/modifiers/spin.webp" width="400" height="150" loading="lazy"/>
@@ -1894,7 +1885,6 @@
                   <tr>
                     <th>Offset</th>
                     <th>Attribute</th>
-                    <th>Storage Type</th>
                     <th>Description</th>
                   </tr>
                 </thead>
@@ -1902,49 +1892,41 @@
                   <tr>
                     <td>0</td>
                     <td><code>x</code></td>
-                    <td><code>float32</code></td>
                     <td>Particle X position</td>
                   </tr>
                   <tr>
                     <td>1</td>
                     <td><code>y</code></td>
-                    <td><code>float32</code></td>
                     <td>Particle Y position</td>
                   </tr>
                   <tr>
                     <td>2</td>
                     <td><code>size</code></td>
-                    <td><code>float32</code></td>
                     <td>Particle size</td>
                   </tr>
                   <tr>
                     <td>3</td>
                     <td><code>rotation</code></td>
-                    <td><code>float32</code></td>
                     <td>Particle rotation in radians</td>
                   </tr>
                   <tr>
                     <td>4</td>
                     <td><code>color.r</code></td>
-                    <td><code>float32</code></td>
                     <td>Red channel, normalized from <code>0–255</code> to <code>0–1</code></td>
                   </tr>
                   <tr>
                     <td>5</td>
                     <td><code>color.g</code></td>
-                    <td><code>float32</code></td>
                     <td>Green channel, normalized from <code>0–255</code> to <code>0–1</code></td>
                   </tr>
                   <tr>
                     <td>6</td>
                     <td><code>color.b</code></td>
-                    <td><code>float32</code></td>
                     <td>Blue channel, normalized from <code>0–255</code> to <code>0–1</code></td>
                   </tr>
                   <tr>
                     <td>7</td>
                     <td><code>opacity</code></td>
-                    <td><code>float32</code></td>
                     <td>Particle opacity (already in the <code>0-1</code> range)</td>
                   </tr>
                 </tbody>
@@ -2003,8 +1985,8 @@
 <span class="kw">function</span> <span class="name">loop</span><span class="punct">(</span><span class="name">currentTime</span><span class="punct">)</span> <span class="punct">{</span>
     <span class="name">requestAnimationFrame</span><span class="punct">(</span><span class="name">loop</span><span class="punct">)</span><span class="punct">;</span>
 
-    <span class="kw">const</span> <span class="name">dt</span> = <span class="punct">(</span><span class="name">currentTime</span> - <span class="name">lastTime</span><span class="punct">)</span> / <span class="lit">1000</span><span class="punct">;</span>
-    <span class="name">lastTime</span> = <span class="name">currentTime</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">dt</span> <span class="punct">=</span> <span class="punct">(</span><span class="name">currentTime</span> <span class="punct">-</span> <span class="name">lastTime</span><span class="punct">)</span> <span class="punct">/</span> <span class="lit">1000</span><span class="punct">;</span>
+    <span class="name">lastTime</span> <span class="punct">=</span> <span class="name">currentTime</span><span class="punct">;</span>
 
     <span class="name">engine</span><span class="punct">.</span><span class="name">update</span><span class="punct">(</span><span class="name">dt</span><span class="punct">)</span><span class="punct">;</span>
 
@@ -2037,19 +2019,19 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">ctx</span> = <span class="name">canvas</span><span class="punct">.</span><span class="name">getContext</span><span class="punct">(</span><span class="str">'2d'</span><span class="punct">)</span><span class="punct">;</span></code></pre>
+              <pre><code><span class="kw">const</span> <span class="name">ctx</span> <span class="punct">=</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">getContext</span><span class="punct">(</span><span class="str">'2d'</span><span class="punct">)</span><span class="punct">;</span></code></pre>
             </div>
 
             <p>...with the code below:</p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">gl</span> = <span class="name">canvas</span><span class="punct">.</span><span class="name">getContext</span><span class="punct">(</span><span class="str">'webgl2'</span><span class="punct">,</span> <span class="punct">{</span>
+              <pre><code><span class="kw">const</span> <span class="name">gl</span> <span class="punct">=</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">getContext</span><span class="punct">(</span><span class="str">'webgl2'</span><span class="punct">,</span> <span class="punct">{</span>
     <span class="name">alpha</span><span class="punct">:</span> <span class="lit">false</span><span class="punct">,</span>
     <span class="name">premultipliedAlpha</span><span class="punct">:</span> <span class="lit">false</span><span class="punct">,</span>
 <span class="punct">}</span><span class="punct">)</span><span class="punct">;</span>
 
-<span class="kw">if</span> <span class="punct">(</span>!<span class="name">gl</span><span class="punct">)</span> <span class="punct">{</span>
+<span class="kw">if</span> <span class="punct">(</span><span class="punct">!</span><span class="name">gl</span><span class="punct">)</span> <span class="punct">{</span>
     <span class="kw">throw</span> <span class="kw">new</span> <span class="name">Error</span><span class="punct">(</span><span class="str">'WebGL2 is not supported'</span><span class="punct">)</span><span class="punct">;</span>
 <span class="punct">}</span></code></pre>
             </div>
@@ -2069,7 +2051,7 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">vertexShaderSource</span> = <span class="str">`#version 300 es
+              <pre><code><span class="kw">const</span> <span class="name">vertexShaderSource</span> <span class="punct">=</span> <span class="str">`#version 300 es
     in vec2 a_quadVertex;
 
     in vec2 a_position;
@@ -2105,7 +2087,7 @@
     }
 `</span><span class="punct">;</span>
 
-<span class="kw">const</span> <span class="name">fragmentShaderSource</span> = <span class="str">`#version 300 es
+<span class="kw">const</span> <span class="name">fragmentShaderSource</span> <span class="punct">=</span> <span class="str">`#version 300 es
     precision highp float;
 
     in vec3 v_color;
@@ -2124,12 +2106,12 @@
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="kw">function</span> <span class="name">createShader</span><span class="punct">(</span><span class="name">gl</span><span class="punct">,</span> <span class="name">type</span><span class="punct">,</span> <span class="name">source</span><span class="punct">)</span> <span class="punct">{</span>
-    <span class="kw">const</span> <span class="name">shader</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">createShader</span><span class="punct">(</span><span class="name">type</span><span class="punct">)</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">shader</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">createShader</span><span class="punct">(</span><span class="name">type</span><span class="punct">)</span><span class="punct">;</span>
 
     <span class="name">gl</span><span class="punct">.</span><span class="name">shaderSource</span><span class="punct">(</span><span class="name">shader</span><span class="punct">,</span> <span class="name">source</span><span class="punct">)</span><span class="punct">;</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">compileShader</span><span class="punct">(</span><span class="name">shader</span><span class="punct">)</span><span class="punct">;</span>
 
-    <span class="kw">if</span> <span class="punct">(</span>!<span class="name">gl</span><span class="punct">.</span><span class="name">getShaderParameter</span><span class="punct">(</span><span class="name">shader</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">COMPILE_STATUS</span><span class="punct">)</span><span class="punct">)</span> <span class="punct">{</span>
+    <span class="kw">if</span> <span class="punct">(</span><span class="punct">!</span><span class="name">gl</span><span class="punct">.</span><span class="name">getShaderParameter</span><span class="punct">(</span><span class="name">shader</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">COMPILE_STATUS</span><span class="punct">)</span><span class="punct">)</span> <span class="punct">{</span>
         <span class="name">console</span><span class="punct">.</span><span class="name">error</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">getShaderInfoLog</span><span class="punct">(</span><span class="name">shader</span><span class="punct">)</span><span class="punct">)</span><span class="punct">;</span>
         <span class="name">gl</span><span class="punct">.</span><span class="name">deleteShader</span><span class="punct">(</span><span class="name">shader</span><span class="punct">)</span><span class="punct">;</span>
         <span class="kw">return</span> <span class="lit">null</span><span class="punct">;</span>
@@ -2145,16 +2127,16 @@
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="comm">// Create and link the shader program from the vertex and fragment shaders.</span>
 
-<span class="kw">const</span> <span class="name">vertexShader</span> = <span class="name">createShader</span><span class="punct">(</span><span class="name">gl</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">VERTEX_SHADER</span><span class="punct">,</span> <span class="name">vertexShaderSource</span><span class="punct">)</span><span class="punct">;</span>
-<span class="kw">const</span> <span class="name">fragmentShader</span> = <span class="name">createShader</span><span class="punct">(</span><span class="name">gl</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FRAGMENT_SHADER</span><span class="punct">,</span> <span class="name">fragmentShaderSource</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">vertexShader</span> <span class="punct">=</span> <span class="name">createShader</span><span class="punct">(</span><span class="name">gl</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">VERTEX_SHADER</span><span class="punct">,</span> <span class="name">vertexShaderSource</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">fragmentShader</span> <span class="punct">=</span> <span class="name">createShader</span><span class="punct">(</span><span class="name">gl</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FRAGMENT_SHADER</span><span class="punct">,</span> <span class="name">fragmentShaderSource</span><span class="punct">)</span><span class="punct">;</span>
 
-<span class="kw">const</span> <span class="name">program</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">createProgram</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">program</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">createProgram</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span>
 
 <span class="name">gl</span><span class="punct">.</span><span class="name">attachShader</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="name">vertexShader</span><span class="punct">)</span><span class="punct">;</span>
 <span class="name">gl</span><span class="punct">.</span><span class="name">attachShader</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="name">fragmentShader</span><span class="punct">)</span><span class="punct">;</span>
 <span class="name">gl</span><span class="punct">.</span><span class="name">linkProgram</span><span class="punct">(</span><span class="name">program</span><span class="punct">)</span><span class="punct">;</span>
 
-<span class="kw">if</span> <span class="punct">(</span>!<span class="name">gl</span><span class="punct">.</span><span class="name">getProgramParameter</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">LINK_STATUS</span><span class="punct">)</span><span class="punct">)</span> <span class="punct">{</span>
+<span class="kw">if</span> <span class="punct">(</span><span class="punct">!</span><span class="name">gl</span><span class="punct">.</span><span class="name">getProgramParameter</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">LINK_STATUS</span><span class="punct">)</span><span class="punct">)</span> <span class="punct">{</span>
     <span class="name">console</span><span class="punct">.</span><span class="name">error</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">getProgramInfoLog</span><span class="punct">(</span><span class="name">program</span><span class="punct">)</span><span class="punct">)</span><span class="punct">;</span>
     <span class="kw">throw</span> <span class="kw">new</span> <span class="name">Error</span><span class="punct">(</span><span class="str">'Failed to link shader program'</span><span class="punct">)</span><span class="punct">;</span>
 <span class="punct">}</span></code></pre>
@@ -2170,22 +2152,22 @@
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="comm">// Create buffers for the reusable quad geometry and per-particle instance data.</span>
 
-<span class="kw">const</span> <span class="name">quadVertices</span> = <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">([</span>
-    -<span class="lit">0.5</span><span class="punct">,</span> -<span class="lit">0.5</span><span class="punct">,</span>
-     <span class="lit">0.5</span><span class="punct">,</span> -<span class="lit">0.5</span><span class="punct">,</span>
-    -<span class="lit">0.5</span><span class="punct">,</span>  <span class="lit">0.5</span><span class="punct">,</span>
+<span class="kw">const</span> <span class="name">quadVertices</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">([</span>
+    <span class="punct">-</span><span class="lit">0.5</span><span class="punct">,</span> <span class="punct">-</span><span class="lit">0.5</span><span class="punct">,</span>
+     <span class="lit">0.5</span><span class="punct">,</span> <span class="punct">-</span><span class="lit">0.5</span><span class="punct">,</span>
+    <span class="punct">-</span><span class="lit">0.5</span><span class="punct">,</span>  <span class="lit">0.5</span><span class="punct">,</span>
 
-    -<span class="lit">0.5</span><span class="punct">,</span>  <span class="lit">0.5</span><span class="punct">,</span>
-     <span class="lit">0.5</span><span class="punct">,</span> -<span class="lit">0.5</span><span class="punct">,</span>
+    <span class="punct">-</span><span class="lit">0.5</span><span class="punct">,</span>  <span class="lit">0.5</span><span class="punct">,</span>
+     <span class="lit">0.5</span><span class="punct">,</span> <span class="punct">-</span><span class="lit">0.5</span><span class="punct">,</span>
      <span class="lit">0.5</span><span class="punct">,</span>  <span class="lit">0.5</span><span class="punct">,</span>
 <span class="punct">]</span><span class="punct">)</span><span class="punct">;</span>
 
-<span class="kw">const</span> <span class="name">quadBuffer</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">createBuffer</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">quadBuffer</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">createBuffer</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span>
 
 <span class="name">gl</span><span class="punct">.</span><span class="name">bindBuffer</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">quadBuffer</span><span class="punct">)</span><span class="punct">;</span>
 <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">quadVertices</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">STATIC_DRAW</span><span class="punct">)</span><span class="punct">;</span>
 
-<span class="kw">const</span> <span class="name">particleBuffer</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">createBuffer</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span></code></pre>
+<span class="kw">const</span> <span class="name">particleBuffer</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">createBuffer</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span></code></pre>
             </div>
 
             <p>The quad buffer stores the six vertices needed to draw a rectangle (rectangles are drawn as two triangles). Each particle will use this same geometry, while its position, size, rotation, color, and opacity will be provided separately as particle attributes.</p>
@@ -2200,7 +2182,7 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">particleData</span> = <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> * <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">;</span></code></pre>
+              <pre><code><span class="kw">const</span> <span class="name">particleData</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Float32Array</span><span class="punct">(</span><span class="lit">50000</span> <span class="punct">*</span> <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">;</span></code></pre>
             </div>
 
             <p>To fill this buffer, call Gnist's <code>fillFlatArray()</code> method after <code>engine.update(dt)</code> in the main loop. This will copy current particle state into the <code>particleData</code> buffer array as a contiguous <code>Float32Array</code> that can be uploaded directly to the WebGL buffer. The returned particle count will be used later.</p>
@@ -2227,13 +2209,13 @@
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="comm">// Retrieve shader attribute and uniform locations used during rendering.</span>
 
-<span class="kw">const</span> <span class="name">quadVertexLocation</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_quadVertex'</span><span class="punct">)</span><span class="punct">;</span>
-<span class="kw">const</span> <span class="name">positionLocation</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_position'</span><span class="punct">)</span><span class="punct">;</span>
-<span class="kw">const</span> <span class="name">sizeLocation</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_size'</span><span class="punct">)</span><span class="punct">;</span>
-<span class="kw">const</span> <span class="name">rotationLocation</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_rotation'</span><span class="punct">)</span><span class="punct">;</span>
-<span class="kw">const</span> <span class="name">colorLocation</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_color'</span><span class="punct">)</span><span class="punct">;</span>
-<span class="kw">const</span> <span class="name">opacityLocation</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_opacity'</span><span class="punct">)</span><span class="punct">;</span>
-<span class="kw">const</span> <span class="name">resolutionLocation</span> = <span class="name">gl</span><span class="punct">.</span><span class="name">getUniformLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'u_resolution'</span><span class="punct">)</span><span class="punct">;</span></code></pre>
+<span class="kw">const</span> <span class="name">quadVertexLocation</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_quadVertex'</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">positionLocation</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_position'</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">sizeLocation</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_size'</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">rotationLocation</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_rotation'</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">colorLocation</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_color'</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">opacityLocation</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">getAttribLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'a_opacity'</span><span class="punct">)</span><span class="punct">;</span>
+<span class="kw">const</span> <span class="name">resolutionLocation</span> <span class="punct">=</span> <span class="name">gl</span><span class="punct">.</span><span class="name">getUniformLocation</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span> <span class="str">'u_resolution'</span><span class="punct">)</span><span class="punct">;</span></code></pre>
             </div>
 
             <h3 id="webgl-rendering-particles">Rendering Particles</h3>
@@ -2252,7 +2234,7 @@
     <span class="name">gl</span><span class="punct">.</span><span class="name">clearColor</span><span class="punct">(</span><span class="lit">0.09</span><span class="punct">,</span> <span class="lit">0.07</span><span class="punct">,</span> <span class="lit">0.16</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">)</span><span class="punct">;</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">clear</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">COLOR_BUFFER_BIT</span><span class="punct">)</span><span class="punct">;</span>
 
-    <span class="kw">if</span> <span class="punct">(</span><span class="name">particleCount</span> === <span class="lit">0</span><span class="punct">)</span> <span class="punct">{</span>
+    <span class="kw">if</span> <span class="punct">(</span><span class="name">particleCount</span> <span class="punct">===</span> <span class="lit">0</span><span class="punct">)</span> <span class="punct">{</span>
         <span class="kw">return</span><span class="punct">;</span>
     <span class="punct">}</span>
 
@@ -2267,10 +2249,10 @@
 
     <span class="comm">// Upload current particle data used by per-instance attributes.</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">bindBuffer</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleBuffer</span><span class="punct">)</span><span class="punct">;</span>
-    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> * <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">)</span><span class="punct">;</span>
+    <span class="name">gl</span><span class="punct">.</span><span class="name">bufferData</span><span class="punct">(</span><span class="name">gl</span><span class="punct">.</span><span class="name">ARRAY_BUFFER</span><span class="punct">,</span> <span class="name">particleData</span><span class="punct">.</span><span class="name">subarray</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="name">particleCount</span> <span class="punct">*</span> <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span><span class="punct">)</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">DYNAMIC_DRAW</span><span class="punct">)</span><span class="punct">;</span>
 
     <span class="comm">// Stride is permanently 32 bytes (8 floats * 4 bytes per float)</span>
-    <span class="kw">const</span> <span class="name">stride</span> = <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span> * <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">stride</span> <span class="punct">=</span> <span class="name">FlatParticleDataFormat.FLOATS_PER_PARTICLE</span> <span class="punct">*</span> <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">;</span>
 
     <span class="comm">// Position (Offset: 0)</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">enableVertexAttribArray</span><span class="punct">(</span><span class="name">positionLocation</span><span class="punct">)</span><span class="punct">;</span>
@@ -2279,22 +2261,22 @@
 
     <span class="comm">// Size (Offset: 2 floats * 4 bytes = 8)</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">enableVertexAttribArray</span><span class="punct">(</span><span class="name">sizeLocation</span><span class="punct">)</span><span class="punct">;</span>
-    <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribPointer</span><span class="punct">(</span><span class="name">sizeLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FLOAT</span><span class="punct">,</span> <span class="lit">false</span><span class="punct">,</span> <span class="name">stride</span><span class="punct">,</span> <span class="lit">2</span> * <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">)</span><span class="punct">;</span>
+    <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribPointer</span><span class="punct">(</span><span class="name">sizeLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FLOAT</span><span class="punct">,</span> <span class="lit">false</span><span class="punct">,</span> <span class="name">stride</span><span class="punct">,</span> <span class="lit">2</span> <span class="punct">*</span> <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">)</span><span class="punct">;</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribDivisor</span><span class="punct">(</span><span class="name">sizeLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">)</span><span class="punct">;</span>
 
     <span class="comm">// Rotation (Offset: 3 floats * 4 bytes = 12)</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">enableVertexAttribArray</span><span class="punct">(</span><span class="name">rotationLocation</span><span class="punct">)</span><span class="punct">;</span>
-    <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribPointer</span><span class="punct">(</span><span class="name">rotationLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FLOAT</span><span class="punct">,</span> <span class="lit">false</span><span class="punct">,</span> <span class="name">stride</span><span class="punct">,</span> <span class="lit">3</span> * <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">)</span><span class="punct">;</span>
+    <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribPointer</span><span class="punct">(</span><span class="name">rotationLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FLOAT</span><span class="punct">,</span> <span class="lit">false</span><span class="punct">,</span> <span class="name">stride</span><span class="punct">,</span> <span class="lit">3</span> <span class="punct">*</span> <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">)</span><span class="punct">;</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribDivisor</span><span class="punct">(</span><span class="name">rotationLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">)</span><span class="punct">;</span>
 
     <span class="comm">// Color (Offset: 4 floats * 4 bytes = 16)</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">enableVertexAttribArray</span><span class="punct">(</span><span class="name">colorLocation</span><span class="punct">)</span><span class="punct">;</span>
-    <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribPointer</span><span class="punct">(</span><span class="name">colorLocation</span><span class="punct">,</span> <span class="lit">3</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FLOAT</span><span class="punct">,</span> <span class="lit">false</span><span class="punct">,</span> <span class="name">stride</span><span class="punct">,</span> <span class="lit">4</span> * <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">)</span><span class="punct">;</span>
+    <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribPointer</span><span class="punct">(</span><span class="name">colorLocation</span><span class="punct">,</span> <span class="lit">3</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FLOAT</span><span class="punct">,</span> <span class="lit">false</span><span class="punct">,</span> <span class="name">stride</span><span class="punct">,</span> <span class="lit">4</span> <span class="punct">*</span> <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">)</span><span class="punct">;</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribDivisor</span><span class="punct">(</span><span class="name">colorLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">)</span><span class="punct">;</span>
 
     <span class="comm">// Opacity (Offset: 7 floats * 4 bytes = 28)</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">enableVertexAttribArray</span><span class="punct">(</span><span class="name">opacityLocation</span><span class="punct">)</span><span class="punct">;</span>
-    <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribPointer</span><span class="punct">(</span><span class="name">opacityLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FLOAT</span><span class="punct">,</span> <span class="lit">false</span><span class="punct">,</span> <span class="name">stride</span><span class="punct">,</span> <span class="lit">7</span> * <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">)</span><span class="punct">;</span>
+    <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribPointer</span><span class="punct">(</span><span class="name">opacityLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">,</span> <span class="name">gl</span><span class="punct">.</span><span class="name">FLOAT</span><span class="punct">,</span> <span class="lit">false</span><span class="punct">,</span> <span class="name">stride</span><span class="punct">,</span> <span class="lit">7</span> <span class="punct">*</span> <span class="name">Float32Array</span><span class="punct">.</span><span class="name">BYTES_PER_ELEMENT</span><span class="punct">)</span><span class="punct">;</span>
     <span class="name">gl</span><span class="punct">.</span><span class="name">vertexAttribDivisor</span><span class="punct">(</span><span class="name">opacityLocation</span><span class="punct">,</span> <span class="lit">1</span><span class="punct">)</span><span class="punct">;</span>
 
     <span class="comm">// Draw particles as instanced quads (6 vertices per quad)</span>
@@ -2321,7 +2303,7 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="name">npm</span> <span class="kw">run</span> <span class="str">dev</span></code></pre>
+              <pre><code><span class="name">npm</span> <span class="name">run</span> <span class="arg">dev</span></code></pre>
             </div>
 
             <p>If everything went according to plan, your <code>main.js</code> should look similar to this:</p>
@@ -2456,7 +2438,7 @@
         <span class="name">xMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
         <span class="name">yMin</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
         <span class="name">xMax</span><span class="punct">:</span> <span class="lit">800</span><span class="punct">,</span>
-        <span class="name">yMax</span><span class="punct">:</span> <span class="lit">600</span>
+        <span class="name">yMax</span><span class="punct">:</span> <span class="lit">600</span><span class="punct">,</span>
     <span class="punct">}</span>
 <span class="punct">});</span>
 
@@ -2491,7 +2473,7 @@
 
 <span class="kw">const</span> <span class="name">noise</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Turbulence</span><span class="punct">({</span>
     <span class="name">strength</span><span class="punct">:</span> <span class="punct">[</span><span class="lit">200</span><span class="punct">,</span> <span class="lit">750</span><span class="punct">],</span>
-    <span class="name">scale</span><span class="punct">:</span> <span class="lit">1</span>
+    <span class="name">scale</span><span class="punct">:</span> <span class="lit">1</span><span class="punct">,</span>
 <span class="punct">});</span>
 
 <span class="name">flames</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">flameColors</span><span class="punct">);</span>
@@ -2917,7 +2899,7 @@
     <span class="name">ctx</span><span class="punct">.</span><span class="name">translate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">x</span><span class="punct">,</span> <span class="name">p</span><span class="punct">.</span><span class="name">y</span><span class="punct">);</span>
     <span class="name">ctx</span><span class="punct">.</span><span class="name">rotate</span><span class="punct">(</span><span class="name">p</span><span class="punct">.</span><span class="name">rotation</span><span class="punct">);</span>
 
-    <span class="name">ctx</span><span class="punct">.</span><span class="name">fillStyle</span> <span class="punct">=</span> <span class="str">`rgba(${r}, ${g}, ${b}, ${a})`</span><span class="punct">;</span>
+    <span class="name">ctx</span><span class="punct">.</span><span class="name">fillStyle</span> <span class="punct">=</span> <span class="str">`rgba(${</span><span class="name">r</span><span class="str">}, ${</span><span class="name">g</span><span class="str">}, ${</span><span class="name">b</span><span class="str">}, ${</span><span class="name">a</span><span class="str">})`</span><span class="punct">;</span>
     <span class="name">ctx</span><span class="punct">.</span><span class="name">fillRect</span><span class="punct">(</span><span class="punct">-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="punct">-</span><span class="name">halfSize</span><span class="punct">,</span> <span class="name">size</span><span class="punct">,</span> <span class="name">size</span><span class="punct">);</span>
 
     <span class="name">ctx</span><span class="punct">.</span><span class="name">restore</span><span class="punct">();</span>
@@ -2930,7 +2912,7 @@
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="name">npm</span> <span class="kw">run</span> <span class="str">dev</span></code></pre>
+              <pre><code><span class="name">npm</span> <span class="name">run</span> <span class="arg">dev</span></code></pre>
             </div>
 
           </section>

@@ -451,6 +451,7 @@ var {
 .comm  { color: #858585; }
 .tag   { color: #777dea; }
 .attr  { color: var(--inline-code-color); }
+.arg   { color: #FF6600; }
 .str   { color: #FF6600; }
 .punct { color: #858585; opacity: 0.7; }
 
