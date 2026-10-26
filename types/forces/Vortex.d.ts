@@ -11,21 +11,25 @@ export type VortexConfigSpecifics = {
      */
     y?: number;
     /**
-     * Rotation speed. Positive values for clockwise, negative values for counter-clockwise rotation.
+     * Strength of the rotational force. Positive values rotate clockwise, negative values rotate counter-clockwise.
      */
     rotationSpeed?: number;
     /**
-     * Inward suction speed. Positive values pull inward, negative values push outward.
+     * Strength of the radial attraction/repulsion. Positive values pull inward, negative values push outward.
      */
     suctionSpeed?: number;
     /**
-     * Maximum radius of influence. Particles outside this distance are unaffected.
+     * Velocity damping factor applied near the vortex center to stabilize motion and prevent particle overshooting.
+     */
+    damping?: number;
+    /**
+     * Radius of influence. Particles outside this distance are unaffected.
      */
     radius?: number;
     /**
-     * Distance threshold from the center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
-     * Note that high velocities or long lifespans may cause particles to mathematically bypass the center and slingshot outward.
-     * In such cases, increase this radius to intercept particles before they reach their escape brink.
+     * Distance threshold from the vortex center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
+     * Note that high particle `speed` or long particle `lifespan`, and/or vortexes with small or zero `damping` may cause particles to mathematically bypass the vortex center and slingshot outward.
+     * One way of preventing this slingshot effect is to tweak mentioned parameters. The other is to increase `cullingRadius` to intercept particles before they reach their escape brink.
      * Omit or set to 0 to disable.
      * Stored internally as {@link Vortex#cullingRadius} and as a squared value in {@link Vortex#cullingRadiusSquared}.
      */
@@ -40,12 +44,13 @@ export type VortexConfig = ForceConfig & VortexConfigSpecifics;
  * @typedef {object} VortexConfigSpecifics
  * @property {number} [x=0] Horizontal coordinate of the vortex center.
  * @property {number} [y=0] Vertical coordinate of the vortex center.
- * @property {number} [rotationSpeed=100] Rotation speed. Positive values for clockwise, negative values for counter-clockwise rotation.
- * @property {number} [suctionSpeed=50] Inward suction speed. Positive values pull inward, negative values push outward.
- * @property {number} [radius=Infinity] Maximum radius of influence. Particles outside this distance are unaffected.
- * @property {number} [cullingRadius=0] Distance threshold from the center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
- * Note that high velocities or long lifespans may cause particles to mathematically bypass the center and slingshot outward.
- * In such cases, increase this radius to intercept particles before they reach their escape brink.
+ * @property {number} [rotationSpeed=100] Strength of the rotational force. Positive values rotate clockwise, negative values rotate counter-clockwise.
+ * @property {number} [suctionSpeed=50] Strength of the radial attraction/repulsion. Positive values pull inward, negative values push outward.
+ * @property {number} [damping=0.05] Velocity damping factor applied near the vortex center to stabilize motion and prevent particle overshooting.
+ * @property {number} [radius=Infinity] Radius of influence. Particles outside this distance are unaffected.
+ * @property {number} [cullingRadius=0] Distance threshold from the vortex center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
+ * Note that high particle `speed` or long particle `lifespan`, and/or vortexes with small or zero `damping` may cause particles to mathematically bypass the vortex center and slingshot outward.
+ * One way of preventing this slingshot effect is to tweak mentioned parameters. The other is to increase `cullingRadius` to intercept particles before they reach their escape brink.
  * Omit or set to 0 to disable.
  * Stored internally as {@link Vortex#cullingRadius} and as a squared value in {@link Vortex#cullingRadiusSquared}.
  */
@@ -55,7 +60,7 @@ export type VortexConfig = ForceConfig & VortexConfigSpecifics;
  * @typedef {ForceConfig & VortexConfigSpecifics} VortexConfig
  */
 /**
- * Environmental force that applies a swirling combination of radial attraction/repulsion and tangential (orbital) forces to particles.
+ * Environmental force that applies a combination of distance-scaled radial attraction/repulsion and tangential rotation forces to particles, supplemented by velocity damping to stabilize particle motion.
  * @class
  * @extends Force
  */
@@ -81,14 +86,19 @@ export declare class Vortex extends Force {
      */
     suctionSpeed: number;
     /**
+     * Velocity damping factor applied near the vortex center to stabilize motion and prevent particle overshooting.
+     * @type {number}
+     */
+    damping: number;
+    /**
      * Radius of influence. Particles outside this distance are unaffected.
      * @type {number}
      */
     radius: number;
     /**
-     * Distance threshold from the center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
-     * Note that high velocities or long lifespans may cause particles to mathematically bypass the center and slingshot outward.
-     * In such cases, increase this radius to intercept particles before they reach their escape brink.
+     * Distance threshold from the vortex center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
+     * Note that high particle `speed` or long particle `lifespan`, and/or vortexes with small or zero `damping` may cause particles to mathematically bypass the vortex center and slingshot outward.
+     * One way of preventing this slingshot effect is to tweak mentioned parameters. The other is to increase `cullingRadius` to intercept particles before they reach their escape brink.
      * Omit or set to 0 to disable.
      * @type {number}
      */

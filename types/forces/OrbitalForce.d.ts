@@ -11,21 +11,21 @@ export type OrbitalForceConfigSpecifics = {
      */
     y?: number;
     /**
-     * Target tangential speed. Positive values produce clockwise motion; negative values produce counter-clockwise motion.
+     * Target tangential speed. Positive values rotate clockwise, negative values rotate counter-clockwise.
      */
     tangentialSpeed?: number;
     /**
-     * Target radial speed. Positive values move particles toward the center; negative values move them away from the center.
+     * Target radial speed. Positive values push outward, negative values pull inward.
      */
     radialSpeed?: number;
     /**
-     * Maximum radius of influence. Particles outside this distance are unaffected.
+     * Radius of influence. Particles outside this distance are unaffected.
      */
     radius?: number;
     /**
      * Distance threshold from the orbital center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
-     * Note that high velocities or long lifespans may cause particles to mathematically bypass the center and slingshot outward.
-     * In such cases, increase this radius to intercept particles before they reach their escape brink.
+     * `OrbitalForce` prevents particles with high speeds or long lifespans from overshooting the center, unlike `RadialForce` or `Vortex`.
+     * With `OrbitalForce`, `cullingRadius` is an optional feature rather than a way to prevent slingshot effects.
      * Omit or set to 0 to disable.
      * Stored internally as {@link OrbitalForce#cullingRadius} and as a squared value in {@link OrbitalForce#cullingRadiusSquared}.
      */
@@ -40,12 +40,12 @@ export type OrbitalForceConfig = ForceConfig & OrbitalForceConfigSpecifics;
  * @typedef {object} OrbitalForceConfigSpecifics
  * @property {number} [x=0] Horizontal coordinate of the orbital center.
  * @property {number} [y=0] Vertical coordinate of the orbital center.
- * @property {number} [tangentialSpeed=100] Target tangential speed. Positive values produce clockwise motion; negative values produce counter-clockwise motion.
- * @property {number} [radialSpeed=50] Target radial speed. Positive values move particles toward the center; negative values move them away from the center.
- * @property {number} [radius=Infinity] Maximum radius of influence. Particles outside this distance are unaffected.
+ * @property {number} [tangentialSpeed=100] Target tangential speed. Positive values rotate clockwise, negative values rotate counter-clockwise.
+ * @property {number} [radialSpeed=50] Target radial speed. Positive values push outward, negative values pull inward.
+ * @property {number} [radius=Infinity] Radius of influence. Particles outside this distance are unaffected.
  * @property {number} [cullingRadius=0] Distance threshold from the orbital center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
- * Note that high velocities or long lifespans may cause particles to mathematically bypass the center and slingshot outward.
- * In such cases, increase this radius to intercept particles before they reach their escape brink.
+ * `OrbitalForce` prevents particles with high speeds or long lifespans from overshooting the center, unlike `RadialForce` or `Vortex`.
+ * With `OrbitalForce`, `cullingRadius` is an optional feature rather than a way to prevent slingshot effects.
  * Omit or set to 0 to disable.
  * Stored internally as {@link OrbitalForce#cullingRadius} and as a squared value in {@link OrbitalForce#cullingRadiusSquared}.
  */
@@ -71,12 +71,12 @@ export declare class OrbitalForce extends Force {
      */
     y: number;
     /**
-     * Target tangential velocity. Positive values produce clockwise motion; negative values produce counter-clockwise motion.
+     * Target tangential speed. Positive values rotate clockwise, negative values rotate counter-clockwise.
      * @type {number}
      */
     tangentialSpeed: number;
     /**
-     * Target radial velocity. Positive values move particles toward the center; negative values move them away from the center.
+     * Target radial speed. Positive values push outward, negative values pull inward.
      * @type {number}
      */
     radialSpeed: number;
@@ -86,9 +86,9 @@ export declare class OrbitalForce extends Force {
      */
     radius: number;
     /**
-     * Distance threshold from the center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
-     * Note that high velocities or long lifespans may cause particles to mathematically bypass the center and slingshot outward.
-     * In such cases, increase this radius to intercept particles before they reach their escape brink.
+     * Distance threshold from the orbital center below which particles are marked dead, surrounded by a frame-rate independent soft-aging buffer zone to prevent visual popping.
+     * `OrbitalForce` prevents particles with high speeds or long lifespans from overshooting the center, unlike `RadialForce` or `Vortex`.
+     * With `OrbitalForce`, `cullingRadius` is an optional feature rather than a way to prevent slingshot effects.
      * Omit or set to 0 to disable.
      * @type {number}
      */
