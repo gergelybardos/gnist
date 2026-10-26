@@ -1589,13 +1589,13 @@
                     <td><code>amplitude</code></td>
                     <td><code>number | number[]</code></td>
                     <td><code>10</code></td>
-                    <td>Wave amplitude (in pixels), or a <code>[start, end]</code> range array interpolated over particle lifespan. Within a <code>SineWave</code> instance, amplitude is stored and exposed as <code>startAmplitude</code> and <code>endAmplitude</code>.</td>
+                    <td>Wave amplitude (in pixels), or a <code>[start, end]</code> range array interpolated over time. Within a <code>SineWave</code> instance, amplitude is stored and exposed as <code>startAmplitude</code> and <code>endAmplitude</code>.</td>
                   </tr>
                   <tr>
                     <td><code>frequency</code></td>
                     <td><code>number | number[]</code></td>
                     <td><code>2</code></td>
-                    <td>Cycles per second (Hz), or a <code>[start, end]</code> range array interpolated over particle lifespan. Within a <code>SineWave</code> instance, frequency is stored and exposed as <code>startFrequency</code> and <code>endFrequency</code>.</td>
+                    <td>Cycles per second (Hz), or a <code>[start, end]</code> range array interpolated over time. Within a <code>SineWave</code> instance, frequency is stored and exposed as <code>startFrequency</code> and <code>endFrequency</code>.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1642,7 +1642,7 @@
                     <td><code>strength</code></td>
                     <td><code>number | number[]</code></td>
                     <td><code>20</code></td>
-                    <td>Magnitude of displacement in pixels per second or a <code>[start, end]</code> range array interpolated over particle lifespan. Within a <code>Turbulence</code> instance, strength is stored and exposed as <code>startStrength</code> and <code>endStrength</code>.</td>
+                    <td>Magnitude of displacement in pixels per second or a <code>[start, end]</code> range array interpolated over time. Within a <code>Turbulence</code> instance, strength is stored and exposed as <code>startStrength</code> and <code>endStrength</code>.</td>
                   </tr>
                   <tr>
                     <td><code>scale</code></td>
@@ -1671,6 +1671,84 @@
             </div>
 
             <img alt="Turbulence modifier demo." src="img/modifiers/turbulence.webp" width="400" height="150" loading="lazy"/>
+
+            <h3 id="modifiers-elastic-anchor">Elastic Anchor</h3>
+
+            <p>An <code>ElasticAnchor</code> continuously pulls particles back toward the coordinates where they were originally emitted.</p>
+
+            <p>On its own, <code>ElasticAnchor</code> is not that interesting; it becomes visually compelling when used alongside dynamically tweaked or moving forces. Particularly interesting effects can be achieved by applying it to emitters that emit persistent particles.</p>
+
+            <p><strong>Typical use cases:</strong> clothing, spring-like motion, elastic recoil.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>ElasticAnchor</code> instance properties:</p>
+
+            <div class="table-container">
+              <table class="property-list">
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>stiffness</code></td>
+                  <td><code>number | number[]</code></td>
+                  <td><code>8</code></td>
+                  <td>Pull strength returning the particle toward its origin, or a <code>[start, end]</code> range array interpolated over time. Within a <code>ElasticAnchor</code> instance, <code>stiffness</code> is stored and exposed as <code>startStiffness</code> and <code>endStiffness</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>damping</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0.85</code></td>
+                  <td>Velocity dampening factor applied to smooth velocity and prevent infinite oscillation. Values range from <code>0.0</code> to <code>1.0</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>snapThreshold</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>Distance threshold in pixels under which particles snap to their origin.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>Below is an example of an <code>ElasticAnchor</code> modifier counteracting a dynamically moved <code>RadialForce</code>. Note that the emitter emits persistent particles for 1 second.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">lineEmitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span>
+    <span class="name">x1</span><span class="punct">:</span> <span class="lit">25</span><span class="punct">,</span>
+    <span class="name">y1</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">x2</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">-</span> <span class="lit">25</span><span class="punct">,</span>
+    <span class="name">y2</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">duration</span><span class="punct">:</span> <span class="lit">1</span><span class="punct">,</span>
+    <span class="name">particlesPerSecond</span><span class="punct">:</span> <span class="lit">100</span><span class="punct">,</span>
+    <span class="name">particleBlueprint</span><span class="punct">:</span> <span class="punct">{</span>
+        <span class="name">persistent</span><span class="punct">:</span> <span class="lit">true</span><span class="punct">,</span>
+        <span class="name">size</span><span class="punct">:</span> <span class="lit">2</span><span class="punct">,</span>
+        <span class="name">direction</span><span class="punct">:</span> <span class="punct">[</span><span class="lit">0</span><span class="punct">,</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">],</span>
+    <span class="punct">}</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">anchor</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ElasticAnchor</span><span class="punct">({</span>
+    <span class="name">stiffness</span><span class="punct">:</span> <span class="lit">8.0</span><span class="punct">,</span>
+    <span class="name">damping</span><span class="punct">:</span> <span class="lit">0.9</span><span class="punct">,</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">repulsionForce</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">RadialForce</span><span class="punct">({</span>
+    <span class="name">x</span><span class="punct">:</span> <span class="punct">-</span><span class="lit">100</span><span class="punct">,</span>
+    <span class="name">y</span><span class="punct">:</span> <span class="punct">-</span><span class="lit">100</span><span class="punct">,</span>
+    <span class="name">strength</span><span class="punct">:</span> <span class="punct">-</span><span class="lit">8000</span><span class="punct">,</span>
+<span class="punct">});</span>
+
+<span class="name">lineEmitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">anchor</span><span class="punct">);</span>
+<span class="name">lineEmitter</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">repulsionForce</span><span class="punct">);</span></code></pre>
+            </div>
+
+            <img alt="Elastic anchor modifier demo." src="img/modifiers/elastic_anchor.webp" width="400" height="150" loading="lazy"/>
 
             <h2 id="modifiers-visual-modifiers">Visual Modifiers</h2>
 
@@ -3084,6 +3162,7 @@
               <ul>
                 <li><a href="#modifiers-sine-wave">Sine Wave</a></li>
                 <li><a href="#modifiers-turbulence">Turbulence</a></li>
+                <li><a href="#modifiers-elastic-anchor">Elastic Anchor</a></li>
               </ul>
             </li>
             <li><a href="#modifiers-visual-modifiers">Visual Modifiers</a>
