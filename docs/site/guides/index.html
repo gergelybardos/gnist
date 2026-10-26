@@ -1159,12 +1159,14 @@
 
             <h2 id="emitters-emitter-types">Emitter Types</h2>
 
+            <p>The following emitters differ primarily in the geometry of their emission area. Their common configuration options are documented in <a href="#emitters-emitter-configuration">Emitter Configuration</a>.</p>
+
             <div class="table-container">
               <table class="property-list">
                 <thead>
                 <tr>
                   <th>Emitter Type</th>
-                  <th>Specific Properties</th>
+                  <th>Emitter-Specific Properties</th>
                   <th>Typical Uses</th>
                 </tr>
                 </thead>
@@ -1191,6 +1193,187 @@
                 </tr>
                 </tbody>
               </table>
+            </div>
+
+            <h3 id="emitters-image-emitter">Image Emitter</h3>
+
+            <p>Unlike the other emitters, <code>ImageEmitter</code> warrants a more detailed explanation. An <code>ImageEmitter</code> emits particles from a rectangular area, using image pixel data like color and opacity to determine particle properties.</p>
+
+            <p>The <code>ImageEmitter</code>-specific properties of the emitter configuration object and their corresponding public properties on the emitter instance:</p>
+
+            <div class="table-container">
+              <table class="property-list">
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>x</code></td>
+                  <td>Horizontal coordinate of the top-left corner of the emission rectangle.</td>
+                </tr>
+                <tr>
+                  <td><code>y</code></td>
+                  <td>Vertical coordinate of the top-left corner of the emission rectangle.</td>
+                </tr>
+                <tr>
+                  <td><code>width</code></td>
+                  <td>Width of the emission rectangle.</td>
+                </tr>
+                <tr>
+                  <td><code>height</code></td>
+                  <td>Height of the emission rectangle.</td>
+                </tr>
+                <tr>
+                  <td><code>imageData</code></td>
+                  <td>Image data used to determine particle properties.</td>
+                </tr>
+                <tr>
+                  <td><code>opacityThreshold</code></td>
+                  <td>Minimum pixel opacity required for emission (0.0 to 1.0).</td>
+                </tr>
+                <tr>
+                  <td><code>ignoreColor</code></td>
+                  <td>RGB color to exclude from particle emission. Format: <code>{ r:255, g:255, b:255 }</code></td>
+                </tr>
+                <tr>
+                  <td><code>ignoreColorTolerance</code></td>
+                  <td>Allowed color difference when matching the ignored color (0 to 255).</td>
+                </tr>
+                <tr>
+                  <td><code>colorMode</code></td>
+                  <td>Color mode that determines how pixel colors are applied to particles by an ImageEmitter.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <blockquote class="callout note">
+              <div class="callout-title">
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+                <span>Note</span>
+              </div>
+              <p>If the loaded image's dimensions or aspect ratio differ from those specified by <code>width</code> and <code>height</code>, the image will be stretched to fit.</p>
+            </blockquote>
+
+            <h4>Loading Pixel Data</h4>
+
+            <p>The client code is responsible for loading the source image and its pixel data. How pixel data is obtained and loaded into <code>imageData.data</code> is entirely up to you, as long as the expected format is respected. In a browser, the simplest approach is to load an image onto a canvas and read its pixel data using <code>getImageData()</code>.</p>
+
+            <p>Properties of the <code>imageData</code> sub-object:</p>
+
+            <div class="table-container">
+              <table class="property-list">
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>width</code></td>
+                  <td><code>number</code></td>
+                  <td>Width of the image in pixels.</td>
+                </tr>
+                <tr>
+                  <td><code>height</code></td>
+                  <td><code>number</code></td>
+                  <td>Height of the image in pixels.</td>
+                </tr>
+                <tr>
+                  <td><code>data</code></td>
+                  <td><code>Uint8ClampedArray</code></td>
+                  <td>RGBA pixel data stored in row-major order, with 4 consecutive 0–255 values per pixel.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p>The following snippet demonstrates one way to load an image and use it with <code>ImageEmitter</code>. It is intended as a reference, not as a ready-to-run example.</p>
+
+            <div class="code-snippet">
+              <button class="copy-button" aria-label="Copy code" title="Copy code"></button>
+              <pre><code><span class="kw">function</span> <span class="name">getImageData</span><span class="punct">(</span><span class="name">image</span><span class="punct">)</span> <span class="punct">{</span>
+    <span class="kw">const</span> <span class="name">canvas</span> <span class="punct">=</span> <span class="name">document</span><span class="punct">.</span><span class="name">createElement</span><span class="punct">(</span><span class="str">'canvas'</span><span class="punct">);</span>
+
+    <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">=</span> <span class="name">image</span><span class="punct">.</span><span class="name">naturalWidth</span><span class="punct">;</span>
+    <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">=</span> <span class="name">image</span><span class="punct">.</span><span class="name">naturalHeight</span><span class="punct">;</span>
+
+    <span class="kw">const</span> <span class="name">context</span> <span class="punct">=</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">getContext</span><span class="punct">(</span><span class="str">'2d'</span><span class="punct">);</span>
+
+    <span class="name">context</span><span class="punct">.</span><span class="name">drawImage</span><span class="punct">(</span><span class="name">image</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">);</span>
+
+    <span class="kw">return</span> <span class="punct">{</span>
+        <span class="name">width</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span><span class="punct">,</span>
+        <span class="name">height</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span><span class="punct">,</span>
+        <span class="name">data</span><span class="punct">:</span> <span class="name">context</span><span class="punct">.</span><span class="name">getImageData</span><span class="punct">(</span><span class="lit">0</span><span class="punct">,</span> <span class="lit">0</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span><span class="punct">,</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span><span class="punct">).</span><span class="name">data</span><span class="punct">,</span>
+    <span class="punct">};</span>
+<span class="punct">}</span>
+
+<span class="kw">const</span> <span class="name">monaLisa</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Image</span><span class="punct">();</span>
+
+<span class="name">monaLisa</span><span class="punct">.</span><span class="name">src</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">URL</span><span class="punct">(</span><span class="str">'mona-lisa.jpg'</span><span class="punct">,</span> <span class="name">import</span><span class="punct">.</span><span class="name">meta</span><span class="punct">.</span><span class="name">url</span><span class="punct">).</span><span class="name">href</span><span class="punct">;</span>
+
+<span class="name">monaLisa</span><span class="punct">.</span><span class="name">onload</span> <span class="punct">=</span> <span class="punct">()</span> <span class="punct">=&gt;</span> <span class="punct">{</span>
+    <span class="kw">const</span> <span class="name">imageWidth</span> <span class="punct">=</span> <span class="lit">500</span><span class="punct">;</span>
+    <span class="kw">const</span> <span class="name">imageHeight</span> <span class="punct">=</span> <span class="lit">800</span><span class="punct">;</span>
+
+    <span class="kw">const</span> <span class="name">imageEmitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ImageEmitter</span><span class="punct">({</span>
+        <span class="name">x</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span> <span class="punct">-</span> <span class="name">imageWidth</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+        <span class="name">y</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">/</span> <span class="lit">2</span> <span class="punct">-</span> <span class="name">imageHeight</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+        <span class="name">width</span><span class="punct">:</span> <span class="name">imageWidth</span><span class="punct">,</span>
+        <span class="name">height</span><span class="punct">:</span> <span class="name">imageHeight</span><span class="punct">,</span>
+        <span class="name">imageData</span><span class="punct">:</span> <span class="name">getImageData</span><span class="punct">(</span><span class="name">monaLisa</span><span class="punct">),</span>
+        <span class="name">colorMode</span><span class="punct">:</span> <span class="name">ColorMode</span><span class="punct">.</span><span class="name">COLORIZE</span><span class="punct">,</span>
+        <span class="name">particlesPerSecond</span><span class="punct">:</span> <span class="lit">20000</span><span class="punct">,</span>
+        <span class="name">duration</span><span class="punct">:</span> <span class="lit">1</span><span class="punct">,</span>
+        <span class="name">particleBlueprint</span><span class="punct">:</span> <span class="punct">{</span>
+            <span class="name">persistent</span><span class="punct">:</span> <span class="lit">true</span><span class="punct">,</span>
+            <span class="name">size</span><span class="punct">:</span> <span class="lit">3</span><span class="punct">,</span>
+            <span class="name">loopDuration</span><span class="punct">:</span> <span class="lit">2</span><span class="punct">,</span>
+            <span class="name">loopMode</span><span class="punct">:</span> <span class="name">LoopMode</span><span class="punct">.</span><span class="name">OSCILLATE</span><span class="punct">,</span>
+            <span class="name">speed</span><span class="punct">:</span> <span class="lit">0</span><span class="punct">,</span>
+            <span class="name">direction</span><span class="punct">:</span> <span class="punct">[</span><span class="lit">0</span><span class="punct">,</span> <span class="name">Math</span><span class="punct">.</span><span class="name">PI</span> <span class="punct">*</span> <span class="lit">2</span><span class="punct">],</span>
+        <span class="punct">}</span>
+    <span class="punct">});</span>
+
+    <span class="kw">const</span> <span class="name">anchor</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">ElasticAnchor</span><span class="punct">({</span>
+        <span class="name">damping</span><span class="punct">:</span> <span class="lit">0.9</span><span class="punct">,</span>
+    <span class="punct">});</span>
+
+    <span class="name">imageEmitter</span><span class="punct">.</span><span class="name">addModifier</span><span class="punct">(</span><span class="name">anchor</span><span class="punct">);</span>
+
+    <span class="name">gnist</span><span class="punct">.</span><span class="name">addEmitter</span><span class="punct">(</span><span class="name">imageEmitter</span><span class="punct">);</span>
+<span class="punct">};</span></code></pre>
+            </div>
+
+            <h4>Pixel Filtering</h4>
+
+            <p>The source image's alpha channel determines which pixels can emit particles. Fully transparent pixels are ignored, while <code>opacityThreshold</code> sets the minimum pixel opacity required for emission (0.0 to 1.0).</p>
+
+            <p>You can also exclude a specific background color, such as a green screen, by setting <code>ignoreColor</code>. Use <code>ignoreColorTolerance</code> to control how closely a pixel's color must match the specified color to be ignored.</p>
+
+            <h4>Coloring</h4>
+
+            <p>The <code>colorMode</code> property of an image emitter configuration object determines how pixel colors are applied to particles.</p>
+
+            <p>The available modes are properties of the <code>ColorMode</code> constant object:</p>
+
+            <ul>
+              <li><code>IMAGE</code> — Uses the source image pixel color directly.</li>
+              <li><code>COLORIZE</code> — Uses the source image pixel brightness to modulate the particle color.</li>
+            </ul>
+
+            <p>The images below demonstrate how color modes work. From left to right: <code>IMAGE</code>, <code>COLORIZE</code> (with the default white particle color), and <code>COLORIZE</code> combined with a <code>ColorRamp</code> modifier, which preserves brightness while changing color.</p>
+
+            <div class="image-gallery">
+              <img alt="Image emitter demo with color mode image." src="img/emitters/image_emitter/mona-lisa-color-mode-image.png" loading="lazy"/>
+              <img alt="Image emitter demo with color mode colorize." src="img/emitters/image_emitter/mona-lisa-color-mode-colorize.png" loading="lazy"/>
+              <img alt="Image emitter demo with color ramp." src="img/emitters/image_emitter/mona-lisa-color-ramp.webp" loading="lazy"/>
             </div>
           </section>
         </article>
@@ -3138,7 +3321,11 @@
                 <li><a href="#emitters-programmatic-emission">Programmatic Emission</a></li>
               </ul>
             </li>
-            <li><a href="#emitters-emitter-types">Emitter Types</a></li>
+            <li><a href="#emitters-emitter-types">Emitter Types</a>
+              <ul>
+                <li><a href="#emitters-image-emitter">Image Emitter</a></li>
+              </ul>
+            </li>
           </ul>
         </nav>
 

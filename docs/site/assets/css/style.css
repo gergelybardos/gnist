@@ -82,14 +82,15 @@ img {
 
 .image-gallery {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 12px;
   margin-top: 48px;
   margin-bottom: 48px;
 }
 
 .image-gallery img {
-  width: calc(50% - 1rem);
+  flex: 1;
+  width: 100%;
   height: auto;
   display: block;
 }
