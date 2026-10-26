@@ -12,7 +12,7 @@ import { Modifier } from '../Modifier.js';
  * @typedef {object} ElasticAnchorConfigSpecifics
  * @property {number|number[]} [stiffness=8] Pull strength returning the particle toward its origin.
  * @property {number} [damping=0.85] Velocity dampening factor (0.0 to 1.0) applied to smooth velocity and prevent infinite oscillation.
- * @property {number} [threshold=0] Distance threshold in pixels under which particles snap to their origin.
+ * @property {number} [snapThreshold=0] Distance threshold in pixels under which particles snap to their origin.
  */
 
 /**
@@ -22,7 +22,7 @@ import { Modifier } from '../Modifier.js';
  */
 
 /**
- * Path modifier that pulls particles back to their coordinates at emission time.
+ * Path modifier that continuously pulls particles back toward the coordinates where they were originally emitted.
  * @class
  * @extends Modifier
  */
@@ -82,7 +82,7 @@ export class ElasticAnchor extends Modifier {
         }
 
         this.damping = config.damping ?? 0.85;
-        this.snapThreshold = config.threshold ?? 0;
+        this.snapThreshold = config.snapThreshold ?? 0;
     }
 
     /**
