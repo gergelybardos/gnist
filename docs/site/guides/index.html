@@ -837,7 +837,7 @@
                 <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
                 <span>Note</span>
               </div>
-              <p>Note that blueprints are used only to initialize particle properties, and their properties do not map one-to-one to the public or readonly properties of <code>Particle</code> instances. For example, <code>speed</code> and <code>direction</code> are not stored directly; they are used to initialize the particle's <code>vx</code> and <code>vy</code> properties.</p>
+              <p>Blueprints are used only to initialize particle properties, and their properties do not map one-to-one to the public or readonly properties of <code>Particle</code> instances. For example, <code>speed</code> and <code>direction</code> are not stored directly; they are used to initialize the particle's <code>vx</code> and <code>vy</code> properties.</p>
             </blockquote>
 
             <p>See <a href="#emitters-event-driven-emission">Event-Driven Emission</a> for details on how <code>onInterval</code> and <code>onDeath</code> let you trigger custom behavior, such as sub-emissions, at specific particle lifecycle events.</p>
@@ -1236,7 +1236,7 @@
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="kw">const</span> <span class="name">wind</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">DirectionalForce</span><span class="punct">({</span>
-    <span class="name">ax</span><span class="punct">:</span> <span class="lit">100</span>
+    <span class="name">ax</span><span class="punct">:</span> <span class="lit">100</span><span class="punct">,</span>
 <span class="punct">});</span>
 
 <span class="kw">const</span> <span class="name">lineEmitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span> <span class="comm">...</span> <span class="punct">});</span>
@@ -1332,7 +1332,7 @@
                   <tr>
                     <td><code>cullingRadius</code></td>
                     <td><code>0</code></td>
-                    <td>Distance from the force center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Only the squared radius is stored internally and exposed as <code>cullingRadiusSquared</code>.</td>
+                    <td>Distance from the force center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Stored internally and exposed as <code>cullingRadius</code> and as a squared value as <code>cullingRadiusSquared</code>.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1343,7 +1343,7 @@
                 <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
                 <span>Note</span>
               </div>
-              <p>Because the simulation is updated in discrete time steps, particles may overshoot the force center and continue on the opposite side before being pulled back. If particles should disappear upon reaching the center, use the <code>cullingRadius</code> property.</p>
+              <p>Particles with high speed or long enough lifespan may overshoot the force center and continue on the opposite side before being pulled back. One way to make the particles disappear before reaching the center is to use the <code>cullingRadius</code> property.</p>
             </blockquote>
 
             <p>Below is an example of a radial force with and without culling. While some particles escape, most are absorbed. Without culling, however, particles continue orbiting the force until they reach the end of their lifespan. The only difference between the two examples is whether <code>cullingRadius</code> is set.</p>
@@ -1351,8 +1351,8 @@
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="kw">const</span> <span class="name">radialForce</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">RadialForce</span><span class="punct">({</span>
-    <span class="name">x</span><span class="punct">:</span> <span class="lit">250</span><span class="punct">,</span>
-    <span class="name">y</span><span class="punct">:</span> <span class="lit">190</span><span class="punct">,</span>
+    <span class="name">x</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">y</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
     <span class="name">strength</span><span class="punct">:</span> <span class="lit">50000</span><span class="punct">,</span>
     <span class="name">radius</span><span class="punct">:</span> <span class="lit">100</span><span class="punct">,</span>
     <span class="name">epsilon</span><span class="punct">:</span> <span class="lit">10</span><span class="punct">,</span>
@@ -1371,7 +1371,7 @@
 
             <h2 id="forces-vortex">Vortex</h2>
 
-            <p>A <code>Vortex</code> applies a combination of inward suction and tangential rotation to create a swirling motion around a central point. The suction component pulls particles toward the center, while the rotational component causes them to orbit around it.</p>
+            <p>A <code>Vortex</code> applies a combination of distance-scaled radial attraction/repulsion and tangential rotation forces to particles, supplemented by velocity damping to stabilize particle motion.</p>
 
             <p><strong>Typical use cases:</strong> whirlpool, tornado, black hole, and portal.</p>
 
@@ -1408,6 +1408,11 @@
                     <td>Strength of the radial attraction/repulsion. Positive values pull inward, negative values push outward.</td>
                   </tr>
                   <tr>
+                    <td><code>damping</code></td>
+                    <td><code>0.05</code></td>
+                    <td>Velocity damping factor applied near the vortex center to stabilize motion and prevent particle overshooting.</td>
+                  </tr>
+                  <tr>
                     <td><code>radius</code></td>
                     <td><code>Infinity</code></td>
                     <td>Radius of influence. Particles outside this distance are unaffected.</td>
@@ -1415,7 +1420,7 @@
                   <tr>
                     <td><code>cullingRadius</code></td>
                     <td><code>0</code></td>
-                    <td>Distance from the vortex center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Stored internally and exposed as <code>epsilon</code> and as a squared value as <code>epsilonSquared</code>.</td>
+                    <td>Distance from the vortex center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Stored internally and exposed as <code>cullingRadius</code> and as a squared value as <code>cullingRadiusSquared</code>.</td>
                   </tr>
                 </tbody>
               </table>
@@ -1426,68 +1431,132 @@
                 <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
                 <span>Note</span>
               </div>
-              <p>Because the simulation is updated in discrete time steps, particles may overshoot the vortex center and continue on the opposite side before being pulled back. If particles should disappear upon reaching the center, use the <code>cullingRadius</code> property.</p>
+              <p>Particles with high speed or long enough lifespan may overshoot the vortex center and continue on the opposite side before being pulled back. One way to make the particles disappear before reaching the center is to use the <code>cullingRadius</code> property.</p>
             </blockquote>
 
-            <p>Below is an example of a vortex with culling. While some particles escape, most are absorbed. Without culling, particles would continue orbiting the force until they reach the end of their lifespan.</p>
+            <blockquote class="callout note">
+              <div class="callout-title">
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+                <span>Note</span>
+              </div>
+              <p><code>Vortex</code> and <code>OrbitalForce</code> may seem redundant at first glance, but they differ fundamentally in how they influence particle movement. See <a href="#forces-vortex-vs-orbital-force">Vortex vs. Orbital Force</a> for details.</p>
+            </blockquote>
+
+            <p>Below is an example of a vortex force that twirls particles from two emitters together.</p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
-              <pre><code><span class="kw">const</span> <span class="name">gnistEngine</span> = <span class="kw">new</span> <span class="name">Gnist</span>();
+              <pre><code><span class="kw">const</span> <span class="name">vortex</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">Vortex</span><span class="punct">({</span>
+    <span class="name">x</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">y</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">rotationSpeed</span><span class="punct">:</span> <span class="lit">1200</span><span class="punct">,</span>
+    <span class="name">suctionSpeed</span><span class="punct">:</span> <span class="lit">800</span><span class="punct">,</span>
+    <span class="name">radius</span><span class="punct">:</span> <span class="lit">300</span><span class="punct">,</span>
+<span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">blueEmitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
-    <span class="name">x1</span>: <span class="lit">25</span>,
-    <span class="name">y1</span>: <span class="lit">25</span>,
-    <span class="name">x2</span>: <span class="lit">475</span>,
-    <span class="name">y2</span>: <span class="lit">25</span>,
-    <span class="name">particlesPerSecond</span>: <span class="lit">200</span>,
-    <span class="name">source</span>: <span class="name">EmissionSource</span>.<span class="name">EDGE_OUT</span>,
-    <span class="name">particleBlueprint</span>: {
-        <span class="name">angularVelocity</span>: [<span class="lit">1</span>, <span class="lit">6</span>],
-        <span class="name">size</span>: [<span class="lit">1</span>, <span class="lit">5</span>],
-        <span class="name">lifespan</span>: <span class="lit">3</span>,
-        <span class="name">speed</span>: [<span class="lit">15</span>, <span class="lit">150</span>],
-        <span class="name">color</span>: {<span class="name">r</span>: <span class="lit">76</span>, <span class="name">g</span>: <span class="lit">122</span>, <span class="name">b</span>: <span class="lit">238</span>},
-    }
-});
+<span class="kw">const</span> <span class="name">blueEmitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span> <span class="punct">...</span> <span class="punct">});</span>
+<span class="kw">const</span> <span class="name">redEmitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span> <span class="punct">...</span> <span class="punct">});</span>
 
-<span class="kw">const</span> <span class="name">pinkEmitter</span> = <span class="kw">new</span> <span class="name">LineEmitter</span>({
-    <span class="name">x1</span>: <span class="lit">25</span>,
-    <span class="name">y1</span>: <span class="lit">355</span>,
-    <span class="name">x2</span>: <span class="lit">475</span>,
-    <span class="name">y2</span>: <span class="lit">355</span>,
-    <span class="name">particlesPerSecond</span>: <span class="lit">200</span>,
-    <span class="name">source</span>: <span class="name">EmissionSource</span>.<span class="name">EDGE_IN</span>,
-    <span class="name">particleBlueprint</span>: {
-        <span class="name">angularVelocity</span>: [<span class="lit">1</span>, <span class="lit">6</span>],
-        <span class="name">size</span>: [<span class="lit">1</span>, <span class="lit">5</span>],
-        <span class="name">lifespan</span>: <span class="lit">3</span>,
-        <span class="name">speed</span>: [<span class="lit">15</span>, <span class="lit">150</span>],
-        <span class="name">color</span>: {<span class="name">r</span>: <span class="lit">224</span>, <span class="name">g</span>: <span class="lit">23</span>, <span class="name">b</span>: <span class="lit">122</span>},
-    }
-});
-
-<span class="kw">const</span> <span class="name">friction</span> = <span class="kw">new</span> <span class="name">LinearDrag</span>({
-    <span class="name">drag</span>: <span class="lit">0.9</span>,
-});
-
-<span class="kw">const</span> <span class="name">vortex</span> = <span class="kw">new</span> <span class="name">Vortex</span>({
-    <span class="name">x</span>: <span class="lit">250</span>,
-    <span class="name">y</span>: <span class="lit">190</span>,
-    <span class="name">rotationSpeed</span>: <span class="lit">275</span>,
-    <span class="name">suctionSpeed</span>: <span class="lit">200</span>,
-    <span class="name">radius</span>: <span class="lit">140</span>,
-    <span class="name">cullingRadius</span>: <span class="lit">75</span>,
-});
-
-<span class="name">gnistEngine</span>.<span class="name">addEmitter</span>(<span class="name">blueEmitter</span>);
-<span class="name">gnistEngine</span>.<span class="name">addEmitter</span>(<span class="name">pinkEmitter</span>);
-
-<span class="name">gnistEngine</span>.<span class="name">addGlobalForce</span>(<span class="name">friction</span>);
-<span class="name">gnistEngine</span>.<span class="name">addGlobalForce</span>(<span class="name">vortex</span>);</code></pre>
+<span class="name">blueEmitter</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">vortex</span><span class="punct">);</span>
+<span class="name">redEmitter</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">vortex</span><span class="punct">);</span></code></pre>
             </div>
 
-            <img alt="Vortex force demo." src="img/forces/vortex.webp" width="494" height="340" loading="lazy"/>
+            <img alt="Vortex force demo." src="img/forces/vortex.webp" width="495" height="340" loading="lazy"/>
+
+            <h2 id="forces-orbital-force">Orbital Force</h2>
+
+            <p>An <code>OrbitalForce</code> steers particles toward a target orbital motion using radial and tangential velocity components.</p>
+
+            <p><strong>Typical use cases:</strong> whirlpool, tornado, black hole, portal, asteroid belt, planetary orbits, and atomic orbitals.</p>
+
+            <p>Properties of a configuration object and its corresponding <code>OrbitalForce</code> instance public properties:</p>
+
+            <div class="table-container">
+              <table class="property-list">
+                <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td><code>x</code></td>
+                  <td><code>0</code></td>
+                  <td>Horizontal coordinate of the orbital center.</td>
+                </tr>
+                <tr>
+                  <td><code>y</code></td>
+                  <td><code>0</code></td>
+                  <td>Vertical coordinate of the orbital center.</td>
+                </tr>
+                <tr>
+                  <td><code>tangentialSpeed</code></td>
+                  <td><code>100</code></td>
+                  <td>Target tangential speed. Positive values rotate clockwise, negative values rotate counter-clockwise.</td>
+                </tr>
+                <tr>
+                  <td><code>radialSpeed</code></td>
+                  <td><code>50</code></td>
+                  <td>Target radial speed. Positive values push outward, negative values pull inward.</td>
+                </tr>
+                <tr>
+                  <td><code>radius</code></td>
+                  <td><code>Infinity</code></td>
+                  <td>Radius of influence. Particles outside this distance are unaffected.</td>
+                </tr>
+                <tr>
+                  <td><code>cullingRadius</code></td>
+                  <td><code>0</code></td>
+                  <td>Distance from the orbital center below which particles are removed. A soft-aging buffer zone is applied around this area to reduce visual popping. Set to <code>0</code> to disable culling. Stored internally and exposed as <code>cullingRadius</code> and as a squared value as <code>cullingRadiusSquared</code>.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <blockquote class="callout note">
+              <div class="callout-title">
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>
+                <span>Note</span>
+              </div>
+              <p><code>OrbitalForce</code> prevents particles with high speeds or long enough lifespans from overshooting the center, unlike <code>RadialForce</code> or <code>Vortex</code>. With <code>OrbitalForce</code>, <code>cullingRadius</code> is an optional feature rather than a way to prevent slingshot effects.</p>
+            </blockquote>
+
+            <h3 id="forces-vortex-vs-orbital-force">Vortex vs. Orbital Force</h3>
+
+            <p>While <code>OrbitalForce</code> can replicate the whirlpool effect shown in <a href="#forces-vortex">Vortex</a>, the example below highlights their key difference instead: a <code>Vortex</code> with low <code>suctionSpeed</code> on the left versus an <code>OrbitalForce</code> with low <code>radialSpeed</code> on the right. The code snippet shows only the <code>OrbitalForce</code> configuration for reference.</p>
+
+            <div class="code-snippet">
+              <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
+              <pre><code><span class="kw">const</span> <span class="name">orbitalForce</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">OrbitalForce</span><span class="punct">({</span>
+    <span class="name">x</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">width</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">y</span><span class="punct">:</span> <span class="name">canvas</span><span class="punct">.</span><span class="name">height</span> <span class="punct">/</span> <span class="lit">2</span><span class="punct">,</span>
+    <span class="name">tangentialSpeed</span><span class="punct">:</span> <span class="punct">-</span><span class="lit">150</span><span class="punct">,</span>
+    <span class="name">radialSpeed</span><span class="punct">:</span> <span class="punct">-</span><span class="lit">25</span><span class="punct">,</span>
+    <span class="name">radius</span><span class="punct">:</span> <span class="lit">200</span><span class="punct">,</span>
+<span class="punct">});</span>
+
+<span class="kw">const</span> <span class="name">blueEmitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span> <span class="punct">...</span> <span class="punct">});</span>
+<span class="kw">const</span> <span class="name">redEmitter</span> <span class="punct">=</span> <span class="kw">new</span> <span class="name">LineEmitter</span><span class="punct">({</span> <span class="punct">...</span> <span class="punct">});</span>
+
+<span class="name">blueEmitter</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">orbitalForce</span><span class="punct">);</span>
+<span class="name">redEmitter</span><span class="punct">.</span><span class="name">addScopedForce</span><span class="punct">(</span><span class="name">orbitalForce</span><span class="punct">);</span></code></pre>
+            </div>
+
+            <div class="image-gallery">
+              <img alt="Vortex force comparison." src="img/forces/vortex_vs_orbital_v.webp" loading="lazy"/>
+              <img alt="Orbital force comparison." src="img/forces/vortex_vs_orbital_o.webp" loading="lazy"/>
+            </div>
+
+            <p>Although <code>Vortex</code> and <code>OrbitalForce</code> both produce circular motion, they use fundamentally different approaches.</p>
+
+            <ul>
+              <li><code>Vortex</code> treats <code>rotationSpeed</code> and <code>suctionSpeed</code> as continuous accelerations applied on top of the particle's existing velocity. Because particles retain more of their existing velocity, <code>Vortex</code> produces more a chaotic effect similar to debris caught in a real stream.</li>
+              <li><code>OrbitalForce</code> uses steering; it measures the particle's current speeds along the radial and tangential axes, compares them with their respective target speeds, and steers them toward those targets, acting like cruise control. Because particles are driven toward their target speeds, <code>OrbitalForce</code> produces more mechanical, precise movement, ideal for rings.</li>
+            </ul>
+
+            <p>Another important difference is that while <code>Vortex</code> may slingshot fast-moving or long-living particles, <code>OrbitalForce</code> will lock them into a stable orbit or inward spiral.</p>
           </section>
         </article>
 
@@ -3001,6 +3070,11 @@
             <li><a href="#forces-linear-drag">Linear Drag</a></li>
             <li><a href="#forces-radial-force">Radial Force</a></li>
             <li><a href="#forces-vortex">Vortex</a></li>
+            <li><a href="#forces-orbital-force">Orbital Force</a>
+              <ul>
+                <a href="#forces-vortex-vs-orbital-force">Vortex vs. Orbital Force</a>
+              </ul>
+            </li>
           </ul>
         </nav>
 

@@ -84,6 +84,8 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  margin-top: 48px;
+  margin-bottom: 48px;
 }
 
 .image-gallery img {
