@@ -7,12 +7,12 @@
 
   --bg-color: #0F0F14;
   --surface-color: #141419;
-  --border-color: #2A2F3A;
+  --border-color: #21252E;
   --text-color: #ABABB6;
   --highlighted-color: #FAFAFA;
-  --accent-color: #16D7E1;
-  --inline-code-bg-color: #2A2F3A;
-  --inline-code-color: #16D7E1;
+  --accent-color: #17B7BD;
+  --inline-code-bg-color: #21252E;
+  --inline-code-color: #17B7BD;
   --block-code-bg-color: #0F0F14;
   --block-code-color: #ABABB6;
   --callout-color: var(--accent-color);
@@ -449,13 +449,13 @@ var {
 }
 
 .kw    { color: var(--inline-code-color); }
-.name  { color: #777dea; }
-.lit   { color: #FF6600; }
+.name  { color: #7075DB; }
+.lit   { color: #D25E11; }
 .comm  { color: #858585; }
-.tag   { color: #777dea; }
+.tag   { color: #7075DB; }
 .attr  { color: var(--inline-code-color); }
-.arg   { color: #FF6600; }
-.str   { color: #FF6600; }
+.arg   { color: #D25E11; }
+.str   { color: #D25E11; }
 .punct { color: #858585; opacity: 0.7; }
 
 /* Utilities */
