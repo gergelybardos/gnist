@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.3.0 (2026-10-27)
+
+### Changes
+
+- Reworked `Vortex` force behavior for more natural vortex-like motion and added the `damping` property.
+
+### Features
+
+- Added lifecycle hooks — `onInterval` and `onDeath` — to emitters and particles, introducing support for event-driven behavior.
+- Added support for persistent particles.
+- Added looping support for particle modifiers, with repeat, oscillate, and hold modes.
+- Added `loopDuration` to control modifier duration independently of particle lifespan.
+- Added the `ImageEmitter` emitter.
+- Added the `OrbitalForce` force.
+- Added the `ElasticAnchor` modifier.
+- Added support for randomly picking property values from a list in `particleBlueprint` configurations, in addition to literal values and `[min, max]` ranges.
+- Added the `toggle()` playback control method to emitters.
+- Added the `kill()` method to `Particle`.
+
+### Fixes
+
+- Fixed the missing soft-aging area around the `RadialForce` culling radius.
+
+### Documentation
+
+- Updated the API documentation and the how-to guides to cover new features and reflect changes.
+- Added a new section to `README.md`: Live Showcase.
+- Updated the Benchmarks section in `README.md`.
+
+### Development
+
+- Added npm scripts: `dev:benchmark`, `build:sandbox`, and `preview:sandbox`.
+- Changed `npm run dev` to use WebGL rendering by default.
+- Refactored the local sandbox to support switching between multiple demos.
+- Added downloadable performance statistics reports to the local sandbox.
+
 ## 0.2.0 (2026-08-04)
 
 ### ⚠ BREAKING CHANGES
@@ -38,7 +74,7 @@
 
 ### Documentation
 
-- Updated the installation section in `README.md`.
+- Updated the Installation section in `README.md`.
 - Fixed the import in the basic usage example in `README.md`.
 
 ## 0.1.0 (2026-07-01)
