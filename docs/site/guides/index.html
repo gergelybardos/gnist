@@ -99,7 +99,7 @@
 
             <h4>Emitters</h4>
 
-            <p>Particle generators that spawn particles into the shared particle pool. Emitters are defined by 2D primitives such as points, lines, rectangles, and ellipses, which determine the initial distribution of emitted particles. Configurations and blueprints provide fine-grained control over emission behavior and initial particle properties, with randomized values available to create natural variation.</p>
+            <p>Particle generators that spawn particles into the shared particle pool. Emitters are defined by 2D primitives that determine the initial distribution of emitted particles. Emitter configurations and particle blueprints provide fine-grained control over emission and initial particle properties, with support for randomized values for natural variation.</p>
 
             <h4>Forces</h4>
 
@@ -134,7 +134,7 @@
 
             <h2 id="yfpe-what-youll-create">What You'll Create</h2>
 
-            <p>In this guide, you will build a simple campfire particle effect using Gnist from scratch. The example uses multiple emitters, modifiers, a global force, and Canvas 2D rendering to demonstrate how the different parts of Gnist work together. The focus is on learning how to use Gnist, not on building a production-ready application.</p>
+            <p>In this guide, you will build a campfire from scratch. The example uses multiple emitters, modifiers, a global force, and Canvas 2D rendering.</p>
 
             <p>The final result will look like this:</p>
 
@@ -164,20 +164,20 @@
 <span class="name">npm</span> <span class="name">init</span></code></pre>
             </div>
 
-            <p>When prompted, set the package type to <code>module</code>. CommonJS projects are not supported.</p>
+            <p>When prompted, set package type to <code>module</code>. CommonJS projects are not supported.</p>
 
-            <p>Note that this project does not use the entry point setting. You can leave it unchanged or remove it entirely.</p>
+            <p>We will not use the entry point setting. You can leave it unchanged or remove it entirely.</p>
 
             <h3 id="yfpe-install-vite">Install Vite</h3>
 
-            <p>Next, we will install <a href="https://vite.dev/" target="_blank">Vite</a> as a dev dependency to provide a development server and handle module resolution for the project. This allows us to import directly from the installed npm package. Vite is used only to simplify the development setup; it is not a requirement for using Gnist.</p>
+            <p>Next, we will install <a href="https://vite.dev/" target="_blank">Vite</a> to provide a development server and handle module resolution. This allows us to import directly from the installed npm package. Vite is used only to simplify the development setup; it is not a requirement for using Gnist.</p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="name">npm</span> <span class="name">i</span> <span class="attr">--save-dev</span> <span class="arg">vite</span></code></pre>
             </div>
 
-            <p>Then add the start script to <code>package.json</code>:</p>
+            <p>Then add a start script to <code>package.json</code>:</p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
@@ -201,7 +201,7 @@
 
             <h3 id="yfpe-html-setup">HTML Setup</h3>
 
-            <p>Create an <code>index.html</code> file in the project root. The page only needs a <code>&lt;canvas&gt;</code> element, which will be used for rendering the particle system, and a <code>&lt;script&gt;</code> tag that loads the application's entry point.</p>
+            <p>Create an <code>index.html</code> file in the project root with a <code>&lt;canvas&gt;</code> element for rendering and a <code>&lt;script&gt;</code> tag to load the application entry point.
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
@@ -221,7 +221,7 @@
 
             <h3 id="yfpe-canvas-setup">Canvas Setup</h3>
 
-            <p>Next, create <code>main.js</code> and initialize the canvas. Gnist performs only the simulation, so the application is responsible for rendering the particles.</p>
+            <p>Next, create <code>main.js</code> and initialize the canvas. Gnist performs only the simulation; rendering is up to the client application.</p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
@@ -235,8 +235,7 @@
             <h3 id="yfpe-main-loop">Main Loop</h3>
 
             <p>Next, create the application's main loop. Each frame, it advances the simulation and renders the updated particle state.</p>
-
-            <p><code>dt</code> represents the time elapsed since the previous frame, measured in seconds. We will pass it to Gnist, ensuring that the simulation runs at a consistent speed regardless of the frame rate.</p>
+            <p><code>dt</code> represents the time elapsed since the previous frame, in seconds. Passing it to Gnist keeps the simulation speed consistent regardless of frame rate.</p>
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
               <pre><code><span class="kw">let</span> <span class="name">lastTime</span> <span class="punct">=</span> <span class="name">performance</span><span class="punct">.</span><span class="name">now</span><span class="punct">();</span>
@@ -257,7 +256,7 @@
 
             <h2 id="yfpe-setting-up-gnist">Setting up Gnist</h2>
 
-            <p>First, import the following items from the Gnist package at the top of <code>main.js</code></p>
+            <p>First, import the following items from Gnist at the top of <code>main.js</code></p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
@@ -273,7 +272,7 @@
 <span class="punct">}</span> <span class="kw">from</span> <span class="str">'@gergelybardos/gnist'</span><span class="punct">;</span></code></pre>
             </div>
 
-            <p>Next, create a <code>Gnist</code> instance and configure its culling bounds. Culling bounds specify the area outside of which particles are automatically removed regardless of their age. Setting culling bounds is optional but recommended for most applications. Since Gnist is renderer-agnostic and has no knowledge of the rendering context, the application may define these bounds if automatic particle cleanup is desired.</p>
+            <p>Next, create a Gnist instance and configure its culling bounds. Culling bounds specify the area outside of which particles are automatically removed, regardless of their age. They are optional, but you must define them if you want automatic particle cleanup, since Gnist has no knowledge of the rendering context.</p>
 
             <div class="code-snippet">
               <button type="button" class="copy-button" aria-label="Copy code">Copy</button>
@@ -289,7 +288,7 @@
 
             <h2 id="yfpe-rendering-the-particles">Rendering the Particles</h2>
 
-            <p>Gnist does not render particles directly. Instead, it exposes the current simulation state through the <code>engine.particles</code> array, which can be rendered using any rendering system. In this example, we use the Canvas 2D API to draw each particle as a small colored rectangle. It is up to the application to interpret the particle data; the same state can be used to create simple shapes, sprites, textures, or custom visual effects. The rendering code in this example is intentionally simple.</p>
+            <p>Gnist exposes the simulation state through <code>engine.particles</code> rather than rendering particles directly. This example uses Canvas 2D to draw each particle as a small colored rectangle, but applications can render the same data as shapes, sprites, textures, or custom effects.</p>
 
             <p>Add the following code inside your main loop:</p>
 
@@ -377,7 +376,7 @@
 
             <h3 id="yfpe-smoke">Smoke</h3>
 
-            <p>Next, we will add some smoke to our campfire simulation:</p>
+            <p>Next, we will add some smoke to our campfire:</p>
 
             <ul>
               <li>Instantiate <code>LineEmitter</code>.</li>
@@ -1143,9 +1142,11 @@
 
             <ul>
               <li><code>particleCount</code> — The number of particles to emit.</li>
-              <li><code>emitterOverrides</code> (optional) — Temporarily overrides emitter-specific geometry properties, such as <code>x</code>, <code>y</code>, <code>width</code>, <code>height</code>, etc. Available overrides depend on the emitter subclass, such as <code>PointEmitter</code>, <code>RectEmitter</code>, etc.</li>
-              <li><code>particleBlueprintOverrides</code> (optional) — Temporarily overrides properties from the emitter's original `particleBlueprint` configuration.</li>
+              <li><code>emitterOverrides</code> (optional) — An object similar to the emitter configuration, but limited to emitter-specific properties such as <code>x</code>, <code>y</code>, <code>width</code>, and <code>height</code>. Available properties depend on the emitter subclass. Only specify the properties you want to override.</li>
+              <li><code>particleBlueprintOverrides</code> (optional) — An object similar to the <code>particleBlueprint</code> configuration (see <a href="#particle-blueprint">Particle Blueprint</a>), allowing you to temporarily override any of its properties. Only specify the properties you want to change.</li>
             </ul>
+
+            <p>Normally, <code>particleBlueprint</code> is part of the emitter configuration. In <code>emit()</code>, the two override objects are passed as separate arguments.</p>
 
             <p>See <a href="#fireworks-with-lifecycle-hooks">Fireworks with Lifecycle Hooks</a> for a practical example of event-driven emission in action.</p>
 
@@ -2973,7 +2974,7 @@
 
             <h2 id="fireworks-prerequisites">Prerequisites</h2>
 
-            <p>This guide assumes you already have a working application skeleton with a main loop. It focuses solely on demonstrating how to use lifecycle hooks. If you need a starting point, follow the steps described in <a href="#your-first-particle-system">Your First Particle System</a> up to the point where emitters are added. This guide covers the subsequent steps.</p>
+            <p>This guide assumes you already have a working application skeleton with a main loop. If you need a starting point, follow the steps described in <a href="#your-first-particle-system">Your First Particle System</a> up to the point where emitters are added. This guide covers the subsequent steps.</p>
 
             <h2 id="fireworks-updating-the-imports">Updating the Imports</h2>
 
