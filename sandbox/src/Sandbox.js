@@ -289,6 +289,7 @@ export class Sandbox {
         this.#btnReport.addEventListener('click', () => this.#requestReport());
 
         this.#particleCanvas.addEventListener('pointermove', (event) => this.#handlePointerMove(event));
+        this.#particleCanvas.addEventListener('pointerup', () => this.#handlePointerUp());
 
         window.addEventListener('resize', () => this.#handleResize());
         window.addEventListener('keydown', (event) => this.#handleKeyDown(event));
@@ -535,28 +536,36 @@ export class Sandbox {
      * @returns {void}
      */
     #initElasticSkullDemo() {
+        const clientRect = this.#particleCanvas.getBoundingClientRect();
+
+        const imageWidth = 600;
+        const imageHeight = 600;
+
+        const scale = Math.min(
+            clientRect.width / imageWidth,
+            clientRect.height / imageHeight
+        );
+
+        const width = imageWidth * scale * 0.75;
+        const height = imageHeight * scale * 0.75;
+
         const skullImage = new Image();
 
         skullImage.src = new URL('./assets/skull.png', import.meta.url).href;
 
         skullImage.onload = () => {
-            const skullWidth = 600;
-            const skullHeight = 600;
-
             const skullEmitter = new ImageEmitter({
-                x: this.#particleCanvas.width / 2 - skullWidth / 2,
-                y: this.#particleCanvas.height / 2 - skullHeight / 2,
-                width: skullWidth,
-                height: skullHeight,
+                x: (clientRect.width - width) / 2,
+                y: (clientRect.height - height) / 2,
+                width: width,
+                height: height,
                 imageData: this.#getImageData(skullImage),
                 colorMode: ColorMode.IMAGE,
-                particlesPerSecond: 20000,
+                particlesPerSecond: 15000,
                 duration: 1,
                 particleBlueprint: {
                     persistent: true,
-                    size: 3,
-                    lifespan: 2,
-                    loopMode: LoopMode.OSCILLATE,
+                    size: [3,4],
                     speed: 0,
                     direction: [0, Math.PI * 2],
                 }
@@ -574,7 +583,7 @@ export class Sandbox {
             const repulsionForce = new RadialForce({
                 x: -100,
                 y: -100,
-                strength: -50000,
+                strength: -30000,
             });
 
             skullEmitter.addModifier(wave);
@@ -698,14 +707,27 @@ export class Sandbox {
      * @returns {void}
      */
     #initPortalDemo() {
-        const centerX = this.#particleCanvas.width / 2;
-        const centerY = this.#particleCanvas.height / 2;
+        const clientRect = this.#particleCanvas.getBoundingClientRect();
+
+        const portalRadiusX = 200;
+        const portalRadiusY = 250;
+
+        const scale = Math.min(
+            clientRect.width / (portalRadiusX * 2),
+            clientRect.height / (portalRadiusY * 2),
+        );
+
+        const radiusX = (portalRadiusX * scale) * 0.5;
+        const radiusY = (portalRadiusY * scale) * 0.5;
+
+        const centerX = clientRect.width / 2;
+        const centerY = clientRect.height / 2;
 
         const portalEmitter = new EllipseEmitter({
             x: centerX,
             y: centerY,
-            radiusX: 200,
-            radiusY: 250,
+            radiusX: radiusX,
+            radiusY: radiusY,
             particlesPerSecond: 1000,
             emissionSource: EmissionSource.EDGE_IN,
             particleBlueprint: {
@@ -719,8 +741,8 @@ export class Sandbox {
         const portalEdgeEmitter = new EllipseEmitter({
             x: centerX,
             y: centerY,
-            radiusX: 200,
-            radiusY: 250,
+            radiusX: radiusX,
+            radiusY: radiusY,
             particlesPerSecond: 3000,
             emissionSource: EmissionSource.EDGE_IN,
             particleBlueprint: {
@@ -891,6 +913,22 @@ export class Sandbox {
         if (activeDemo.repulsionForce) {
             activeDemo.repulsionForce.x = event.clientX - this.#particleCanvasBounds.left;
             activeDemo.repulsionForce.y = event.clientY - this.#particleCanvasBounds.top;
+        }
+    }
+
+    /**
+     * @returns {void}
+     */
+    #handlePointerUp() {
+        if (!this.#particleCanvas || !this.#particleCanvasBounds) {
+            return;
+        }
+
+        const activeDemo = this.#activeDemoContext;
+
+        if (activeDemo.repulsionForce) {
+            activeDemo.repulsionForce.x = -100;
+            activeDemo.repulsionForce.y = -100;
         }
     }
 
