@@ -69,6 +69,21 @@ export class Sandbox {
     /** @type {HTMLDivElement|null} */
     #shortcutsOverlay;
 
+    /** @type {HTMLButtonElement|null} */
+    #btnHud;
+
+    /** @type {HTMLButtonElement|null} */
+    #btnGrid;
+
+    /** @type {HTMLButtonElement|null} */
+    #btnBackground;
+
+    /** @type {HTMLButtonElement|null} */
+    #btnSnapshot;
+
+    /** @type {HTMLButtonElement|null} */
+    #btnReport;
+
     /** @type {HTMLDivElement|null} */
     #footerOverlay;
 
@@ -183,6 +198,11 @@ export class Sandbox {
         this.#renderMode = renderMode;
         this.#useGradientBackground = true;
         this.#shortcutsOverlay = null;
+        this.#btnHud = null;
+        this.#btnGrid = null;
+        this.#btnBackground = null;
+        this.#btnSnapshot = null;
+        this.#btnReport = null;
         this.#footerOverlay = null;
         this.#overlayCanvas = null;
         this.#particleCanvas = null;
@@ -238,6 +258,7 @@ export class Sandbox {
         this.#userAgentInfo = this.#getUserAgentInfo();
         this.#useCullingBounds = this.#selectedDemo.useCullingBounds;
 
+        this.#initShortcutOverlay();
         this.#initCanvas();
 
         switch(this.#selectedDemo.id) {
@@ -261,10 +282,27 @@ export class Sandbox {
 
         this.#updateGnistCullingBounds();
 
-        this.#particleCanvas.addEventListener('mousemove', (event) => this.#handleMouseMove(event));
+        this.#btnHud.addEventListener('click', () => this.#toggleHud());
+        this.#btnGrid.addEventListener('click', () => this.#toggleGrid());
+        this.#btnBackground.addEventListener('click', () => this.#toggleBackground());
+        this.#btnSnapshot.addEventListener('click', () => this.#requestScreenshot());
+        this.#btnReport.addEventListener('click', () => this.#requestReport());
+
+        this.#particleCanvas.addEventListener('pointermove', (event) => this.#handlePointerMove(event));
 
         window.addEventListener('resize', () => this.#handleResize());
         window.addEventListener('keydown', (event) => this.#handleKeyDown(event));
+    }
+
+    /**
+     * @returns {void}
+     */
+    #initShortcutOverlay() {
+        this.#btnHud = document.getElementById('btnHud');
+        this.#btnGrid = document.getElementById('btnGrid');
+        this.#btnBackground = document.getElementById('btnBackground');
+        this.#btnSnapshot = document.getElementById('btnSnapshot');
+        this.#btnReport = document.getElementById('btnReport');
     }
 
     /**
@@ -843,7 +881,7 @@ export class Sandbox {
      * @param {MouseEvent} event
      * @returns {void}
      */
-    #handleMouseMove(event) {
+    #handlePointerMove(event) {
         if (!this.#particleCanvas || !this.#particleCanvasBounds) {
             return;
         }
@@ -890,35 +928,70 @@ export class Sandbox {
     #handleKeyDown(event) {
         if ((event.shiftKey || event.metaKey) && event.key.toLowerCase() === 'h') {
             event.preventDefault();
-            if (!this.#displayGrid) {
-                this.#displayHud = !this.#displayHud;
-                this.#displayHudDefault = this.#displayHud;
-            }
+            this.#toggleHud();
         }
 
         if ((event.shiftKey || event.metaKey) && event.key.toLowerCase() === 'g') {
             event.preventDefault();
-            this.#shortcutsOverlay.classList.toggle('hidden');
-            this.#footerOverlay.classList.toggle('hidden');
-            this.#displayGrid = !this.#displayGrid;
-            this.#displayHud = this.#displayHudDefault && !this.#displayGrid;
+            this.#toggleGrid();
         }
 
         if ((event.shiftKey || event.metaKey) && event.key.toLowerCase() === 'b') {
             event.preventDefault();
-            this.#useGradientBackground = !this.#useGradientBackground;
+            this.#toggleBackground();
         }
 
         if ((event.shiftKey || event.metaKey) && event.key.toLowerCase() === 's') {
             event.preventDefault();
-            this.#takeScreenshotNextFrame = true;
+            this.#requestScreenshot();
         }
 
         if ((event.shiftKey || event.metaKey) && event.key.toLowerCase() === 'r') {
             event.preventDefault();
-            this.#getReportNextFrame = true;
+            this.#requestReport();
         }
     }
+
+    /**
+     * @returns {void}
+     */
+    #toggleHud() {
+        if (!this.#displayGrid) {
+            this.#displayHud = !this.#displayHud;
+            this.#displayHudDefault = this.#displayHud;
+        }
+    }
+
+    /**
+     * @returns {void}
+     */
+    #toggleGrid() {
+        this.#footerOverlay.classList.toggle('hidden');
+        this.#displayGrid = !this.#displayGrid;
+        this.#displayHud = this.#displayHudDefault && !this.#displayGrid;
+    }
+
+    /**
+     * @returns {void}
+     */
+    #toggleBackground() {
+        this.#useGradientBackground = !this.#useGradientBackground;
+    }
+
+    /**
+     * @returns {void}
+     */
+    #requestScreenshot() {
+        this.#takeScreenshotNextFrame = true;
+    }
+
+    /**
+     * @returns {void}
+     */
+    #requestReport() {
+        this.#getReportNextFrame = true;
+    }
+
 
     /**
      * @returns {void}

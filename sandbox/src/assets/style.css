@@ -24,9 +24,9 @@ body {
 
 #demo-nav {
   display: flex;
-  flex: 0 0 42px;
   align-items: center;
-  padding: 0 16px;
+  flex: 0 0 42px;
+  padding: 0;
   border-bottom: 2px solid #202531;
   background: #11141B;
   color: #9AA0A6;
@@ -35,18 +35,34 @@ body {
 
 #demo-list {
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   height: 100%;
+  min-width: 0;
 }
 
 #demo-list button {
-  padding: 0 12px;
+  min-width: 120px;
+  height: 40px;
+  padding: 0 24px;
   border: 0;
   background: transparent;
   color: #9AA0A6;
   font: inherit;
   cursor: pointer;
   transition: color 150ms ease, background-color 150ms ease;
+}
+
+@media (max-width: 600px) {
+  #demo-list {
+    width: 100%;
+    height: auto;
+    gap: 0;
+  }
+
+  #demo-list button {
+    flex: 1 1 0;
+  }
 }
 
 #demo-list button:hover,
@@ -103,22 +119,50 @@ body {
 
 #shortcuts-overlay {
   top: 0;
-  gap: 36px;
+  flex-wrap: wrap;
+  gap: 10px 32px;
+  padding: 8px 16px;
   opacity: 0.8;
 }
 
-#shortcuts-overlay kbd {
-  display: inline-block;
-  margin: 2px;
-  padding: 2px 5px;
-  border: 1px solid #292e38;
+#shortcuts-overlay button {
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid #292E38;
   border-radius: 3px;
-  background: #15181f;
+  background: #15181F;
   color: #9AA0A6;
   font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+#shortcuts-overlay button:hover {
+  background: #252A35;
+  border-color: #383E4B;
+  color: #fff;
+}
+
+#shortcuts-overlay button:active {
+  background: #252A35;
+  border-color: #383E4B;
+  color: #fff;
+  transform: translateY(1px);
+}
+
+#shortcuts-overlay button:focus-visible {
+  outline: 2px solid #7C9CFF;
+  outline-offset: 2px;
+}
+
+#shortcuts-overlay button .shortcut {
+  margin-left: 4px;
+  opacity: 0.8;
 }
 
 #footer-overlay {
+  flex-wrap: wrap;
   bottom: 8px;
   opacity: 0.6;
 }
@@ -126,6 +170,12 @@ body {
 #footer-overlay span {
   margin: 2px;
   padding: 2px 5px;
+}
+
+#footer-overlay .separator {
+  @media (max-width: 380px) {
+    display: none;
+  }
 }
 
 #footer-overlay a {

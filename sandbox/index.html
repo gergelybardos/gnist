@@ -17,19 +17,21 @@
 
     <div id="container">
       <div id="shortcuts-overlay">
-        <span><kbd>Shift</kbd> + <kbd>H</kbd> HUD</span>
-        <span><kbd>Shift</kbd> + <kbd>G</kbd> Grid</span>
-        <span><kbd>Shift</kbd> + <kbd>B</kbd> Background</span>
-        <span><kbd>Shift</kbd> + <kbd>S</kbd> Snapshot</span>
-        <span><kbd>Shift</kbd> + <kbd>R</kbd> Report</span>
+        <button id="btnHud">HUD <span class="shortcut">(Shift+H)</span></button>
+        <button id="btnGrid">Grid <span class="shortcut">(Shift+G)</span></button>
+        <button id="btnBackground">Background <span class="shortcut">(Shift+B)</span></button>
+        <button id="btnSnapshot">Snapshot <span class="shortcut">(Shift+S)</span></button>
+        <button id="btnReport">Report <span class="shortcut">(Shift+R)</span></button>
       </div>
 
       <canvas id="overlay-canvas"></canvas>
       <canvas id="particle-canvas"></canvas>
 
       <div id="footer-overlay">
-        <span>Made with <a href="https://github.com/gergelybardos/gnist">Gnist</a></span> •
-        <span><a href="https://github.com/gergelybardos/gnist/blob/main/LICENSE">MIT License</a></span> •
+        <span>Made with <a href="https://github.com/gergelybardos/gnist">Gnist</a></span>
+        <span class="separator">•</span>
+        <span><a href="https://github.com/gergelybardos/gnist/blob/main/LICENSE">MIT License</a></span>
+        <span class="separator">•</span>
         <span>© 2026 <a href="https://github.com/gergelybardos">Gergely Bárdos</a></span>
       </div>
     </div>
