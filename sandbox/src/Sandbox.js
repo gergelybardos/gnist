@@ -546,8 +546,8 @@ export class Sandbox {
             clientRect.height / imageHeight
         );
 
-        const width = imageWidth * scale * 0.75;
-        const height = imageHeight * scale * 0.75;
+        const width = imageWidth * scale * 0.85;
+        const height = imageHeight * scale * 0.85;
 
         const skullImage = new Image();
 
@@ -717,8 +717,8 @@ export class Sandbox {
             clientRect.height / (portalRadiusY * 2),
         );
 
-        const radiusX = (portalRadiusX * scale) * 0.5;
-        const radiusY = (portalRadiusY * scale) * 0.5;
+        const radiusX = (portalRadiusX * scale) * 0.65;
+        const radiusY = (portalRadiusY * scale) * 0.65;
 
         const centerX = clientRect.width / 2;
         const centerY = clientRect.height / 2;
